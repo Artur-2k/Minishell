@@ -3,9 +3,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
+#include <termios.h>
+#include <unistd.h>
 
 void    ft_handle_sigint(int signo)
 {
+    printf("\n");
+
     // Notifica o Readline que uma nova linha será iniciada
     rl_on_new_line();
     // Substitui o conteúdo da linha atual por uma linha em branco
@@ -17,10 +21,17 @@ void    ft_handle_sigint(int signo)
 int main() {
     char *input;
     struct sigaction sa;
-
     sa.sa_handler = ft_handle_sigint; // void handler(int signo);
     sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
+    sigemptyset(&sa.sa_mask);   
+
+    // Ignora o caractere ^C do terminal 
+    // Tem de ser configurado antes de poder receber um sinal
+    struct termios termios_p;
+    tcgetattr(STDIN_FILENO, &termios_p); // reads the config
+    termios_p.c_lflag &= ~ECHOCTL; // Nega esta flag para Ctrl+C e Ctrl+D (switch on and off)
+    tcsetattr(STDIN_FILENO, TCSANOW, &termios_p); // aplies the new config
+
 
     sigaction(SIGINT, &sa, NULL); // TODO ver sigaction
 

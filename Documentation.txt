@@ -119,3 +119,94 @@ Funcoes
                 Descricao:
                 Limpa todos os itens do histórico que foram adicionados por chamadas a add_history().
                 Se o histórico for salvo em um arquivo usando write_history(), isso não afetará o histórico já salvo no arquivo, apenas o histórico em memória será limpo.
+
+    
+    Estrutura struct termios #include <termios.h>
+        A estrutura termios contém as configurações do terminal. Cada campo dessa estrutura controla uma parte do comportamento do terminal, e você pode manipulá-los para modificar como o terminal lida com entradas e saídas.
+        struct termios termios_p;
+    
+        Estrutura termios:
+            c_lflag (Local modes): Controla as opções de modo local, como se o terminal deve ecoar os caracteres digitados e como os sinais são tratados (por exemplo, Ctrl+C).
+            c_iflag (Input modes): Controla as opções de modo de entrada, como se o terminal deve processar caracteres de controle.
+            c_oflag (Output modes): Controla as opções de modo de saída, como se o terminal deve processar os caracteres de controle de nova linha.
+            c_cflag (Control modes): Controla as opções de modo de controle, como a velocidade da comunicação serial.
+            c_cc[] (Control characters): Um array de caracteres de controle, como o caractere que representa a tecla de "fim de arquivo" (EOF) ou "apagar" (DEL).
+
+        c_lflag (Local Mode Flags)
+            O campo c_lflag controla o modo local do terminal. Aqui estamos manipulando a flag ECHOCTL:
+                ECHOCTL: Se essa flag estiver definida, os caracteres de controle (como Ctrl+C, Ctrl+D) são exibidos no terminal na forma de ^C, ^D, etc. 
+                Quando removemos essa flag (usando &= ~ECHOCTL  => BITWISE HELLO XD), esses caracteres de controle não são mais exibidos no terminal.
+
+    Funções tcgetattr e tcsetattr   <termios.h>
+
+        tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
+            Esta função lê as configurações atuais do terminal e armazena-as na estrutura termios apontada por termios_p.
+            Essa função retorna 0 em caso de sucesso e -1 em caso de falha.
+
+            Parametros:
+                fd: O descritor de arquivo que representa o terminal. Para manipular a entrada padrão (teclado), usamos STDIN_FILENO (definido como 0), que é o descritor para o terminal de entrada.
+                termios_p: Um ponteiro para uma estrutura termios, onde as configurações atuais do terminal serão armazenadas.
+
+        tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
+
+            Esta função aplica as configurações do terminal armazenadas na estrutura termios apontada por termios_p para o terminal indicado pelo descritor de arquivo fd.
+            Essa função também retorna 0 em caso de sucesso e -1 em caso de falha.
+
+                Parametros:
+                    fd: O descritor de arquivo do terminal (como STDIN_FILENO).
+                    optional_actions: Determina quando as mudanças nas configurações devem ser aplicadas. Algumas opções incluem:
+                        TCSANOW: Aplica as mudanças imediatamente.
+                        TCSADRAIN: Aplica as mudanças após esvaziar os buffers de saída.
+                        TCSAFLUSH: Aplica as mudanças após esvaziar tanto os buffers de entrada quanto os de saída.
+                    termios_p: Ponteiro para a estrutura termios que contém as configurações que serão aplicadas.
+        struct termios termios_t;
+        tcgetattr(STDIN_FILENO, &termios_t);
+        termios_t.c_lflags &= ~ECHOCTL;
+        tcsetattr(STDIN_FILENO, TCSANOW, &termios_t);
+    
+
+    Fork        #include <unistd.h>
+        Assinatura: pid_t fork(void);
+        Retorno da função
+            Retorno do processo pai: fork() retorna o PID (Process ID) do processo filho.
+            Retorno do processo filho: fork() retorna 0 no processo filho.
+            Erro: Se ocorrer um erro ao tentar criar o processo, fork() retorna -1 e define o valor da variável global errno para indicar o erro.
+        Comportamento do fork()
+            Copia o espaço de memória: O processo filho recebe uma cópia do espaço de memória do processo pai. Inicialmente, isso inclui todas as variáveis, pilha e heap. No entanto, o sistema usa uma técnica chamada copy-on-write (COW), onde a cópia real da memória só é feita se um dos processos (pai ou filho) tentar modificar a memória.
+            Execução paralela: Após a chamada para fork(), ambos os processos (pai e filho) continuam a ser executados. Não há garantias sobre a ordem em que eles serão executados, pois o escalonador do sistema operacional decide isso.
+            Process IDs diferentes: O processo filho tem um PID diferente do pai. O pai pode obter o PID do filho a partir do valor retornado por fork(), enquanto o filho pode obter o PID do pai usando getppid().
+
+    pid_t #include <sys/types.h>
+        é um tipo de dado definido em <sys/types.h> que representa o Process ID (PID), que é um identificador único atribuído a cada processo em execução no sistema.
+        Este tipo é usado principalmente em chamadas de sistema que lidam com processos, como fork(), wait(), getpid(), e getppid().
+
+    wait()  #include <sys/wait.h>
+    Assinatura: pid_t wait(int *status);
+        A função wait() é usada pelo processo pai para esperar que um ou mais processos filhos terminem a execução.
+        Parâmetros:
+            status: Um ponteiro para um inteiro onde o estado de saída do processo filho pode ser armazenado. Esse valor pode ser analisado para determinar como o processo filho terminou (normalmente, se ele terminou com sucesso ou se terminou devido a um sinal).
+                Se nao nos interessar o resultado do retorno podemos passar NULL
+            Retorno:
+                Retorna o PID do processo filho que terminou, ou -1 se ocorrer um erro (por exemplo, se não houver filhos para esperar).
+        Devemos usar wait() sempre que usamos fork para aguardar pela terminacao dos processos filhos no parent para nao crirar processos zumbis ou orfaos
+
+
+    waitpid()  <sys/wait.h>
+    Assinatura: pid_t waitpid(pid_t pid, int *status, int options);
+
+    Processos Zumbis
+        Um processo zumbi é um processo que já foi terminado, mas ainda tem uma entrada na tabela de processos. Isso ocorre porque o processo pai ainda não chamou wait() para recuperar o estado de saída do filho.
+        Os processos zumbis estão em um estado de "terminado" (exited), mas ainda ocupam uma entrada na tabela de processos do sistema, pois o sistema precisa manter informações sobre o processo terminado até que o pai as recupere.
+        Um processo se torna zumbi quando o processo filho termina sua execução ou se o processo pai não chama wait() para obter o status de saída do filho.
+        O processo zumbi é removido da tabela de processos quando o pai chama wait() e recupera o status de saída do filho.
+
+    Processos Órfãos
+        Um processo órfão é um processo cujo processo pai terminou antes dele. Em outras palavras, o processo órfão ainda está em execução, mas não tem um pai vivo.
+        Os processos órfãos são processos que estão em execução, mas não têm um pai ativo. Quando um processo pai termina, o sistema operacional adota automaticamente seus filhos, tornando-os órfãos.
+        Um processo se torna órfão quando o processo pai termina sua execução ou um ou mais de seus filhos continuam a ser executados.
+        O sistema operacional adota processos órfãos, geralmente atribuindo o processo init (PID 1) como seu novo pai. O processo init é responsável por gerenciar todos os processos órfãos e garantir que eles sejam limpos adequadamente.
+
+    Se muitos processos zumbis acumularem, podem levar ao esgotamento da tabela de processos, impedindo que novos processos sejam criados
+    O gerenciamento automático de processos órfãos pelo sistema operacional evita que esses processos fiquem perdidos e sem controle, garantindo que continuem a ser monitorados e finalizados adequadamente.
+
+    
