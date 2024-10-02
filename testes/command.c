@@ -35,7 +35,7 @@ char *ft_find_path(char **my_envp)
     char *path_var = NULL;
     int j = 0;
     while (my_envp[j] != NULL)
-    {   
+    {
         if (ft_strncmp(my_envp[j], "PATH=", 5) == 0)
         {
             path_var = my_envp[j] + 5; // skip over PATH= and is now pointing to the first path
@@ -45,6 +45,7 @@ char *ft_find_path(char **my_envp)
     }
     if (!path_var || !*path_var) // nao tem path ou nao tem nenhum valor PATH= o
         return NULL;
+	return path_var;
 }
 
 char *ft_check_paths_for_cmd(char **paths, char *cmd)
@@ -53,9 +54,8 @@ char *ft_check_paths_for_cmd(char **paths, char *cmd)
     int j = 0;
     while (paths[j] != NULL)
     {
-        paths[j] = ft_append_char_to_str(paths[j], '/');  
+        paths[j] = ft_append_char_to_str(paths[j], '/');
         full_path = ft_strjoin(paths[j], cmd);
-        printf("path: %s\n full_path: %s\n\n", paths[j], full_path);
         if (access(full_path, X_OK) == 0)
         {
             printf("Comando ENCONTRADO!\n");
@@ -73,28 +73,28 @@ void ft_free(char **my_envp, char **paths, char *full_path, char**options)
     // free all
     int i = 0;
     while (my_envp[i] != NULL)
-        free(paths[i++]);
-    free(my_envp); 
+        free(my_envp[i++]);
+    free(my_envp);
     i = 0;
     while (paths[i] != NULL)
         free(paths[i++]);
     free(paths);
     free(full_path);
-    for (int i = 0; i < 2; i++) {
-        free(options[i]);
+    for (int j = 0; j < 2; j++) {
+        free(options[j]);
     }
     free(options);
 }
 
 int main(int ac, char **av, char *envp[])
 {
-    // input simulation of input after parsing: ls -a
+    // input simulation of input after parsing: ls -la
     char *cmd = "ls";
     char **options = malloc(3 * sizeof(char *));
     options[0] = malloc(3 * sizeof(char)); strcpy(options[0], "ls");
-    options[1] = malloc(3 * sizeof(char)); strcpy(options[1], "-a");
+    options[1] = malloc(3 * sizeof(char)); strcpy(options[1], "-la");
     options[2] = NULL;
-    
+
     // dinamic envp
     char **my_envp;
     my_envp = ft_copy_envp(envp);
@@ -108,15 +108,14 @@ int main(int ac, char **av, char *envp[])
     if (!paths)
         return -2;
 
-    // checking if there is a comand from paths 
+    // checking if there is a comand from paths
     char *full_path = ft_check_paths_for_cmd(paths, cmd);
     if (!full_path)
     {
-        ft_free(my_envp, paths, full_path, options);//todo
+        ft_free(my_envp, paths, full_path, options);
         printf("no comand\n");
         return -3;
     }
-
     pid_t pid = fork();
     if (pid == 0)
     {
