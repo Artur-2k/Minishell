@@ -8,7 +8,7 @@
 
 void    ft_handle_sigint(int signo)
 {
-    printf("\n");
+   1
 
     // Notifica o Readline que uma nova linha será iniciada
     rl_on_new_line();

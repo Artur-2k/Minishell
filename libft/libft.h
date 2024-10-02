@@ -74,5 +74,5 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 int					ft_atoi_base(char *str, char *base);
 char				*get_next_line(int fd);
-
+char				*ft_append_char_to_str(char *str, char c);
 #endif

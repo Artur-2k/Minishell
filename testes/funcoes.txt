@@ -1,9 +1,13 @@
-funcoes     
+funcoes 
+    
+ execve,
 
- access
- waitpid, wait3, wait4, signal,
-getcwd, chdir, stat, lstat, fstat, unlink, execve,
-dup, dup2, pipe, opendir, readdir, closedir,
-strerror, perror, isatty, ttyname, ttyslot, ioctl,
-getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
-tgetnum, tgetstr, tgoto, tputs
+signal, sigaction, sigemptyset, sigaddset, kill,
+
+strerror, perror,
+
+dup, dup2, pipe,
+
+getcwd, chdir, stat, lstat, fstat, unlink, opendir, readdir, closedir,
+
+ isatty, ttyname, ttyslot, ioctl, tgetent, tgetflag,tgetnum, tgetstr, tgoto, tputs
