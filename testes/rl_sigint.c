@@ -8,8 +8,7 @@
 
 void    ft_handle_sigint(int signo)
 {
-   1
-
+    printf("\n");
     // Notifica o Readline que uma nova linha será iniciada
     rl_on_new_line();
     // Substitui o conteúdo da linha atual por uma linha em branco
@@ -54,7 +53,6 @@ int main() {
 
         free(input);  // Libera a memória alocada por readline
     }
-
     return 0;
 }
 

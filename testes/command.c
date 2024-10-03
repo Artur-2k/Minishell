@@ -91,8 +91,8 @@ int main(int ac, char **av, char *envp[])
     // input simulation of input after parsing: ls -la
     char *cmd = "ls";
     char **options = malloc(3 * sizeof(char *));
-    options[0] = malloc(3 * sizeof(char)); strcpy(options[0], "ls");
-    options[1] = malloc(3 * sizeof(char)); strcpy(options[1], "-la");
+    options[0] = ft_strdup("ls");
+    options[1] = ft_strdup("-la");
     options[2] = NULL;
 
     // dinamic envp
@@ -120,7 +120,7 @@ int main(int ac, char **av, char *envp[])
     if (pid == 0)
     {
         // child
-        if(execve(full_path, options, NULL))
+        if(execve(full_path, options, NULL) == -1)
             return -42;
     }
     wait(NULL);

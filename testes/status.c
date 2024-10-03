@@ -11,7 +11,6 @@ int main(void)
 
     if (pid < 0)
         return -1;
-
     if (pid == 0)
     {
         // filho
@@ -45,6 +44,5 @@ int main(void)
             }
         }
     }
-
     return 0;
 }

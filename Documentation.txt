@@ -335,3 +335,220 @@ Funcoes
                 return 0;  // Este ponto nunca será alcançado se execve for bem-sucedido
             }
     
+    errno #include <errno.h>
+        A variável errno é uma variável global em C que é utilizada para indicar se ocorreu um erro durante a execução de uma função do sistema ou da biblioteca. Quando uma função que pode falhar é chamada, se ocorrer um erro, errno é definido com um código de erro específico que pode ser usado para determinar o que deu errado.
+        Se uma função falhar, errno é definido como um valor diferente de zero. Se a função for bem-sucedida, errno pode manter o valor anterior ou ser zero. Por isso, é importante verificar errno apenas após uma falha de função.
+        é definido por várias funções do sistema e da biblioteca C.Cada função que pode falhar tem seus próprios códigos de erro que podem ser atribuídos a errno.
+    
+    strerror() #include <string.h> 
+        A função strerror() converte um código de erro em uma string descritiva. É útil quando você tem um código de erro (geralmente retornado por funções do sistema) e deseja obter uma descrição legível.
+        Assinatura: char *strerror(int errnum);
+        Parâmetros
+            errnum: O número do erro, que geralmente é obtido de errno.
+        Retorno
+            Retorna um ponteiro para uma string estática que descreve o erro correspondente ao código fornecido.
+        
+    perror() #include <stdio.h>
+        A função perror() é uma maneira conveniente de imprimir uma mensagem de erro para a saída padrão (normalmente o terminal) precedida por uma string especificada pelo usuário. Ela utiliza o valor de errno para imprimir a mensagem de erro correspondente.
+        Assinatura: void perror(const char *s);
+        Parâmetros
+            s: Uma string que será impressa antes da mensagem de erro. Se s for NULL, apenas a mensagem de erro será impressa.
+        Retorno
+            Não retorna valor (tipo void).
+
+    signal()  #include <signal.h>
+        função signal() é usada em C para capturar ou lidar com sinais (interrupts ou eventos) enviados para um processo. Sinais são um mecanismo que o sistema operacional usa para notificar um processo sobre eventos assíncronos, como a terminação de um processo filho, uma interrupção de teclado (como Ctrl+C), ou erros de execução.
+        Assinatura: void (*signal(int signum, void (*handler)(int)))(int);
+        Parâmetros
+            signum: O número do sinal que você quer capturar ou ignorar. Alguns sinais comuns incluem:
+                SIGINT: Interrupção de terminal (geralmente Ctrl+C).
+                SIGTERM: Solicitação de terminação.
+                SIGKILL: Sinal de matar um processo (não pode ser capturado ou ignorado).
+                SIGCHLD: Indica que um processo filho terminou.
+                SIGSEGV: Erro de segmentação (tentativa de acessar memória inválida).
+            handler: Um ponteiro para a função que será chamada quando o sinal for recebido. Pode ser:
+                Função de tratamento: Uma função que será chamada quando o sinal for capturado.
+                SIG_IGN: Para ignorar o sinal.
+                SIG_DFL: Para restaurar o comportamento padrão para esse sinal.
+            Retorno
+                Retorna o antigo handler de sinal se for bem-sucedido.
+                Se ocorrer um erro, retorna SIG_ERR.
+        Exemplo de uso:
+            void handle_sigint(int sig) {
+                 printf("Recebi o sinal %d (SIGINT). Ignorando Ctrl+C...\n", sig);
+            }           
+
+            int main() {
+                // Define o handler para SIGINT (Ctrl+C)
+                signal(SIGINT, handle_sigint);
+                ...
+            }
+    
+    
+    sigaction()
+        A função sigaction() é uma alternativa mais robusta e flexível à função signal() para capturar e manipular sinais em C. Enquanto signal() tem algumas limitações de portabilidade e confiabilidade, sigaction() oferece um controle mais preciso sobre o comportamento dos sinais, permitindo especificar várias opções, como máscaras de sinal e flags que afetam o comportamento da função.
+        Assinatura: int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+        Parâmetros
+            signum: O número do sinal que queremos capturar ou manipular (como SIGINT, SIGTERM, etc.).
+            act: Um ponteiro para uma estrutura do tipo struct sigaction, que especifica o novo comportamento para o sinal signum.
+            oldact: Um ponteiro para uma estrutura do tipo struct sigaction, onde o comportamento anterior do sinal (antes da modificação) será armazenado. Se não for necessário recuperar o comportamento anterior, esse valor pode ser passado como NULL.
+        Retorno: Retorna 0 em caso de sucesso. Se houver erro, retorna -1 e define errno com o código de erro apropriado.
+        
+        Estrutura sigaction
+            struct sigaction {
+                void     (*sa_handler)(int);   // Ponteiro para a função de tratamento do sinal
+                void     (*sa_sigaction)(int, siginfo_t *, void *); // Alternativa para o handler
+                sigset_t sa_mask;              // Máscara de sinais bloqueados durante a execução do handler
+                int      sa_flags;             // Flags que controlam o comportamento do sinal
+            };
+            sa_handler: Um ponteiro para a função que será chamada quando o sinal for capturado. Pode ser SIG_IGN (ignorar o sinal) ou SIG_DFL (comportamento padrão).
+            sa_mask: Especifica outros sinais que devem ser bloqueados (temporariamente ignorados) enquanto o handler de sinal está sendo executado. Isso evita que um sinal interrompa o tratamento de outro.
+            sa_flags: Flags que modificam o comportamento de captura de sinal. Algumas flags comuns incluem:
+                SA_RESTART: Faz com que chamadas de sistema interrompidas por sinais sejam reiniciadas automaticamente.
+                SA_NOCLDSTOP: Evita que SIGCHLD seja enviado quando um processo filho parar.
+                SA_SIGINFO: Usa a função sa_sigaction em vez de sa_handler para manipular sinais, fornecendo informações adicionais.
+        Exemplo de uso:
+            void handle_sigint(int sig) {
+                printf("Recebi o sinal SIGINT (%d), ignorando Ctrl+C...\n", sig);
+            }
+
+            int main() {
+                struct sigaction sa;
+                
+                // Configura o handler de sinal
+                sa.sa_handler = handle_sigint;
+                sa.sa_flags = SA_RESTART;  // Reinicia chamadas interrompidas
+                sigemptyset(&sa.sa_mask);  // Nenhum sinal será bloqueado
+
+                // Define o tratamento para SIGINT
+                if (sigaction(SIGINT, &sa, NULL) == -1) {
+                    perror("Erro ao definir sigaction");
+                    return 1;
+                }
+                ...
+            }
+
+    sigemptyset() 
+        A função sigemptyset() é usada para inicializar um conjunto de sinais (sigset_t), que é uma estrutura usada para representar um grupo de sinais no sistema. Quando você chama sigemptyset(), ela limpa todos os sinais do conjunto, ou seja, garante que nenhum sinal está inicialmente incluído no grupo.
+        Usada para inicializar um set, basicamente
+
+    sigaddset()
+        A função sigaddset() é usada para adicionar um sinal a um conjunto de sinais para serem bloqueados
+        Assinatura: int sigaddset(sigset_t *set, int signum);
+        Exemplo:
+            sigemptyset(&sa.sa_mask);         // Inicializa o conjunto de sinais vazio
+            sigaddset(&sa.sa_mask, SIGTERM);  // Adiciona SIGTERM ao conjunto, bloqueando-o
+
+    kill()
+        A função kill() em C é usada para enviar sinais a um processo ou grupo de processos
+        Assinatura: int kill(pid_t pid, int sig);
+        Parâmetros:
+            pid: Identifica o processo ou grupo de processos que receberá o sinal.
+                pid > 0: Envia o sinal ao processo cujo ID é igual a pid.
+                pid == 0: Envia o sinal a todos os processos no mesmo grupo de processos do chamador.
+                pid < -1: Envia o sinal a todos os processos cujo ID de grupo de processos é igual a |pid| (o valor absoluto de pid).
+                pid == -1: Envia o sinal a todos os processos para os quais o chamador tem permissão de enviar sinais (exceto a si próprio e o processo init).
+            sig: O número do sinal que será enviado, como SIGKILL, SIGTERM, SIGINT, etc. Se o valor for 0, a função não envia um sinal real, mas faz uma verificação se o processo ainda existe e se há permissão para enviar sinais a ele.
+        Retorno:
+            0 em caso de sucesso.
+            -1 em caso de erro e errno será definido com o código de erro apropriado (como ESRCH se o processo não existir ou EPERM se não houver permissão).
+        Exemplos de Sinais Comuns:
+            SIGKILL: Termina um processo imediatamente, sem dar chance para o processo tratar ou ignorar o sinal.
+            SIGTERM: Solicita a terminação de um processo de forma amigável. O processo pode capturar e tratar o sinal, o que permite que ele se encerre graciosamente.
+            SIGINT: Interrompe um processo, semelhante ao que acontece quando o usuário pressiona Ctrl+C no terminal.
+            SIGSTOP: Suspende um processo (não pode ser ignorado ou capturado).
+            SIGCONT: Continua a execução de um processo suspenso.
+
+    dup() #include <fcntl.h>
+        A função dup() em C é usada para duplicar um descritor de arquivo existente. O novo descritor de arquivo criado compartilha a mesma tabela de arquivos abertos que o descritor original, o que significa que ambos referenciam o mesmo arquivo ou recurso e compartilham a mesma posição de leitura/escrita e flags.
+        Assinatura: int dup(int oldfd);
+        Parâmetros:
+            oldfd: O descritor de arquivo que você deseja duplicar. Este descritor deve ser válido, ou seja, o arquivo deve estar aberto.
+        Retorno:
+            Retorna o número do novo descritor de arquivo em caso de sucesso.
+            Retorna -1 em caso de erro e define errno com o código de erro apropriado.
+
+        Exemplo
+            #include <stdio.h>
+            #include <unistd.h>
+            #include <fcntl.h>
+
+            int main() {
+                int fd1, fd2;
+                
+                // Abre um arquivo para escrita
+                fd1 = open("exemplo.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if (fd1 < 0) {
+                    perror("Erro ao abrir o arquivo");
+                    return 1;
+                }
+                // Duplica o descritor de arquivo
+                fd2 = dup(fd1);
+                if (fd2 < 0) {
+                    perror("Erro ao duplicar o descritor de arquivo");
+                    return 1;
+                }
+
+                // Escreve no arquivo usando os dois descritores
+                write(fd1, "Texto pelo fd1\n", 15);
+                write(fd2, "Texto pelo fd2\n", 15);
+
+                // Fecha ambos os descritores
+                close(fd1);
+                close(fd2);
+                return 0;
+            }
+
+        dup2() #include <fcntl.h>
+            A função dup2() é uma versão da função dup() que permite que você duplique um descritor de arquivo para um descritor específico. Essa função é especialmente útil para redirecionar a entrada ou saída de um programa.
+            Assinatura:int dup2(int oldfd, int newfd);
+            Parâmetros:
+                oldfd: O descritor de arquivo que você deseja duplicar.
+                newfd: O descritor de arquivo onde oldfd deve ser duplicado. Se newfd já estiver aberto, ele será fechado antes de ser duplicado.
+            Retorno:
+                Retorna o valor de newfd em caso de sucesso.
+                Retorna -1 em caso de erro e define errno com o código de erro apropriado.
+            Exemplo de uso:
+                #include <stdio.h>
+                #include <unistd.h>
+                #include <fcntl.h>
+
+                int main() {
+                    int fd;
+                    int saved_stdout;  // Para guardar o descritor original de stdout
+
+                    // Guarda o descritor original de stdout
+                    saved_stdout = dup(STDOUT_FILENO);
+                    if (saved_stdout < 0) {
+                        perror("Erro ao guardar stdout");
+                        return 1;
+                    }
+                    // Abre um arquivo para escrita
+                    fd = open("saida.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                    if (fd < 0) {
+                        perror("Erro ao abrir arquivo");
+                        return 1;
+                    }
+                    // Duplica o descritor de arquivo para redirecionar stdout
+                    if (dup2(fd, STDOUT_FILENO) < 0) {
+                        perror("Erro ao redirecionar stdout");
+                        return 1;
+                    }
+                    // Agora, printf enviará a saída para o arquivo saida.txt
+                    printf("Esta mensagem será redirecionada para o arquivo saida.txt\n");
+
+                    // Restaura stdout para seu estado original
+                    if (dup2(saved_stdout, STDOUT_FILENO) < 0) {
+                        perror("Erro ao restaurar stdout");
+                        return 1;
+                    }
+                    // Agora, printf enviará a saída de volta para a tela
+                    printf("Esta mensagem será enviada de volta para a saída padrão (tela)\n");
+
+                    // Fecha o descritor do arquivo
+                    close(fd);
+                    close(saved_stdout); // Fecha o descritor salvo, se não for mais necessário
+                    return 0;
+                }
+
+    pipe()
