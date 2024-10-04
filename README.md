@@ -57,6 +57,7 @@ Quando removemos essa flag (usando `&= ~ECHOCTL`  => BITWISE HELLO XD), esses ca
 
 Esta função lê as configurações atuais do terminal e armazena-as na estrutura termios apontada por termios_p.
 Essa função retorna 0 em caso de sucesso e -1 em caso de falha.
+
 Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termios_p);`
 
 ### Parametros:
@@ -67,6 +68,7 @@ Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termi
 
 Esta função aplica as configurações do terminal armazenadas na estrutura termios apontada por termios_p para o terminal indicado pelo descritor de arquivo fd.
 Essa função também retorna 0 em caso de sucesso e -1 em caso de falha.
+
 `Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termios_p);`
 
 ### Parametros:
@@ -159,7 +161,9 @@ Se houver algum processo filho que não tenha terminado a sua execução ele fic
 
 Pode especificar o PID de um processo específico para esperar, ou outras opções como -1 (esperar por qualquer filho).
 options: Pode incluir opções como WNOHANG (não espera, retorna imediatamente se nenhum filho tiver terminado) e WUNTRACED (retorna se um processo filho tiver sido parado, mas não terminado).
+
 Assinatura: `pid_t waitpid(pid_t pid, int *status, int options);`
+
 ### Parâmetros
 - pid: Especifica qual processo filho esperar. Existem alguns valores especiais que você pode usar:
      - pid > 0: Espera pelo processo filho cujo PID é exatamente igual a pid.
@@ -232,7 +236,9 @@ O gerenciamento automático de processos órfãos pelo sistema operacional evita
 `#include <unistd.h>`
 
 A função access() é usada em C para verificar os permissões de acesso a arquivos ou diretórios. Ela permite que o programa teste se um arquivo ou diretório pode ser lido, gravado ou executado, sem tentar abrir o arquivo diretamente.
+
 Assinatura: int access(const char *pathname, int mode);
+
 ### Parâmetros:
 - pathname: O caminho do arquivo ou diretório que você deseja testar.
 - mode: Especifica o tipo de verificação de permissão que você deseja realizar. Esse parâmetro pode ser uma combinação de vários valores (com operadores lógicos OR), entre eles:
@@ -257,7 +263,9 @@ Em C, você pode manipular variáveis de ambiente através de várias funções 
 `#include <stdlib.h>`
 
 A função getenv() é usada para recuperar o valor de uma variável de ambiente.
+
 Assinatura: `char *getenv(const char *name);`
+
 ### Parametros
 - name: O nome da variável de ambiente que você deseja obter.
 ### Retorno:
@@ -281,7 +289,9 @@ Descritores de arquivo (FDs) são inteiros não negativos que representam abertu
 `#include <fcntl.h>`
 
 A função open() é usada para abrir um arquivo e retornar um descritor de arquivo
+
 Assinatura: `int open(const char *pathname, int flags, mode_t mode);`
+
 ### Parâmetros:
 - pathname: O caminho do arquivo a ser aberto.
 - flags: Um conjunto de opções que determina o modo como o arquivo será aberto. Alguns dos flags comuns incluem:
@@ -301,7 +311,9 @@ Assinatura: `int open(const char *pathname, int flags, mode_t mode);`
 `#include <unistd.h>`
 
 A função close() é usada para fechar um descritor de arquivo que foi aberto anteriormente com open(). Isso libera os recursos associados ao descritor de arquivo.    
+
 Assinatura: `int close(int fd);`
+
 ### Parametros:
 - fd: O descritor de arquivo a ser fechado.
 ### Retorno:
@@ -323,7 +335,9 @@ if (close(fd) < 0)
 `#include <unistd.h>`
 
 A função execve() é uma das chamadas de sistema em C usadas para executar um novo programa, substituindo o processo atual pelo novo programa especificado. É uma das várias funções exec disponíveis, e é considerada a forma mais básica e poderosa, pois permite passar os argumentos e variáveis de ambiente diretamente.
+
 Assinatura: `int execve(const char *filename, char *const argv[], char *const envp[]);`
+
 ### Parametros:
 - filename: O caminho para o arquivo executável que você deseja executar. Este arquivo deve ter permissões executáveis.
 - argv: Um vetor de strings que contém os argumentos passados para o programa. O primeiro argumento (argv[0]) deve ser o nome do programa, seguido pelos argumentos reais. O vetor deve ser terminado por um ponteiro nulo (NULL)
@@ -365,7 +379,9 @@ Cada função que pode falhar tem seus próprios códigos de erro que podem ser 
 `#include <string.h>` 
 
 A função strerror() converte um código de erro em uma string descritiva. É útil quando você tem um código de erro (geralmente retornado por funções do sistema) e deseja obter uma descrição legível.
+
 Assinatura: `char *strerror(int errnum);`
+
 ### Parâmetros
 - errnum: O número do erro, que geralmente é obtido de errno.
 ### Retorno
@@ -376,6 +392,7 @@ Assinatura: `char *strerror(int errnum);`
 `#include <stdio.h>`
 
 A função perror() é uma maneira conveniente de imprimir uma mensagem de erro para a saída padrão (normalmente o terminal) precedida por uma string especificada pelo usuário. Ela utiliza o valor de errno para imprimir a mensagem de erro correspondente.
+
 Assinatura: `void perror(const char *s);`
 
 ### Parâmetros
@@ -386,7 +403,9 @@ Assinatura: `void perror(const char *s);`
 # signal()
 `#include <signal.h>`
 A função signal() é usada em C para capturar ou lidar com sinais (interrupts ou eventos) enviados para um processo. Sinais são um mecanismo que o sistema operacional usa para notificar um processo sobre eventos assíncronos, como a terminação de um processo filho, uma interrupção de teclado (como Ctrl+C), ou erros de execução.
+
 Assinatura: `void (*signal(int signum, void (*handler)(int)))(int);`
+
 ### Parâmetros
 - signum: O número do sinal que você quer capturar ou ignorar. Alguns sinais comuns incluem:
     - SIGINT: Interrupção de terminal (geralmente Ctrl+C).
@@ -420,6 +439,7 @@ int main() {
 `#include <signal.h>`
 
 A função sigaction() é uma alternativa mais robusta e flexível à função signal() para capturar e manipular sinais em C. Enquanto signal() tem algumas limitações de portabilidade e confiabilidade, sigaction() oferece um controle mais preciso sobre o comportamento dos sinais, permitindo especificar várias opções, como máscaras de sinal e flags que afetam o comportamento da função.
+
 Assinatura: `int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);`
 
 ### Parâmetros
@@ -475,6 +495,7 @@ Usada para inicializar um set, basicamente
 # sigaddset()
 
 A função sigaddset() é usada para adicionar um sinal a um conjunto de sinais para serem bloqueados
+
 Assinatura: `int sigaddset(sigset_t *set, int signum);`
 
 #### Exemplo:
@@ -510,7 +531,9 @@ Assinatura: `int kill(pid_t pid, int sig);`
 `#include <fcntl.h>`
 
 A função dup() em C é usada para duplicar um descritor de arquivo existente. O novo descritor de arquivo criado compartilha a mesma tabela de arquivos abertos que o descritor original, o que significa que ambos referenciam o mesmo arquivo ou recurso e compartilham a mesma posição de leitura/escrita e flags.
+
 Assinatura: `int dup(int oldfd);`
+
 ### Parâmetros:
 - oldfd: O descritor de arquivo que você deseja duplicar. Este descritor deve ser válido, ou seja, o arquivo deve estar aberto.
 ### Retorno:
@@ -555,7 +578,9 @@ int main() {
 `#include <fcntl.h>`
 
 A função dup2() é uma versão da função dup() que permite que você duplique um descritor de arquivo para um descritor específico. Essa função é especialmente útil para redirecionar a entrada ou saída de um programa.
+
 Assinatura: `int dup2(int oldfd, int newfd);`
+
 ### Parâmetros:
 - oldfd: O descritor de arquivo que você deseja duplicar.
 - newfd: O descritor de arquivo onde oldfd deve ser duplicado. Se newfd já estiver aberto, ele será fechado antes de ser duplicado.
@@ -610,7 +635,9 @@ int main() {
 # pipe()
 `#include <unistd.h>`
 A função pipe() é usada em C para criar um canal de comunicação entre processos. Ela permite que um processo escreva dados que podem ser lidos por outro processo, estabelecendo uma comunicação unidirecional. Esse mecanismo é muito útil para interprocess communication (IPC).
+
 Assinatura: `int pipe(int pipefd[2]);`
+
 ### Parâmetros:
 - pipefd: É um array de dois inteiros. O primeiro elemento (pipefd[0]) será o descritor de leitura, e o segundo elemento (pipefd[1]) será o descritor de escrita.
 ### Retorno:
@@ -679,7 +706,9 @@ int main() {
 `#include <unistd.h>`
 
 A função getcwd() em C é usada para obter o caminho absoluto (diretório de trabalho atual) do processo em execução. Ela preenche um buffer fornecido pelo usuário com o caminho completo do diretório onde o programa está sendo executado no momento. 
+
 Assinatura: `char *getcwd(char *buf, size_t size);`
+
 ### Parâmetros:
 - buf: Um ponteiro para um buffer onde o caminho será armazenado.
 - size: O tamanho do buffer em bytes.
@@ -715,7 +744,9 @@ int main() {
 `#include <unistd.h>`
 
 A função chdir() é utilizada para mudar o diretório de trabalho atual de um processo. Ela permite que você altere o diretório em que o processo está operando, o que pode ser útil em várias situações, como ao trabalhar com arquivos em diferentes diretórios.
+
 Assinatura: `int chdir(const char *path);`
+
 ### Parâmetros:
 - path: Um ponteiro para uma string que representa o caminho do diretório que você deseja definir como o novo diretório de trabalho. Pode ser um caminho absoluto (exemplo: /home/- user/diretorio) ou um caminho relativo (exemplo: ./diretorio).
 ### Retorno:
@@ -728,7 +759,9 @@ Se tentarmos mudar para um diretório que não existe ou para um diretório para
 `#include <unistd.h>`
 
 A função unlink() é usada para remover um link para um arquivo no sistema de arquivos, o que, na prática, significa excluir o arquivo (desde que não haja mais links para ele). Se o arquivo tiver vários links, a função apenas remove o link especificado, e o arquivo só será realmente excluído quando o último link for removido e não houver mais processos com o arquivo aberto.
+
 Assinatura: `int unlink(const char *pathname);`
+
 ### Parâmetros
 - pathname: O caminho do arquivo que você deseja remover.
 ### Retorno
@@ -769,7 +802,9 @@ int main() {
 ```
 
 A função opendir() é usada para abrir um diretório no sistema de arquivos e retornar um ponteiro para uma estrutura DIR, que será usada para ler o conteúdo do diretório (como os arquivos e subdiretórios nele). Ela é normalmente utilizada em conjunto com outras funções de manipulação de diretórios, como readdir(), closedir(), entre outras.
+
 Assinatura: `DIR *opendir(const char *name);`
+
 ### Parâmetros:
 - name: O caminho para o diretório que você deseja abrir.
 ### Retorno:        
