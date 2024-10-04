@@ -24,7 +24,7 @@ Autocompletar: Pode ser configurada para sugerir ou completar automaticamente pa
 __Compilação: Ao compilar, é necessário linkar a biblioteca com -lreadline.__
 Para adicionar um input ao historico usamos a add_history e podemos navegar pelo historico atraves das setas
 
-`add_history(string)` string seria a string a ser gravada no historico
+`add_history(string)` `string` seria a string a ser gravada no historico
 
 `rl_clear_history()` limpa todos os itens do histórico que foram adicionados por chamadas a add_history().
 Se o histórico for salvo em um arquivo usando write_history(), isso não afetará o histórico já salvo no arquivo, apenas o histórico em memória será limpo.
@@ -129,15 +129,56 @@ int main() {
 Este tipo é usado principalmente em chamadas de sistema que lidam com processos, como fork(), wait(), getpid(), e getppid().
 
 # wait()  
+
 `#include <sys/wait.h>`
 
 Assinatura: `pid_t wait(int *status);`
 
-A funcao `wait()` em C e usada para fazer com que um processo pai aguarde a finalizacao de um ou mais processos filhos (Se houve algum processo filho que nao tenha acabado a sua execussao ele fica a aguardar).
+A funcao `wait()` em C e usada para fazer com que um processo pai aguarde a finalizacao de um ou mais processos filhos.
+Se houver algum processo filho que não tenha terminado a sua execução ele fica a aguardar.
 
 ### Parametros:
 - status: E um ponteiro para um inteiro onde o status de termino do processo filho sera armazenado. Se nao estivermos interessados no status de saida podemos passar NULL. O statuss pode ser analizado com macros como: `WIFEXITED()`, `WEXITSTATUS()`, `WIFSIGNALED()` entre outras.
- 
+
+`WIFEXITED(status)`: Retorna verdadeiro se o processo filho terminou normalmente (ou seja, usou exit() ou retornou da main()).
+
+`WEXITSTATUS(status)`: Retorna o código de saída do processo filho se ele terminou normalmente (o valor passado para exit()).
+
+`WIFSIGNALED(status)`: Retorna verdadeiro se o processo filho foi encerrado por um sinal.
+
+`WTERMSIG(status)`: Retorna o número do sinal que causou a finalização do processo filho.
+
+`WIFSTOPPED(status)`: Retorna verdadeiro se o processo filho foi parado por um sinal (mas não terminado).
+
+### Valores de retorno:
+- Retorna o PID do processolho filho que terminou
+- Retorna -1 em caso de erro
+
+# waitpid()
+`#include <sys/wait.h>`
+
+Pode especificar o PID de um processo específico para esperar, ou outras opções como -1 (esperar por qualquer filho).
+options: Pode incluir opções como WNOHANG (não espera, retorna imediatamente se nenhum filho tiver terminado) e WUNTRACED (retorna se um processo filho tiver sido parado, mas não terminado).
+Assinatura: `pid_t waitpid(pid_t pid, int *status, int options);`
+### Parâmetros
+- pid: Especifica qual processo filho esperar. Existem alguns valores especiais que você pode usar:
+     - pid > 0: Espera pelo processo filho cujo PID é exatamente igual a pid.
+     - pid == 0: Espera por qualquer processo filho que esteja no mesmo grupo de processos que o chamador.
+     - pid < -1: Espera por qualquer processo filho cujo grupo de processos seja igual a -pid.
+     - pid == -1: Comportamento padrão de wait(), ou seja, espera por qualquer processo filho.
+- status: Um ponteiro para um inteiro onde o status de término do processo será armazenado. O valor pode ser verificado usando macros como:
+     - WIFEXITED(status): Retorna true se o processo filho terminou normalmente (via exit ou _exit).
+     - WEXITSTATUS(status): Retorna o código de saída do filho se WIFEXITED for verdadeiro.
+     - WIFSIGNALED(status): Retorna true se o filho foi encerrado por um sinal.
+     - WTERMSIG(status): Retorna o número do sinal que encerrou o filho, se WIFSIGNALED for verdadeiro.
+     - WIFSTOPPED(status): Retorna true se o processo filho foi interrompido por um sinal (SIGSTOP ou similar).
+     - WSTOPSIG(status): Retorna o número do sinal que parou o processo, se WIFSTOPPED for verdadeiro.
+- options: Permite especificar opções adicionais. Algumas opções comuns são:
+     - WNOHANG: Faz com que waitpid() não bloqueie se nenhum filho tiver terminado ainda. Se nenhum processo filho terminou, a função retorna imediatamente com 0.
+     - WUNTRACED: Faz com que waitpid() retorne se um processo filho foi parado, mas não terminado (por exemplo, após um sinal SIGSTOP).
+     - WCONTINUED: Faz com que waitpid() retorne se um processo filho que estava parado foi reiniciado (após um SIGCONT).
+
+
 ### Principais opções:
 `WNOHANG`: Esta opção faz com que waitpid() não bloqueie se o filho ainda não tiver terminado. Em vez disso, ele retorna imediatamente e você pode continuar executando outras tarefas.
 `WUNTRACED`: Faz com que waitpid() retorne também se um filho for parado (não apenas terminado) por um sinal (como um Ctrl + Z no terminal). Normalmente, waitpid() só retornaria se o processo filho terminasse de fato, mas com WUNTRACED, você é notificado mesmo que o filho apenas suspenda (não termine).
@@ -157,39 +198,11 @@ A funcao `wait()` em C e usada para fazer com que um processo pai aguarde a fina
    
   `__WCLONE`: Monitora apenas processos que não compartilham o mesmo grupo de processos. Essa é uma opção avançada para contextos que envolvem threads e processos criados com clone().
 
-#### Como usar essas opções?
+### Como usar essas opções?
    
 Essas opções são passadas como um argumento adicional na chamada à função waitpid(). Elas podem ser combinadas usando o operador bitwise OR (|) para que você use mais de uma opção ao mesmo tempo. Por exemplo:
 
 `waitpid(pid, &status, WNOHANG | WUNTRACED);`
-
-
-### Valores de retorno:
-- Retorna o PID do processolho filho que terminou
-- Retorna -1 em caso de erro
-
-# waitpid() 
-
-`#include <sys/wait.h>`
-
-Assinatura: pid_t waitpid(pid_t pid, int *status, int options);
-### Parâmetros
-- pid: Especifica qual processo filho esperar. Existem alguns valores especiais que você pode usar:
-     - pid > 0: Espera pelo processo filho cujo PID é exatamente igual a pid.
-     - pid == 0: Espera por qualquer processo filho que esteja no mesmo grupo de processos que o chamador.
-     - pid < -1: Espera por qualquer processo filho cujo grupo de processos seja igual a -pid.
-     - pid == -1: Comportamento padrão de wait(), ou seja, espera por qualquer processo filho.
-- status: Um ponteiro para um inteiro onde o status de término do processo será armazenado. O valor pode ser verificado usando macros como:
-     - WIFEXITED(status): Retorna true se o processo filho terminou normalmente (via exit ou _exit).
-     - WEXITSTATUS(status): Retorna o código de saída do filho se WIFEXITED for verdadeiro.
-     - WIFSIGNALED(status): Retorna true se o filho foi encerrado por um sinal.
-     - WTERMSIG(status): Retorna o número do sinal que encerrou o filho, se WIFSIGNALED for verdadeiro.
-     - WIFSTOPPED(status): Retorna true se o processo filho foi interrompido por um sinal (SIGSTOP ou similar).
-     - WSTOPSIG(status): Retorna o número do sinal que parou o processo, se WIFSTOPPED for verdadeiro.
-- options: Permite especificar opções adicionais. Algumas opções comuns são:
-     - WNOHANG: Faz com que waitpid() não bloqueie se nenhum filho tiver terminado ainda. Se nenhum processo filho terminou, a função retorna imediatamente com 0.
-     - WUNTRACED: Faz com que waitpid() retorne se um processo filho foi parado, mas não terminado (por exemplo, após um sinal SIGSTOP).
-     - WCONTINUED: Faz com que waitpid() retorne se um processo filho que estava parado foi reiniciado (após um SIGCONT).
 
 ### Retorno
 - Retorna o PID do processo filho que mudou de estado (terminou, foi interrompido, ou continuou).
@@ -280,8 +293,8 @@ Assinatura: `int open(const char *pathname, int flags, mode_t mode);`
      - O_APPEND: Escreve dados no final do arquivo.
 - mode: Usado apenas se O_CREAT for especificado. Define as permissões do arquivo (ex: S_IRUSR | S_IWUSR, que dá permissão de leitura e escrita ao proprietário).
 ### Retorno:
--Retorna um descritor de arquivo (um inteiro) se a operação for bem-sucedida.
--Retorna -1 em caso de erro, e errno é configurado para indicar o erro.
+- Retorna um descritor de arquivo (um inteiro) se a operação for bem-sucedida.
+- Retorna -1 em caso de erro, e errno é configurado para indicar o erro.
 
 # close()
 
@@ -297,7 +310,8 @@ Assinatura: `int close(int fd);`
 
 #### Exemplo de uso:
 ```
-int fd = open(./teste.txt, W_RDONLY); // o terceiro parametro so precisa de ser usado no caso de usarmos a flag O_CREATE
+// o terceiro parametro so precisa de ser usado no caso de usarmos a flag O_CREATE
+int fd = open(./teste.txt, W_RDONLY);
 if (fd < 0)
     error_handle();
 ...
@@ -340,11 +354,16 @@ int main()
 `#include <errno.h>`
 
 A variável `errno` é uma variável global em C que é utilizada para indicar se ocorreu um erro durante a execução de uma função do sistema ou da biblioteca. Quando uma função que pode falhar é chamada, se ocorrer um erro, errno é definido com um código de erro específico que pode ser usado para determinar o que deu errado.
+
 Se uma função falhar, errno é definido como um valor diferente de zero. Se a função for bem-sucedida, errno pode manter o valor anterior ou ser zero. Por isso, é importante verificar errno apenas após uma falha de função.
-é definido por várias funções do sistema e da biblioteca C.Cada função que pode falhar tem seus próprios códigos de erro que podem ser atribuídos a errno.
+é definido por várias funções do sistema e da biblioteca C.
+
+Cada função que pode falhar tem seus próprios códigos de erro que podem ser atribuídos a errno.
 
 # strerror()
+
 `#include <string.h>` 
+
 A função strerror() converte um código de erro em uma string descritiva. É útil quando você tem um código de erro (geralmente retornado por funções do sistema) e deseja obter uma descrição legível.
 Assinatura: `char *strerror(int errnum);`
 ### Parâmetros
@@ -353,9 +372,12 @@ Assinatura: `char *strerror(int errnum);`
 - Retorna um ponteiro para uma string estática que descreve o erro correspondente ao código fornecido.
     
 # perror()
+
 `#include <stdio.h>`
+
 A função perror() é uma maneira conveniente de imprimir uma mensagem de erro para a saída padrão (normalmente o terminal) precedida por uma string especificada pelo usuário. Ela utiliza o valor de errno para imprimir a mensagem de erro correspondente.
 Assinatura: `void perror(const char *s);`
+
 ### Parâmetros
 - s: Uma string que será impressa antes da mensagem de erro. Se s for NULL, apenas a mensagem de erro será impressa.
 ### Retorno
@@ -399,11 +421,13 @@ int main() {
 
 A função sigaction() é uma alternativa mais robusta e flexível à função signal() para capturar e manipular sinais em C. Enquanto signal() tem algumas limitações de portabilidade e confiabilidade, sigaction() oferece um controle mais preciso sobre o comportamento dos sinais, permitindo especificar várias opções, como máscaras de sinal e flags que afetam o comportamento da função.
 Assinatura: `int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);`
+
 ### Parâmetros
 - signum: O número do sinal que queremos capturar ou manipular (como SIGINT, SIGTERM, etc.).
 - act: Um ponteiro para uma estrutura do tipo struct sigaction, que especifica o novo comportamento para o sinal signum.
 - oldact: Um ponteiro para uma estrutura do tipo struct sigaction, onde o comportamento anterior do sinal (antes da modificação) será armazenado. Se não for necessário recuperar o comportamento anterior, esse valor pode ser passado como NULL.
-### Retorno: Retorna 0 em caso de sucesso. Se houver erro, retorna -1 e define errno com o código de erro apropriado.
+### Retorno: 
+Retorna 0 em caso de sucesso. Se houver erro, retorna -1 e define errno com o código de erro apropriado.
     
 #### Estrutura sigaction
 ```
