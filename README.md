@@ -5,7 +5,7 @@
 #include <readline/history.h>
 ```
                      
-A função readline() é usada para ler uma linha de texto do terminal de forma interativa, permitindo ao usuário editar a linha, mover o cursor, e navegar no histórico de comandos.
+A função `readline()` é usada para ler uma linha de texto do terminal de forma interativa, permitindo ao usuário editar a linha, mover o cursor, e navegar no histórico de comandos.
 Mostra um prompt (texto que aparece antes da linha de entrada) e aguarda o usuário digitar algo.
 Retorna um ponteiro para a string digitada ou NULL se o usuário pressionar Ctrl+D (EOF).
 
@@ -34,20 +34,20 @@ Se o histórico for salvo em um arquivo usando write_history(), isso não afetar
 
 `#include <termios.h>`
 
-A estrutura termios contém as configurações do terminal. Cada campo dessa estrutura controla uma parte do comportamento do terminal, e você pode manipulá-los para modificar como o terminal lida com entradas e saídas.
+A `struct termios` contém as configurações do terminal. Cada campo dessa estrutura controla uma parte do comportamento do terminal, e você pode manipulá-los para modificar como o terminal lida com entradas e saídas.
 
 Assinatura: `struct termios termios_p;`
 
 ### Estrutura termios:
- - c_lflag (Local modes): Controla as opções de modo local, como se o terminal deve ecoar os caracteres digitados e como os sinais são tratados (por exemplo, Ctrl+C).
- - c_iflag (Input modes): Controla as opções de modo de entrada, como se o terminal deve processar caracteres de controle.
- - c_oflag (Output modes): Controla as opções de modo de saída, como se o terminal deve processar os caracteres de controle de nova linha.
- - c_cflag (Control modes): Controla as opções de modo de controle, como a velocidade da comunicação serial.
- - c_cc[] (Control characters): Um array de caracteres de controle, como o caractere que representa a tecla de "fim de arquivo" (EOF) ou "apagar" (DEL).
+ - `c_lflag` (Local modes): Controla as opções de modo local, como se o terminal deve ecoar os caracteres digitados e como os sinais são tratados (por exemplo, Ctrl+C).
+ - `c_iflag` (Input modes): Controla as opções de modo de entrada, como se o terminal deve processar caracteres de controle.
+ - `c_oflag` (Output modes): Controla as opções de modo de saída, como se o terminal deve processar os caracteres de controle de nova linha.
+ - `c_cflag` (Control modes): Controla as opções de modo de controle, como a velocidade da comunicação serial.
+ - `c_cc[]` (Control characters): Um array de caracteres de controle, como o caractere que representa a tecla de "fim de arquivo" (EOF) ou "apagar" (DEL).
 
 __c_lflag (Local Mode Flags)__
-ECHOCTL: Se essa flag estiver definida, os caracteres de controle (como Ctrl+C, Ctrl+D) são exibidos no terminal na forma de ^C, ^D, etc. 
-Quando removemos essa flag (usando `&= ~ECHOCTL`  => BITWISE HELLO XD), esses caracteres de controle não são mais exibidos no terminal.
+`ECHOCTL`: Se essa flag estiver definida, os caracteres de controle (como Ctrl+C, Ctrl+D) são exibidos no terminal na forma de ^C, ^D, etc. 
+Quando removemos essa flag (usando `&= ~ECHOCTL`  => **BITWISE** HELLO XD), esses caracteres de controle não são mais exibidos no terminal.
 
 # Funções tcgetattr e tcsetattr
 
@@ -55,7 +55,7 @@ Quando removemos essa flag (usando `&= ~ECHOCTL`  => BITWISE HELLO XD), esses ca
 
 ## tcsetattr()
 
-Esta função lê as configurações atuais do terminal e armazena-as na estrutura termios apontada por termios_p.
+Esta função `tcsetattr()` lê as configurações atuais do terminal e armazena-as na estrutura termios apontada por termios_p.
 Essa função retorna 0 em caso de sucesso e -1 em caso de falha.
 
 Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termios_p);`
@@ -66,7 +66,7 @@ Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termi
 
 ## tcsetattr()
 
-Esta função aplica as configurações do terminal armazenadas na estrutura termios apontada por termios_p para o terminal indicado pelo descritor de arquivo fd.
+Esta função `tcsetattr()` aplica as configurações do terminal armazenadas na estrutura termios apontada por termios_p para o terminal indicado pelo descritor de arquivo fd.
 Essa função também retorna 0 em caso de sucesso e -1 em caso de falha.
 
 Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termios_p);`
@@ -94,15 +94,15 @@ tcsetattr(STDIN_FILENO, TCSANOW, &termios_t);
 
 ### Comportamento do fork()
 Copia o espaço de memória: O processo filho recebe uma cópia do espaço de memória do processo pai. Inicialmente, isso inclui todas as variáveis, pilha e heap. No entanto, o sistema usa uma técnica chamada copy-on-write (COW), onde a cópia real da memória só é feita se um dos processos (pai ou filho) tentar modificar a memória.
-Execução paralela: Após a chamada para fork(), ambos os processos (pai e filho) continuam a ser executados. Não há garantias sobre a ordem em que eles serão executados, pois o escalonador do sistema operacional decide isso.
-Process IDs diferentes: O processo filho tem um PID diferente do pai. O pai pode obter o PID do filho a partir do valor retornado por fork(), enquanto o filho pode obter o PID do pai usando getppid().
+Execução paralela: Após a chamada para `fork()`, ambos os processos (pai e filho) continuam a ser executados. Não há garantias sobre a ordem em que eles serão executados, pois o escalonador do sistema operacional decide isso.
+Process IDs diferentes: O processo filho tem um PID diferente do pai. O pai pode obter o PID do filho a partir do valor retornado por `fork()`, enquanto o filho pode obter o PID do pai usando `getppid()`.
 
 Assinatura: `pid_t fork(void);`
 
 ### Retorno da função
-- Retorno do processo pai: fork() retorna o PID (Process ID) do processo filho.
-- Retorno do processo filho: fork() retorna 0 no processo filho.
-- Erro: Se ocorrer um erro ao tentar criar o processo, fork() retorna -1 e define o valor da variável global errno para indicar o erro.
+- Retorno do processo pai: `fork()` retorna o PID (Process ID) do processo filho.
+- Retorno do processo filho: `fork()` retorna 0 no processo filho.
+- Erro: Se ocorrer um erro ao tentar criar o processo, `fork()` retorna -1 e define o valor da variável global errno para indicar o erro.
 
 #### Exemplo de uso
 ```
@@ -127,8 +127,8 @@ int main() {
 
 `#include <sys/types.h>`
 
-É um tipo de dado definido em <sys/types.h> que representa o Process ID (PID), que é um identificador único atribuído a cada processo em execução no sistema.
-Este tipo é usado principalmente em chamadas de sistema que lidam com processos, como fork(), wait(), getpid(), e getppid().
+É um tipo de dado definido em `<sys/types.h>` que representa o Process ID (PID), que é um identificador único atribuído a cada processo em execução no sistema.
+Este tipo é usado principalmente em chamadas de sistema que lidam com processos, como `fork()`, `wait()`, `getpid()`, e `getppid()`.
 
 # wait()  
 
@@ -210,19 +210,19 @@ Essas opções são passadas como um argumento adicional na chamada à função 
 
 ### Retorno
 - Retorna o PID do processo filho que mudou de estado (terminou, foi interrompido, ou continuou).
-- Retorna 0 se a opção WNOHANG foi usada e nenhum processo filho mudou de estado.
+- Retorna 0 se a opção `WNOHANG` foi usada e nenhum processo filho mudou de estado.
 - Retorna -1 se ocorrer um erro (por exemplo, se o processo filho não existir ou não houver processos filhos). A variável global errno é configurada para indicar o erro.
 
-wait3, wait4 sao funcoes parecidas com a wait e waitpid mas que permitem recolher mais dados dos processos filhos terminados atraves de uma estrutura (struct rusage) // not necessary for minishell id say
+*wait3, wait4 sao funcoes parecidas com a wait e waitpid mas que permitem recolher mais dados dos processos filhos terminados atraves de uma estrutura (struct rusage) // not necessary for minishell id say*
 
 # Processos Zumbis
-Um processo zumbi é um processo que já foi terminado, mas ainda tem uma entrada na tabela de processos. Isso ocorre porque o processo pai ainda não chamou wait() para recuperar o estado de saída do filho.
+Um **processo zumbi** é um processo que já foi terminado, mas ainda tem uma entrada na tabela de processos. Isso ocorre porque o processo pai ainda não chamou wait() para recuperar o estado de saída do filho.
 Os processos zumbis estão em um estado de "terminado" (exited), mas ainda ocupam uma entrada na tabela de processos do sistema, pois o sistema precisa manter informações sobre o processo terminado até que o pai as recupere.
 Um processo se torna zumbi quando o processo filho termina sua execução ou se o processo pai não chama wait() para obter o status de saída do filho.
 O processo zumbi é removido da tabela de processos quando o pai chama wait() e recupera o status de saída do filho.
 
 # Processos Órfãos
-Um processo órfão é um processo cujo processo pai terminou antes dele. Em outras palavras, o processo órfão ainda está em execução, mas não tem um pai vivo.
+Um **processo órfão** é um processo cujo processo pai terminou antes dele. Em outras palavras, o processo órfão ainda está em execução, mas não tem um pai vivo.
 Os processos órfãos são processos que estão em execução, mas não têm um pai ativo. Quando um processo pai termina, o sistema operacional adota automaticamente seus filhos, tornando-os órfãos.
 Um processo se torna órfão quando o processo pai termina sua execução ou um ou mais de seus filhos continuam a ser executados.
 O sistema operacional adota processos órfãos, geralmente atribuindo o processo init (PID 1) como seu novo pai. O processo init é responsável por gerenciar todos os processos órfãos e garantir que eles sejam limpos adequadamente.
@@ -235,7 +235,7 @@ O gerenciamento automático de processos órfãos pelo sistema operacional evita
 
 `#include <unistd.h>`
 
-A função access() é usada em C para verificar os permissões de acesso a arquivos ou diretórios. Ela permite que o programa teste se um arquivo ou diretório pode ser lido, gravado ou executado, sem tentar abrir o arquivo diretamente.
+A função `access()` é usada em C para verificar os permissões de acesso a arquivos ou diretórios. Ela permite que o programa teste se um arquivo ou diretório pode ser lido, gravado ou executado, sem tentar abrir o arquivo diretamente.
 
 Assinatura: `int access(const char *pathname, int mode);`
 
@@ -262,7 +262,7 @@ Em C, você pode manipular variáveis de ambiente através de várias funções 
 
 `#include <stdlib.h>`
 
-A função getenv() é usada para recuperar o valor de uma variável de ambiente.
+A função `getenv()` é usada para recuperar o valor de uma variável de ambiente.
 
 Assinatura: `char *getenv(const char *name);`
 
@@ -272,13 +272,13 @@ Assinatura: `char *getenv(const char *name);`
 - Retorna um ponteiro para o valor da variável de ambiente correspondente ou NULL se a variável não estiver definida.
 
 ### envp[]
-O vetor envp[] (environment pointer) contém todas as variáveis de ambiente disponíveis no momento da execução do programa. Ele pode ser passado como o terceiro argumento da função main(). Se envp[] for passado, você pode iterar sobre ele para acessar todas as variáveis de ambiente.
+O vetor `envp[]` (environment pointer) contém todas as variáveis de ambiente disponíveis no momento da execução do programa. Ele pode ser passado como o terceiro argumento da função main(). Se envp[] for passado, você pode iterar sobre ele para acessar todas as variáveis de ambiente.
 int main(int argc, char *argv[], char *envp[]);
 Podemos iterar pelos key=values com um loop normal e o formato e sempre KEY=value
 PS: vais ter de copiar o envp para poder adicionar com um custom export que pede e para ler vais ter de criar um custom getenv ja que estamos agora a armazenar envp dinamicamente num array dinamico
 
 ### File descriptors
-Descritores de arquivo (FDs) são inteiros não negativos que representam aberturas de arquivos ou recursos manipuláveis em sistemas Unix/Linux. Eles permitem acesso uniforme a arquivos, sockets e pipes, e são obtidos através de chamadas de sistema como open(). Cada descritor deve ser fechado com close() após o uso para liberar os recursos associados.
+Descritores de arquivo (**fds**) são inteiros não negativos que representam aberturas de arquivos ou recursos manipuláveis em sistemas Unix/Linux. Eles permitem acesso uniforme a arquivos, sockets e pipes, e são obtidos através de chamadas de sistema como `open()`. Cada descritor deve ser fechado com close() após o uso para liberar os recursos associados.
 - 0: stdin (entrada padrão).
 - 1: stdout (saída padrão).
 - 2: stderr (saída de erro padrão).
@@ -288,7 +288,7 @@ Descritores de arquivo (FDs) são inteiros não negativos que representam abertu
 
 `#include <fcntl.h>`
 
-A função open() é usada para abrir um arquivo e retornar um descritor de arquivo
+A função `open()` é usada para abrir um arquivo e retornar um descritor de arquivo
 
 Assinatura: `int open(const char *pathname, int flags, mode_t mode);`
 
@@ -310,7 +310,7 @@ Assinatura: `int open(const char *pathname, int flags, mode_t mode);`
 
 `#include <unistd.h>`
 
-A função close() é usada para fechar um descritor de arquivo que foi aberto anteriormente com open(). Isso libera os recursos associados ao descritor de arquivo.    
+A função `close()` é usada para fechar um descritor de arquivo que foi aberto anteriormente com `open()`. Isso libera os recursos associados ao descritor de arquivo.    
 
 Assinatura: `int close(int fd);`
 
@@ -334,7 +334,7 @@ if (close(fd) < 0)
 
 `#include <unistd.h>`
 
-A função execve() é uma das chamadas de sistema em C usadas para executar um novo programa, substituindo o processo atual pelo novo programa especificado. É uma das várias funções exec disponíveis, e é considerada a forma mais básica e poderosa, pois permite passar os argumentos e variáveis de ambiente diretamente.
+A função `execve()` é uma das chamadas de sistema em C usadas para executar um novo programa, substituindo o processo atual pelo novo programa especificado. É uma das várias funções exec disponíveis, e é considerada a forma mais básica e poderosa, pois permite passar os argumentos e variáveis de ambiente diretamente.
 
 Assinatura: `int execve(const char *filename, char *const argv[], char *const envp[]);`
 
@@ -343,7 +343,7 @@ Assinatura: `int execve(const char *filename, char *const argv[], char *const en
 - argv: Um vetor de strings que contém os argumentos passados para o programa. O primeiro argumento (argv[0]) deve ser o nome do programa, seguido pelos argumentos reais. O vetor deve ser terminado por um ponteiro nulo (NULL)
 - envp: Um vetor de strings que contém as variáveis de ambiente a serem passadas para o novo programa. Assim como argv, deve ser terminado por um ponteiro nulo (NULL).
 ### Retorno
-- Em caso de sucesso, execve() não retorna; o processo atual é substituído pelo novo programa.
+- Em caso de sucesso, `execve()` não retorna; o processo atual é substituído pelo novo programa.
 - Se ocorrer um erro, retorna -1 e errno é configurado para indicar o tipo de erro.
 
 #### Exemplo de uso:
@@ -378,7 +378,7 @@ Cada função que pode falhar tem seus próprios códigos de erro que podem ser 
 
 `#include <string.h>` 
 
-A função strerror() converte um código de erro em uma string descritiva. É útil quando você tem um código de erro (geralmente retornado por funções do sistema) e deseja obter uma descrição legível.
+A função `strerror()` converte um código de erro em uma string descritiva. É útil quando você tem um código de erro (geralmente retornado por funções do sistema) e deseja obter uma descrição legível.
 
 Assinatura: `char *strerror(int errnum);`
 
@@ -391,7 +391,7 @@ Assinatura: `char *strerror(int errnum);`
 
 `#include <stdio.h>`
 
-A função perror() é uma maneira conveniente de imprimir uma mensagem de erro para a saída padrão (normalmente o terminal) precedida por uma string especificada pelo usuário. Ela utiliza o valor de errno para imprimir a mensagem de erro correspondente.
+A função `perror()` é uma maneira conveniente de imprimir uma mensagem de erro para a saída padrão (normalmente o terminal) precedida por uma string especificada pelo usuário. Ela utiliza o valor de errno para imprimir a mensagem de erro correspondente.
 
 Assinatura: `void perror(const char *s);`
 
@@ -402,21 +402,21 @@ Assinatura: `void perror(const char *s);`
 
 # signal()
 `#include <signal.h>`
-A função signal() é usada em C para capturar ou lidar com sinais (interrupts ou eventos) enviados para um processo. Sinais são um mecanismo que o sistema operacional usa para notificar um processo sobre eventos assíncronos, como a terminação de um processo filho, uma interrupção de teclado (como Ctrl+C), ou erros de execução.
+A função `signal()` é usada em C para capturar ou lidar com sinais (interrupts ou eventos) enviados para um processo. Sinais são um mecanismo que o sistema operacional usa para notificar um processo sobre eventos assíncronos, como a terminação de um processo filho, uma interrupção de teclado (como Ctrl+C), ou erros de execução.
 
 Assinatura: `void (*signal(int signum, void (*handler)(int)))(int);`
 
 ### Parâmetros
 - signum: O número do sinal que você quer capturar ou ignorar. Alguns sinais comuns incluem:
-    - SIGINT: Interrupção de terminal (geralmente Ctrl+C).
-    - SIGTERM: Solicitação de terminação.
-    - SIGKILL: Sinal de matar um processo (não pode ser capturado ou ignorado).
-    - SIGCHLD: Indica que um processo filho terminou.
-    - SIGSEGV: Erro de segmentação (tentativa de acessar memória inválida).
+    - `SIGINT`: Interrupção de terminal (geralmente Ctrl+C).
+    - `SIGTERM`: Solicitação de terminação.
+    - `SIGKILL`: Sinal de matar um processo (não pode ser capturado ou ignorado).
+    - `SIGCHLD`: Indica que um processo filho terminou.
+    - `SIGSEGV`: Erro de segmentação (tentativa de acessar memória inválida).
 - handler: Um ponteiro para a função que será chamada quando o sinal for recebido. Pode ser:
-    - Função de tratamento: Uma função que será chamada quando o sinal for capturado.
-    - SIG_IGN: Para ignorar o sinal.
-    - SIG_DFL: Para restaurar o comportamento padrão para esse sinal.
+    - `Signal handler`: Uma função que será chamada quando o sinal for capturado.
+    - `SIG_IGN`: Para ignorar o sinal.
+    - `SIG_DFL`: Para restaurar o comportamento padrão para esse sinal.
 ### Retorno
 - Retorna o antigo handler de sinal se for bem-sucedido.
 - Se ocorrer um erro, retorna SIG_ERR.
@@ -438,7 +438,7 @@ int main() {
 
 `#include <signal.h>`
 
-A função sigaction() é uma alternativa mais robusta e flexível à função signal() para capturar e manipular sinais em C. Enquanto signal() tem algumas limitações de portabilidade e confiabilidade, sigaction() oferece um controle mais preciso sobre o comportamento dos sinais, permitindo especificar várias opções, como máscaras de sinal e flags que afetam o comportamento da função.
+A função `sigaction()` é uma alternativa mais robusta e flexível à função signal() para capturar e manipular sinais em C. Enquanto signal() tem algumas limitações de portabilidade e confiabilidade, `sigaction()` oferece um controle mais preciso sobre o comportamento dos sinais, permitindo especificar várias opções, como máscaras de sinal e flags que afetam o comportamento da função.
 
 Assinatura: `int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);`
 
@@ -461,9 +461,9 @@ struct sigaction {
 - sa_handler: Um ponteiro para a função que será chamada quando o sinal for capturado. Pode ser SIG_IGN (ignorar o sinal) ou SIG_DFL (comportamento padrão).
 - sa_mask: Especifica outros sinais que devem ser bloqueados (temporariamente ignorados) enquanto o handler de sinal está sendo executado. Isso evita que um sinal interrompa o tratamento de outro.
 - sa_flags: Flags que modificam o comportamento de captura de sinal. Algumas flags comuns incluem:
-    - SA_RESTART: Faz com que chamadas de sistema interrompidas por sinais sejam reiniciadas automaticamente.
-    - SA_NOCLDSTOP: Evita que SIGCHLD seja enviado quando um processo filho parar.
-    - SA_SIGINFO: Usa a função sa_sigaction em vez de sa_handler para manipular sinais, fornecendo informações adicionais.
+    - `SA_RESTART`: Faz com que chamadas de sistema interrompidas por sinais sejam reiniciadas automaticamente.
+    - `SA_NOCLDSTOP`: Evita que SIGCHLD seja enviado quando um processo filho parar.
+    - `SA_SIGINFO`: Usa a função sa_sigaction em vez de sa_handler para manipular sinais, fornecendo informações adicionais.
 #### Exemplo de uso:
 ```
 void handle_sigint(int sig) {
@@ -532,7 +532,7 @@ Assinatura: `int kill(pid_t pid, int sig);`
 
 `#include <fcntl.h>`
 
-A função dup() em C é usada para duplicar um descritor de arquivo existente. O novo descritor de arquivo criado compartilha a mesma tabela de arquivos abertos que o descritor original, o que significa que ambos referenciam o mesmo arquivo ou recurso e compartilham a mesma posição de leitura/escrita e flags.
+A função `dup()` em C é usada para duplicar um descritor de arquivo existente. O novo descritor de arquivo criado compartilha a mesma tabela de arquivos abertos que o descritor original, o que significa que ambos referenciam o mesmo arquivo ou recurso e compartilham a mesma posição de leitura/escrita e flags.
 
 Assinatura: `int dup(int oldfd);`
 
@@ -579,7 +579,7 @@ int main() {
 
 `#include <fcntl.h>`
 
-A função dup2() é uma versão da função dup() que permite que você duplique um descritor de arquivo para um descritor específico. Essa função é especialmente útil para redirecionar a entrada ou saída de um programa.
+A função `dup2()` é uma versão da função `dup()` que permite que você duplique um descritor de arquivo para um descritor específico. Essa função é especialmente útil para redirecionar a entrada ou saída de um programa.
 
 Assinatura: `int dup2(int oldfd, int newfd);`
 
@@ -638,7 +638,7 @@ int main() {
 
 `#include <unistd.h>`
 
-A função pipe() é usada em C para criar um canal de comunicação entre processos. Ela permite que um processo escreva dados que podem ser lidos por outro processo, estabelecendo uma comunicação unidirecional. Esse mecanismo é muito útil para interprocess communication (IPC).
+A função `pipe()` é usada em C para criar um canal de comunicação entre processos. Ela permite que um processo escreva dados que podem ser lidos por outro processo, estabelecendo uma comunicação unidirecional. Esse mecanismo é muito útil para interprocess communication (IPC).
 
 Assinatura: `int pipe(int pipefd[2]);`
 
