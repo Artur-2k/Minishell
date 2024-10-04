@@ -551,4 +551,199 @@ Funcoes
                     return 0;
                 }
 
-    pipe()
+    pipe() #include <unistd.h>
+        A função pipe() é usada em C para criar um canal de comunicação entre processos. Ela permite que um processo escreva dados que podem ser lidos por outro processo, estabelecendo uma comunicação unidirecional. Esse mecanismo é muito útil para interprocess communication (IPC).
+        Assinatura: int pipe(int pipefd[2]);
+        Parâmetros:
+            pipefd: É um array de dois inteiros. O primeiro elemento (pipefd[0]) será o descritor de leitura, e o segundo elemento (pipefd[1]) será o descritor de escrita.
+        Retorno:
+            Retorna 0 em caso de sucesso.
+            Retorna -1 em caso de erro e define errno com o código de erro apropriado.
+        Funcionamento:
+            Quando você cria um pipe, ele é composto por um buffer na memória. Os dados escritos no descritor de escrita (pipefd[1]) podem ser lidos do descritor de leitura (pipefd[0]).
+            A comunicação é unidirecional: se você escrever em pipefd[1], não poderá ler a partir desse descritor. Para ler, você deve usar pipefd[0].
+            TLDR
+                pipe[0] => READING
+                pipe[1] => WRITING
+                Quando um processo e forked, o filho herda os mesmos fds entao podemos so
+            fechar o lado do pipe que nao queremos usar. Usar um pipe por via de comunicacao.  
+                Nao esquecer de fechar os fds que nao vamos usar no inicio e depois de os usar no fim
+
+        Exemplo de uso
+            #include <stdio.h>
+            #include <stdlib.h>
+            #include <unistd.h>
+            #include <string.h>
+
+            int main() {
+                int pipefd[2];
+                pid_t pid;
+                char buffer[100];
+
+                // Cria o pipe
+                if (pipe(pipefd) == -1) {
+                    perror("Erro ao criar pipe");
+                    return 1;
+                }
+
+                // Cria um processo filho
+                pid = fork();
+                if (pid == -1) {
+                    perror("Erro ao criar processo filho");
+                    return 1;
+                }
+
+                if (pid == 0) { // Processo filho
+                    // Fecha o descritor de leitura
+                    close(pipefd[0]); 
+
+                    // Escreve uma mensagem no pipe
+                    const char *msg = "Olá do filho!";
+                    write(pipefd[1], msg, strlen(msg) + 1); // +1 para incluir o terminador nulo
+                    close(pipefd[1]); // Fecha o descritor de escrita
+                } else { // Processo pai
+                    // Fecha o descritor de escrita
+                    close(pipefd[1]); 
+
+                    // Lê a mensagem do pipe
+                    read(pipefd[0], buffer, sizeof(buffer));
+                    printf("Mensagem do filho: %s\n", buffer);
+                    close(pipefd[0]); // Fecha o descritor de leitura
+                }
+
+                return 0;
+            }
+
+
+    getcwd() #include <unistd.h>
+        A função getcwd() em C é usada para obter o caminho absoluto (diretório de trabalho atual) do processo em execução. Ela preenche um buffer fornecido pelo usuário com o caminho completo do diretório onde o programa está sendo executado no momento. 
+        Assinatura: char *getcwd(char *buf, size_t size);
+        Parâmetros:
+            buf: Um ponteiro para um buffer onde o caminho será armazenado.
+            size: O tamanho do buffer em bytes.
+            Ao passar NULL como o primeiro argumento e 0 como o segundo, o sistema automaticamente aloca um buffer suficientemente grande para armazenar o caminho completo. Neste caso, você deve liberar a memória com free() após usá-la para evitar vazamentos de memória.
+            cwd = getcwd(NULL, 0);
+        Retorno:
+            Retorna um ponteiro para o buffer contendo o caminho absoluto em caso de sucesso.
+            Retorna NULL em caso de erro, e errno é definido com o código de erro apropriado.
+        Exemplo de uso:
+            #include <stdio.h>
+            #include <unistd.h>
+            #include <stdlib.h>
+
+            int main() {
+                // Aloca dinamicamente memória para o caminho
+                char *cwd = getcwd(NULL, 0);
+                if (cwd) {
+                    printf("Diretório de trabalho atual: %s\n", cwd);
+                    free(cwd); // Não se esqueça de liberar a memória alocada
+                } 
+                else {
+                    perror("Erro ao obter o diretório de trabalho atual");
+                    return 1;
+                }
+                return 0;
+            }
+
+    chdir() <unistd.h>
+        A função chdir() é utilizada para mudar o diretório de trabalho atual de um processo. Ela permite que você altere o diretório em que o processo está operando, o que pode ser útil em várias situações, como ao trabalhar com arquivos em diferentes diretórios.
+        Assinatura: int chdir(const char *path);
+        Parâmetros:
+            path: Um ponteiro para uma string que representa o caminho do diretório que você deseja definir como o novo diretório de trabalho. Pode ser um caminho absoluto (exemplo: /home/user/diretorio) ou um caminho relativo (exemplo: ./diretorio).
+        Retorno:
+            Retorna 0 em caso de sucesso.
+            Retorna -1 em caso de erro, e errno é definido para indicar o tipo de erro.
+        Se você tentar mudar para um diretório que não existe ou para um diretório para o qual não tem permissões, chdir() falhará e errno será definido para indicar o erro (por exemplo, ENOENT para "No such file or directory" ou EACCES para "Permission denied").
+    
+    unlink() #include <unistd.h>
+        A função unlink() é usada para remover um link para um arquivo no sistema de arquivos, o que, na prática, significa excluir o arquivo (desde que não haja mais links para ele). Se o arquivo tiver vários links, a função apenas remove o link especificado, e o arquivo só será realmente excluído quando o último link for removido e não houver mais processos com o arquivo aberto.
+        Assinatura: int unlink(const char *pathname);
+        Parâmetros
+            pathname: O caminho do arquivo que você deseja remover.
+        Retorno
+            Retorna 0 em caso de sucesso.
+            Retorna -1 em caso de erro, e errno é ajustado para indicar o erro.
+        Exemplo de uso:
+            #include <stdio.h>
+            #include <unistd.h>
+            #include <errno.h>
+
+            int main() {
+                const char *filename = "example.txt";
+
+                // Tenta remover o arquivo
+                if (unlink(filename) == -1) {
+                    if (errno == EACCES) {
+                        perror("Erro: Permissão negada para remover o arquivo");
+                    } else if (errno == EPERM) {
+                        perror("Erro: Operação não permitida");
+                    } else {
+                        perror("Erro ao remover o arquivo");
+                    }
+                    return 1; // Retorna com erro
+                }
+
+                printf("Arquivo %s removido com sucesso.\n", filename);
+                return 0; // Retorna com sucesso
+            }
+
+    opendir()   #include <sys/types.h>
+                #include <dirent.h>
+        A função opendir() é usada para abrir um diretório no sistema de arquivos e retornar um ponteiro para uma estrutura DIR, que será usada para ler o conteúdo do diretório (como os arquivos e subdiretórios nele). Ela é normalmente utilizada em conjunto com outras funções de manipulação de diretórios, como readdir(), closedir(), entre outras.
+        Assinatura: DIR *opendir(const char *name);
+        Parâmetros:
+            name: O caminho para o diretório que você deseja abrir.
+        Retorno:        
+            Um ponteiro para uma estrutura do tipo DIR que representa o diretório aberto.
+            NULL em caso de erro, e errno é definido para indicar o motivo do erro.
+        E preciso usar a closedir(DIR*)
+    Definitions
+        DIR *dir:
+            This is a pointer to a DIR structure, which represents a directory stream. You will use this pointer to access the directory entries.
+        struct dirent *entry:
+            This is a pointer to a struct dirent, which holds information about a directory entry, such as the name of the file or directory.
+            struct dirent {
+                ino_t   d_ino;       // Número do inode
+                char    d_name[];    // Nome da entrada (arquivo ou subdiretório)
+            };
+
+
+
+    closedir():
+        Fecha o diretório após a leitura.
+        Assinatura: int closedir(DIR *dirp);
+        Parameters
+            DIR *dirp: A pointer to a DIR structure representing the directory stream to be closed.
+        Return Value
+            Returns 0 on success.
+            Returns -1 on failure and sets errno to indicate the error.
+
+
+    Exemplo de uso
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <dirent.h> // Required for DIR, dirent, opendir, readdir, closedir
+
+        int main() {
+            const char *dir_path = "."; // Path to the directory (current directory)
+            DIR *dir;
+            struct dirent *entry;
+
+            // Open the directory
+            dir = opendir(dir_path);
+            if (dir == NULL) {
+                perror("Failed to open directory");
+                return EXIT_FAILURE;
+            }
+
+            // Read entries from the directory
+            while ((entry = readdir(dir)) != NULL) {
+                // Print the name of the file/directory
+                printf("Found: %s\n", entry->d_name);
+            }
+
+            // Close the directory stream
+            closedir(dir);
+
+            return EXIT_SUCCESS;
+        }

@@ -1,7 +1,0 @@
-funcoes 
-
-
-
-getcwd, chdir, stat, lstat, fstat, unlink, opendir, readdir, closedir,
-
- isatty, ttyname, ttyslot, ioctl, tgetent, tgetflag,tgetnum, tgetstr, tgoto, tputs

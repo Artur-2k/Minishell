@@ -6,22 +6,6 @@
 
 int main(void)
 {
-    char    *cmd;
-
-    while (true)
-    {
-        cmd = readline("Pocaterra pocaterra tchuuuuu 🚆: ");
-
-        if (!cmd)
-            break;
-
-        if (*cmd)
-            add_history(cmd);
-        
-        printf("Escreveste: %s\n", cmd);
-        
-        free(cmd);
-    }
 
     return (0);
 }
