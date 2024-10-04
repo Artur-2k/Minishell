@@ -69,7 +69,7 @@ Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termi
 Esta função aplica as configurações do terminal armazenadas na estrutura termios apontada por termios_p para o terminal indicado pelo descritor de arquivo fd.
 Essa função também retorna 0 em caso de sucesso e -1 em caso de falha.
 
-`Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termios_p);`
+Assinatura: `tcsetattr(int fd, int optional_actions, const struct termios *termios_p);`
 
 ### Parametros:
 - fd: O descritor de arquivo do terminal (como STDIN_FILENO).
@@ -237,7 +237,7 @@ O gerenciamento automático de processos órfãos pelo sistema operacional evita
 
 A função access() é usada em C para verificar os permissões de acesso a arquivos ou diretórios. Ela permite que o programa teste se um arquivo ou diretório pode ser lido, gravado ou executado, sem tentar abrir o arquivo diretamente.
 
-Assinatura: int access(const char *pathname, int mode);
+Assinatura: `int access(const char *pathname, int mode);`
 
 ### Parâmetros:
 - pathname: O caminho do arquivo ou diretório que você deseja testar.
@@ -269,7 +269,7 @@ Assinatura: `char *getenv(const char *name);`
 ### Parametros
 - name: O nome da variável de ambiente que você deseja obter.
 ### Retorno:
-Retorna um ponteiro para o valor da variável de ambiente correspondente ou NULL se a variável não estiver definida.
+- Retorna um ponteiro para o valor da variável de ambiente correspondente ou NULL se a variável não estiver definida.
 
 ### envp[]
 O vetor envp[] (environment pointer) contém todas as variáveis de ambiente disponíveis no momento da execução do programa. Ele pode ser passado como o terceiro argumento da função main(). Se envp[] for passado, você pode iterar sobre ele para acessar todas as variáveis de ambiente.
@@ -447,7 +447,7 @@ Assinatura: `int sigaction(int signum, const struct sigaction *act, struct sigac
 - act: Um ponteiro para uma estrutura do tipo struct sigaction, que especifica o novo comportamento para o sinal signum.
 - oldact: Um ponteiro para uma estrutura do tipo struct sigaction, onde o comportamento anterior do sinal (antes da modificação) será armazenado. Se não for necessário recuperar o comportamento anterior, esse valor pode ser passado como NULL.
 ### Retorno: 
-Retorna 0 em caso de sucesso. Se houver erro, retorna -1 e define errno com o código de erro apropriado.
+- Retorna 0 em caso de sucesso. Se houver erro, retorna -1 e define errno com o código de erro apropriado.
     
 #### Estrutura sigaction
 ```
@@ -489,12 +489,12 @@ int main() {
 
 # sigemptyset() 
 
-A função sigemptyset() é usada para inicializar um conjunto de sinais (sigset_t), que é uma estrutura usada para representar um grupo de sinais no sistema. Quando você chama sigemptyset(), ela limpa todos os sinais do conjunto, ou seja, garante que nenhum sinal está inicialmente incluído no grupo.
+A função `sigemptyset()` é usada para inicializar um conjunto de sinais (sigset_t), que é uma estrutura usada para representar um grupo de sinais no sistema. Quando você chama sigemptyset(), ela limpa todos os sinais do conjunto, ou seja, garante que nenhum sinal está inicialmente incluído no grupo.
 Usada para inicializar um set, basicamente
 
 # sigaddset()
 
-A função sigaddset() é usada para adicionar um sinal a um conjunto de sinais para serem bloqueados
+A função `sigaddset()` é usada para adicionar um sinal a um conjunto de sinais para serem bloqueados
 
 Assinatura: `int sigaddset(sigset_t *set, int signum);`
 
@@ -507,8 +507,10 @@ sigaddset(&sa.sa_mask, SIGTERM);  // Adiciona SIGTERM ao conjunto, bloqueando-o
 
 # kill()
 
-A função kill() em C é usada para enviar sinais a um processo ou grupo de processos
+A função `kill()` em C é usada para enviar sinais a um processo ou grupo de processos.
+
 Assinatura: `int kill(pid_t pid, int sig);`
+
 ### Parâmetros:
 - pid: Identifica o processo ou grupo de processos que receberá o sinal.
     - pid > 0: Envia o sinal ao processo cujo ID é igual a pid.
@@ -633,7 +635,9 @@ int main() {
 }
 ```
 # pipe()
+
 `#include <unistd.h>`
+
 A função pipe() é usada em C para criar um canal de comunicação entre processos. Ela permite que um processo escreva dados que podem ser lidos por outro processo, estabelecendo uma comunicação unidirecional. Esse mecanismo é muito útil para interprocess communication (IPC).
 
 Assinatura: `int pipe(int pipefd[2]);`
@@ -647,9 +651,13 @@ Assinatura: `int pipe(int pipefd[2]);`
 #### Funcionamento:
 Quando você cria um pipe, ele é composto por um buffer na memória. Os dados escritos no descritor de escrita (pipefd[1]) podem ser lidos do descritor de leitura (pipefd[0]).
 A comunicação é unidirecional: se você escrever em pipefd[1], não poderá ler a partir desse descritor. Para ler, você deve usar pipefd[0].
+
 _**TLDR**_
+
 `pipe[0]` => **READING**
+
 `pipe[1]` => **WRITING**
+
 Quando um processo é forked, o filho herda os mesmos fds entao podemos fechar o lado do pipe que não queremos usar. 
 Usar um pipe por via de comunicacao.  
 Não esquecer de fechar os fds que não vamos usar no inicio e depois de os usar no fim.
