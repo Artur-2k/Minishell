@@ -1,98 +1,3 @@
-# fork()
-`#include <unistd.h>`
-
-### Como funciona o fork():
-
-Quando o processo pai chama fork(), o sistema cria uma cópia do processo pai e o novo processo é chamado de processo filho.
-O processo filho herda quase todo o ambiente do processo pai, como variáveis de ambiente, descritores de arquivos abertos, etc.
-Tanto o processo pai quanto o processo filho continuam a execução a partir do ponto onde o fork() foi chamado.
-
-### Retorno de fork():
-
-No processo pai, fork() retorna o PID do processo filho.
-No processo filho, fork() retorna 0.
-Se ocorrer um erro na criação do processo filho, fork() retorna -1.
-
-### Exemplo de uso:
-```
-int main() {
-    pid_t pid = fork();
-
-    if (pid < 0) {
-        // Se fork() falhou
-        printf("Erro ao criar processo filho\n");
-    } else if (pid == 0) {
-        // Código executado pelo processo filho
-        printf("Processo filho: Meu PID é %d\n", getpid());
-    } else {
-        // Código executado pelo processo pai
-        printf("Processo pai: Criei um filho com PID %d\n", pid);
-    }
-    return 0;
-}
-```
-
-
-`pid_t` é um tipo de dado definido em C (em sistemas Unix e Unix-like) que é usado para armazenar identificadores de processos, conhecidos como PIDs (Process IDs). Ele é um tipo de signed int, mas o tipo exato pode variar dependendo da implementação do sistema operacional.
-
-
-# wait()  
-`#include <sys/wait.h>`
-
-Assinatura: `pid_t wait(int *status);`
-
-A funcao `wait()` em C e usada para fazer com que um processo pai aguarde a finalizacao de um ou mais processos filhos (Se houve algum processo filho que nao tenha acabado a sua execussao ele fica a aguardar).
-
-### Parametros:
-*status*: E um ponteiro para um inteiro onde o status de termino do processo filho sera armazenado. Se nao estivermos interessados no status de saida podemos passar NULL. O statuss pode ser analizado com macros como: `WIFEXITED()`, `WEXITSTATUS()`, `WIFSIGNALED()` entre outras.
-
-`WIFEXITED(status)`: Retorna verdadeiro se o processo filho terminou normalmente (ou seja, usou exit() ou retornou da main()).
-
-`WEXITSTATUS(status)`: Retorna o código de saída do processo filho se ele terminou normalmente (o valor passado para exit()).
-
-`WIFSIGNALED(status)`: Retorna verdadeiro se o processo filho foi encerrado por um sinal.
-
-`WTERMSIG(status)`: Retorna o número do sinal que causou a finalização do processo filho.
-
-`WIFSTOPPED(status)`: Retorna verdadeiro se o processo filho foi parado por um sinal (mas não terminado).
-
-### Valores de retorno:
-Retorna o PID do processolho filho que terminou
-Retorna -1 em caso de erro
-
-# waitpid()
-`#include <sys/wait.h>`
-
-Assinatura: `pid_t waitpid(pid_t pid, int *status, int options);`
-
-Pode especificar o PID de um processo específico para esperar, ou outras opções como -1 (esperar por qualquer filho).
-options: Pode incluir opções como WNOHANG (não espera, retorna imediatamente se nenhum filho tiver terminado) e WUNTRACED (retorna se um processo filho tiver sido parado, mas não terminado).
-
-### Principais opções:
-`WNOHANG`: Esta opção faz com que waitpid() não bloqueie se o filho ainda não tiver terminado. Em vez disso, ele retorna imediatamente e você pode continuar executando outras tarefas.
-`WUNTRACED`: Faz com que waitpid() retorne também se um filho for parado (não apenas terminado) por um sinal (como um Ctrl + Z no terminal). Normalmente, waitpid() só retornaria se o processo filho terminasse de fato, mas com WUNTRACED, você é notificado mesmo que o filho apenas suspenda (não termine).
-   Útil para detectar quando um filho é temporariamente interrompido e está apenas em estado "parado".
-   
- `WCONTINUED`: Retorna se um filho que estava parado (suspendido) é continuado (retoma a execução) após receber o sinal SIGCONT.
-   Essa opção permite que você monitore quando um processo filho que foi interrompido (exemplo: Ctrl + Z) volta a rodar depois de ser "despausado".
-   
- `WEXITED`: Com waitid() (outra função relacionada), essa opção espera apenas processos que terminaram normalmente. É como WIFEXITED() no waitpid(), mas você passa como opção.
-   
- `WSTOPPED`: Similar a WUNTRACED, mas usado com waitid(). Faz com que waitid() retorne informações sobre processos que foram parados por sinais como SIGSTOP.
-   
- `WNOWAIT`: Se usado com waitid(), não remove o status de término do processo filho quando ele termina, ou seja, deixa o status "pendente". Isso permite que você consulte o status de término várias vezes sem "limpar" a informação.
-   
- `__WALL`: Retorna o status de todos os processos filhos, mesmo que estejam em grupos de processos diferentes. Normalmente, waitpid() só retorna informações sobre filhos do mesmo grupo.
-   Não é muito usado, mas pode ser útil em contextos específicos.
-   
-  `__WCLONE`: Monitora apenas processos que não compartilham o mesmo grupo de processos. Essa é uma opção avançada para contextos que envolvem threads e processos criados com clone().
-
-### Como usar essas opções?
-   
-Essas opções são passadas como um argumento adicional na chamada à função waitpid(). Elas podem ser combinadas usando o operador bitwise OR (|) para que você use mais de uma opção ao mesmo tempo. Por exemplo:
-
-`waitpid(pid, &status, WNOHANG | WUNTRACED);`
-
 # readline(), add_history() e rl_clear_history()
 
 ```
@@ -197,6 +102,25 @@ Assinatura: `pid_t fork(void);`
 - Retorno do processo filho: fork() retorna 0 no processo filho.
 - Erro: Se ocorrer um erro ao tentar criar o processo, fork() retorna -1 e define o valor da variável global errno para indicar o erro.
 
+#### Exemplo de uso
+```
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        // Se fork() falhou
+        printf("Erro ao criar processo filho\n");
+    } else if (pid == 0) {
+        // Código executado pelo processo filho
+        printf("Processo filho: Meu PID é %d\n", getpid());
+    } else {
+        // Código executado pelo processo pai
+        printf("Processo pai: Criei um filho com PID %d\n", pid);
+    }
+    return 0;
+}
+```
+
 ### _pid_t_ 
 
 `#include <sys/types.h>`
@@ -204,21 +128,45 @@ Assinatura: `pid_t fork(void);`
 É um tipo de dado definido em <sys/types.h> que representa o Process ID (PID), que é um identificador único atribuído a cada processo em execução no sistema.
 Este tipo é usado principalmente em chamadas de sistema que lidam com processos, como fork(), wait(), getpid(), e getppid().
 
-# wait() 
-
+# wait()  
 `#include <sys/wait.h>`
 
-A função wait() é usada pelo processo pai para esperar que um ou mais processos filhos terminem a execução.
 Assinatura: `pid_t wait(int *status);`
 
-### Parâmetros:
+A funcao `wait()` em C e usada para fazer com que um processo pai aguarde a finalizacao de um ou mais processos filhos (Se houve algum processo filho que nao tenha acabado a sua execussao ele fica a aguardar).
 
-status: Um ponteiro para um inteiro onde o estado de saída do processo filho pode ser armazenado. Esse valor pode ser analisado para determinar como o processo filho terminou (normalmente, se ele terminou com sucesso ou se terminou devido a um sinal).
-Se nao nos interessar o resultado do retorno podemos passar NULL
-### Retorno:
-Retorna o PID do processo filho que terminou, ou -1 se ocorrer um erro (por exemplo, se não houver filhos para esperar).
-**!**Devemos usar wait() sempre que usamos fork para aguardar pela terminacao dos processos filhos no parent para nao crirar processos zumbis ou orfaos
+### Parametros:
+- status: E um ponteiro para um inteiro onde o status de termino do processo filho sera armazenado. Se nao estivermos interessados no status de saida podemos passar NULL. O statuss pode ser analizado com macros como: `WIFEXITED()`, `WEXITSTATUS()`, `WIFSIGNALED()` entre outras.
+ 
+### Principais opções:
+`WNOHANG`: Esta opção faz com que waitpid() não bloqueie se o filho ainda não tiver terminado. Em vez disso, ele retorna imediatamente e você pode continuar executando outras tarefas.
+`WUNTRACED`: Faz com que waitpid() retorne também se um filho for parado (não apenas terminado) por um sinal (como um Ctrl + Z no terminal). Normalmente, waitpid() só retornaria se o processo filho terminasse de fato, mas com WUNTRACED, você é notificado mesmo que o filho apenas suspenda (não termine).
+   Útil para detectar quando um filho é temporariamente interrompido e está apenas em estado "parado".
+   
+ `WCONTINUED`: Retorna se um filho que estava parado (suspendido) é continuado (retoma a execução) após receber o sinal SIGCONT.
+   Essa opção permite que você monitore quando um processo filho que foi interrompido (exemplo: Ctrl + Z) volta a rodar depois de ser "despausado".
+   
+ `WEXITED`: Com waitid() (outra função relacionada), essa opção espera apenas processos que terminaram normalmente. É como WIFEXITED() no waitpid(), mas você passa como opção.
+   
+ `WSTOPPED`: Similar a WUNTRACED, mas usado com waitid(). Faz com que waitid() retorne informações sobre processos que foram parados por sinais como SIGSTOP.
+   
+ `WNOWAIT`: Se usado com waitid(), não remove o status de término do processo filho quando ele termina, ou seja, deixa o status "pendente". Isso permite que você consulte o status de término várias vezes sem "limpar" a informação.
+   
+ `__WALL`: Retorna o status de todos os processos filhos, mesmo que estejam em grupos de processos diferentes. Normalmente, waitpid() só retorna informações sobre filhos do mesmo grupo.
+   Não é muito usado, mas pode ser útil em contextos específicos.
+   
+  `__WCLONE`: Monitora apenas processos que não compartilham o mesmo grupo de processos. Essa é uma opção avançada para contextos que envolvem threads e processos criados com clone().
 
+#### Como usar essas opções?
+   
+Essas opções são passadas como um argumento adicional na chamada à função waitpid(). Elas podem ser combinadas usando o operador bitwise OR (|) para que você use mais de uma opção ao mesmo tempo. Por exemplo:
+
+`waitpid(pid, &status, WNOHANG | WUNTRACED);`
+
+
+### Valores de retorno:
+- Retorna o PID do processolho filho que terminou
+- Retorna -1 em caso de erro
 
 # waitpid() 
 
