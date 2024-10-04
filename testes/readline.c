@@ -11,7 +11,7 @@ int main() {
         input = readline("Digite algo: ");  // Exibe o prompt e aguarda a entrada
 
         if (input == NULL) {
-            // Se o usuário digitar Ctrl+D (EOF), readline retorna NULL
+            // Digitar Ctrl+D (EOF), readline retorna NULL
             printf("\nEOF detectado. Saindo...\n");
             break;
         }

@@ -12,15 +12,32 @@
 #include <readline/readline.h> // readline
 #include <readline/history.h> // addhistory
 #include <stdlib.h> // malloc free size_t...
-#include <stdbool.h> // bool -- we could use bitwise too
+#include <stdbool.h> // bool -- we could use bitwise too for flags
+#include <../libft/libft.h> // libft
+
+
+// root struct
+typedef struct s_sh
+{
+    // Input
+    char    *input;
+
+    // Signals
+    struct sigaction sa_int;
+    struct sigaction sa_quit;
+    struct sigaction sa_eof;
+
+
+}   t_sh;
+
+
+// Prototypes
+
+//Signals
+void    ft_init_signals(t_sh *shell);
 
 
 
-
-
-
-
-#include <libft/libft.h> // libft
 
 
 
