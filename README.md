@@ -652,7 +652,7 @@ Assinatura: `int pipe(int pipefd[2]);`
 Quando você cria um pipe, ele é composto por um buffer na memória. Os dados escritos no descritor de escrita (pipefd[1]) podem ser lidos do descritor de leitura (pipefd[0]).
 A comunicação é unidirecional: se você escrever em pipefd[1], não poderá ler a partir desse descritor. Para ler, você deve usar pipefd[0].
 
-_**TLDR**_
+_**TLDR:**_
 
 `pipe[0]` => **READING**
 
@@ -713,7 +713,7 @@ int main() {
 
 `#include <unistd.h>`
 
-A função getcwd() em C é usada para obter o caminho absoluto (diretório de trabalho atual) do processo em execução. Ela preenche um buffer fornecido pelo usuário com o caminho completo do diretório onde o programa está sendo executado no momento. 
+A função `getcwd()` em C é usada para obter o caminho absoluto (diretório de trabalho atual) do processo em execução. Ela preenche um buffer fornecido pelo usuário com o caminho completo do diretório onde o programa está sendo executado no momento. 
 
 Assinatura: `char *getcwd(char *buf, size_t size);`
 
@@ -751,7 +751,7 @@ int main() {
 
 `#include <unistd.h>`
 
-A função chdir() é utilizada para mudar o diretório de trabalho atual de um processo. Ela permite que você altere o diretório em que o processo está operando, o que pode ser útil em várias situações, como ao trabalhar com arquivos em diferentes diretórios.
+A função `chdir()` é utilizada para mudar o diretório de trabalho atual de um processo. Ela permite que você altere o diretório em que o processo está operando, o que pode ser útil em várias situações, como ao trabalhar com arquivos em diferentes diretórios.
 
 Assinatura: `int chdir(const char *path);`
 
@@ -766,7 +766,7 @@ Se tentarmos mudar para um diretório que não existe ou para um diretório para
 
 `#include <unistd.h>`
 
-A função unlink() é usada para remover um link para um arquivo no sistema de arquivos, o que, na prática, significa excluir o arquivo (desde que não haja mais links para ele). Se o arquivo tiver vários links, a função apenas remove o link especificado, e o arquivo só será realmente excluído quando o último link for removido e não houver mais processos com o arquivo aberto.
+A função `unlink()` é usada para remover um link para um arquivo no sistema de arquivos, o que, na prática, significa excluir o arquivo (desde que não haja mais links para ele). Se o arquivo tiver vários links, a função apenas remove o link especificado, e o arquivo só será realmente excluído quando o último link for removido e não houver mais processos com o arquivo aberto.
 
 Assinatura: `int unlink(const char *pathname);`
 
@@ -809,20 +809,22 @@ int main() {
 #include <dirent.h>
 ```
 
-A função opendir() é usada para abrir um diretório no sistema de arquivos e retornar um ponteiro para uma estrutura DIR, que será usada para ler o conteúdo do diretório (como os arquivos e subdiretórios nele). Ela é normalmente utilizada em conjunto com outras funções de manipulação de diretórios, como readdir(), closedir(), entre outras.
+A função `opendir()` é usada para abrir um diretório no sistema de arquivos e retornar um ponteiro para uma estrutura DIR, que será usada para ler o conteúdo do diretório (como os arquivos e subdiretórios nele). Ela é normalmente utilizada em conjunto com outras funções de manipulação de diretórios, como readdir(), closedir(), entre outras.
 
 Assinatura: `DIR *opendir(const char *name);`
 
 ### Parâmetros:
 - name: O caminho para o diretório que você deseja abrir.
 ### Retorno:        
-Um ponteiro para uma estrutura do tipo DIR que representa o diretório aberto.
-NULL em caso de erro, e errno é definido para indicar o motivo do erro.
-**É preciso usar a closedir(DIR*)**
+- Um ponteiro para uma estrutura do tipo DIR que representa o diretório aberto.
+- NULL em caso de erro, e errno é definido para indicar o motivo do erro.
+  
+__É preciso usar a closedir(DIR*)__
 
 # Definitions
 
 `DIR *dir`: This is a pointer to a DIR structure, which represents a directory stream. You will use this pointer to access the directory entries.
+
 `struct dirent *entry`: This is a pointer to a struct dirent, which holds information about a directory entry, such as the name of the file or directory.
 
 ```
@@ -836,7 +838,7 @@ struct dirent {
 Fecha o diretório após a leitura.
 Assinatura: int closedir(DIR *dirp);
 ### Parâmetros:
-- DIR *dirp: A pointer to a DIR structure representing the directory stream to be closed.
+- `DIR *dirp`: A pointer to a DIR structure representing the directory stream to be closed.
 ### Retorno:
 - Returns 0 on success.
 - Returns -1 on failure and sets errno to indicate the error.
