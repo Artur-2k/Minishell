@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:05:19 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/04/22 15:12:27 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:32:01 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "ft_printf.h"
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define BUFFER_SIZE 10
 
@@ -26,6 +27,7 @@ typedef struct s_list
 
 }					t_list;
 
+int					ft_isspace(char c);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
