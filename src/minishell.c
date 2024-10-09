@@ -6,59 +6,32 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/09 14:13:14 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/09 18:50:42 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
- redirs 
-    command > file
-    command < FILE
-    command >> FILE
-    command << STRING_TO_BE_FOUND
-pipe
-    command | command
-0 ou mais espacos 
-
-
-Comando
-    comando -flag       args
-0 ou mais espacos. Nunca junto
-
-
-  cat <infile |grep    texto >file.txt
- */  
-
- void    ft_tokenizer(t_shell *shell)
-{
-    char    *in = shell->input;
-    if (!in || !*in)
-        return ;
-    
-    
-    
-    
-}
-
-
-int main(void)
+int     main(int ac, char** av, char *envp[])
 {
     t_shell    shell;
 
+    // dont know if needed but for flags
+    (void)ac;
+    (void)av;
+    
     // probably init shell bools and shit
     ft_init_signals(&shell);
-    
+    ft_init_envp(&shell, envp); //todo  
     
     while (true)
     {
-        shell.input = readline("$Minishell>");
+        shell.input = readline("\033[0;31mMinihell => \033[0m");
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
         
-        //ft_tokenizer(&shell);
+        ft_tokenizer(&shell);
         
 
         // Verifica se o input não está vazio antes de adicionar ao histórico

@@ -15,6 +15,16 @@
 #include <stdbool.h> // bool -- we could use bitwise too for flags
 #include <../libft/libft.h> // libft
 
+// Color variables
+#define RED \033[0;31m
+#define GRN \033[0;32m
+#define YEL \033[0;33m
+#define BLU \033[0;34m
+#define MAG \033[0;35m
+#define CYN \033[0;36m
+#define WHT \033[0;37m
+#define RES \033[0m
+
 // Argument types
 enum e_token_types
 {
@@ -32,32 +42,25 @@ enum e_token_types
     FUCKING_FILE = 8
 };
 
-// Argument nodes
-typedef struct  s_token_list
+typedef struct  s_envp_
 {
-    struct s_arg_dlist  *prev;
-    struct s_arg_dlist  *next;
-
-    // type of token
-    int                 type;
-    // token
-    char *token;
-
-}   t_tkn;
-
+    char *key;
+    char *value;
+} t_envp;
 
 // root struct
-typedef struct s_shell
+typedef struct  s_shell
 {
     // Input
-    char    *input;
+    char    *input; // allocated
+
+    // Env
+    t_envp  *my_envp; // allocated
 
     // Signals
     struct sigaction sa_int;
     struct sigaction sa_quit;
-    struct sigaction sa_eof;
 
-    t_tkn *tkn_lst_h;
 
 
 
@@ -65,9 +68,16 @@ typedef struct s_shell
 
 
 // Prototypes
-
 //Signals
 void    ft_init_signals(t_shell *shell);
+
+// Env
+void    ft_init_envp(t_shell *shell, char *envp[]);
+
+
+// Tokenizer
+void    ft_tokenizer(t_shell *shell);
+char    **ft_split_tokens(char *str);
 char    *ft_space_tokens(char *str);
 
 #endif

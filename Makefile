@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/04 13:20:37 by artuda-s          #+#    #+#              #
-#    Updated: 2024/10/09 14:30:07 by artuda-s         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 # Binary
 BIN = minishell
 
@@ -37,9 +25,12 @@ OBJ_DIR = obj/
 # Files
 MAIN_FILE = $(SRC_DIR)minishell.c
 LIB = $(LIB_DIR)libft.a
-SRC_FILES = signal_handlers.c space_tokens.c
-SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
-OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
+
+# Find all .c files in src/ and its subdirectories
+SRC_FILES := $(shell find $(SRC_DIR) -name '*.c' ! -name 'minishell.c')
+# Create object file paths
+OBJ_FILES := $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC_FILES))
+
 TOTAL_FILES := $(words $(SRC_FILES))
 COMPILED_FILES := $(shell if [ -d "$(OBJ_DIR)" ]; then find $(OBJ_DIR) -name "*.o" | wc -l; else echo 0; fi)
 
@@ -49,8 +40,8 @@ COMPILED_FILES := $(shell if [ -d "$(OBJ_DIR)" ]; then find $(OBJ_DIR) -name "*.
 # Rules
 all: $(BIN)
 
-$(BIN): $(LIB) $(MAIN_FILE) $(OBJ) | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) $(MAIN_FILE) -lreadline $(OBJ) $(LIB) -o $@
+$(BIN): $(LIB) $(MAIN_FILE) $(OBJ_FILES) | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(MAIN_FILE) -lreadline $(OBJ_FILES) $(LIB) -o $@
 	@printf "$(GRN)Compilation progress: $$(echo "$(shell find $(OBJ_DIR) -name "*.o" | wc -l) $(TOTAL_FILES)" | awk '{printf "%.2f", $$1/$$2 * 100}')%%$(RES)\r"
 	@echo "\n$(GRN)${BIN} created$(RES)"
 	@printf "\n"
@@ -59,7 +50,8 @@ $(LIB):
 	@$(MAKE) --silent -C $(LIB_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@ 
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -c $< -o $@
 	@printf "$(GRN)➾ Compilation progress: $$(echo "$(shell find $(OBJ_DIR) -name "*.o" | wc -l) $(TOTAL_FILES)" | awk '{printf "%.2f", $$1/$$2 * 100}')%%$(RES)\r"
 
 $(OBJ_DIR):
@@ -77,7 +69,7 @@ fclean: clean
 	@rm -f leaks-old.log
 	@rm -f supressions
 	@echo "${RED}➾ Fully cleaned the workspace${RES}"
-	
+
 re: fclean all
 
 #Debugging
@@ -116,9 +108,16 @@ sup:
 	$(file > supressions,$(SUP_BODY)):
 
 # Notes:
-#	$(file > sup,$(SUP_BODY)):
-#		file é uma função do Make que escreve texto em um arquivo.
-#		> indica que o arquivo será criado ou sobrescrito.
-#		sup é o nome do arquivo que será criado.
-#		$(SUP_BODY) é uma variável que contém o conteúdo a ser escrito no arquivo.
-#  @if [ -f leaks.log ]; then mv leaks.log leaks-old.log; fi  ===> se existir um log renomeia para old para manter a antiga
+# $(file > sup,$(SUP_BODY)):
+#	file é uma função do Make que escreve texto em um arquivo.
+#	> indica que o arquivo será criado ou sobrescrito.
+#	sup é o nome do arquivo que será criado.
+#	$(SUP_BODY) é uma variável que contém o conteúdo a ser escrito no arquivo.
+#
+# @if [ -f leaks.log ]; then mv leaks.log leaks-old.log; fi  ===> se existir um log renomeia para old para manter a antiga
+#
+# :=
+#	The := operator is particularly useful when:
+#	You want to ensure a variable is set to a specific value at a specific point in the Makefile.
+#	You're using the result of a shell command and you want it to be executed only once.
+#	You want to avoid potential infinite recursion in variable definitions.
