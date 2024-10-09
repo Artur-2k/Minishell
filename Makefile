@@ -6,7 +6,7 @@
 #    By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/04 13:20:37 by artuda-s          #+#    #+#              #
-#    Updated: 2024/10/04 14:13:19 by artuda-s         ###   ########.fr        #
+#    Updated: 2024/10/09 14:30:07 by artuda-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ BIN = minishell
 
 # Compiler
 CC = cc
-CFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -Wall -Wextra -Werror -lreadline
+CFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -Wall -Wextra -Werror
 VG = valgrind --leak-check=full --show-leak-kinds=all --suppressions=supressions --track-origins=yes --log-file=leaks.log
 
 # Color variables
@@ -37,7 +37,7 @@ OBJ_DIR = obj/
 # Files
 MAIN_FILE = $(SRC_DIR)minishell.c
 LIB = $(LIB_DIR)libft.a
-SRC_FILES =
+SRC_FILES = signal_handlers.c space_tokens.c
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
 TOTAL_FILES := $(words $(SRC_FILES))
@@ -50,13 +50,13 @@ COMPILED_FILES := $(shell if [ -d "$(OBJ_DIR)" ]; then find $(OBJ_DIR) -name "*.
 all: $(BIN)
 
 $(BIN): $(LIB) $(MAIN_FILE) $(OBJ) | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) $(MAIN_FILE) $(OBJ) $(LIB) -o $@
-	@printf "$(GRN)➾ Compilation progress: $$(echo "$(shell find $(OBJ_DIR) -name "*.o" | wc -l) $(TOTAL_FILES)" | awk '{printf "%.2f", $$1/$$2 * 100}')%%$(RES)\r"
-    @echo "\n$(GRN)➾ ${NAME} created$(RES)"
-    @printf "\n"
+	@$(CC) $(CFLAGS) $(MAIN_FILE) -lreadline $(OBJ) $(LIB) -o $@
+	@printf "$(GRN)Compilation progress: $$(echo "$(shell find $(OBJ_DIR) -name "*.o" | wc -l) $(TOTAL_FILES)" | awk '{printf "%.2f", $$1/$$2 * 100}')%%$(RES)\r"
+	@echo "\n$(GRN)${BIN} created$(RES)"
+	@printf "\n"
 
 $(LIB):
-	@$(MAKE) -C $(LIB_DIR)
+	@$(MAKE) --silent -C $(LIB_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@ 
@@ -66,26 +66,27 @@ $(OBJ_DIR):
 	@mkdir -p $@
 
 clean:
-	@$(MAKE) -C $(LIB_DIR) clean
+	@$(MAKE) --silent -C $(LIB_DIR) clean
 	@rm -rf $(OBJ_DIR)
 	@echo "${RED}➾ Cleaned the workspace${RES}"
 
 fclean: clean
-	@$(MAKE) -C $(LIB_DIR) fclean
+	@$(MAKE) --silent -C $(LIB_DIR) fclean
 	@rm -f $(BIN)
 	@rm -f leaks.log
 	@rm -f leaks-old.log
+	@rm -f supressions
 	@echo "${RED}➾ Fully cleaned the workspace${RES}"
 	
 re: fclean all
 
 #Debugging
 leaks: all sup
-    @if [ -f leaks.log ]; then mv leaks.log leaks-old.log; fi
-    $(VG) ./$(BIN)
+	@if [ -f leaks.log ]; then mv leaks.log leaks-old.log; fi
+	$(VG) ./$(BIN)
 
 gdb: re
-    gdb --tui $(BIN)
+	gdb --tui $(BIN)
 
 # Supressoes de leaks
 define SUP_BODY

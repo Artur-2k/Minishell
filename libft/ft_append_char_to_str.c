@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_append_char_to_str.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/09 14:01:08 by artuda-s          #+#    #+#             */
+/*   Updated: 2024/10/09 14:01:13 by artuda-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
+
 // Appends a char to a string keeping it null terminated.
 // Returns a new allocated string and frees the old one.
 char	*ft_append_char_to_str(char *str, char c)
 {
 	char	*nstr;
-	size_t			len;
+	size_t	len;
 
 	len = 0;
 	if (str)

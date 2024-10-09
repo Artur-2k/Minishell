@@ -3,8 +3,11 @@
 #include <stdlib.h> // malloc free
 
 //printar o pwd atual
+//todo printar o oldpwd atual
 //mudar o pwd 
+//todo mudar o oldpwd 
 //printar o novo pwd
+//todo printar o novo oldpwd
 int main()
 {
     char *pwd = getcwd(NULL, 0);

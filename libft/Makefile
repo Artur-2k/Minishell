@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+         #
+#    By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/15 17:46:54 by artuda-s          #+#    #+#              #
-#    Updated: 2024/06/23 19:45:40 by artuda-s         ###   ########.fr        #
+#    Updated: 2024/10/09 14:01:01 by artuda-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
     ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c \
     ft_strrchr.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_substr.c \
     ft_atoi_base.c get_next_line.c ft_printf.c ft_printf_chars.c \
-    ft_printf_putptr.c ft_printf_putnum_base.c ft_append_char_to_str.c
+    ft_printf_putptr.c ft_printf_putnum_base.c ft_append_char_to_str.c \
+    ft_isspace.c ft_trim.c
 
 
 SRCS_BONUS = 	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c\
