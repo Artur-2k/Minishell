@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/09 18:50:42 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/10 13:39:45 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int     main(int ac, char** av, char *envp[])
     
     //release everything
 
-    printf("\nexit");
+    printf("exit\n");
     return (0);
 }

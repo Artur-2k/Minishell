@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/09 18:00:48 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/10 13:26:48 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,18 @@ Comando
   cat <infile |grep    texto >file.txt
 */  
 
+static void	ft_free_token_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
 
 void    ft_tokenizer(t_shell *shell) 
 {
@@ -54,8 +66,8 @@ void    ft_tokenizer(t_shell *shell)
     space_input = ft_space_tokens(shell->input);
     token_arr = ft_split_tokens(space_input);
     free(space_input);
+
     
-    //* .....    
-    //* .....    
-    //* .....    
+
+   ft_free_token_arr(token_arr);
 }

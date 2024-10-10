@@ -42,11 +42,15 @@ enum e_token_types
     FUCKING_FILE = 8
 };
 
-typedef struct  s_envp_
+
+// Env
+typedef struct  s_envp
 {
+    struct s_envp *next;
     char *key;
     char *value;
 } t_envp;
+
 
 // root struct
 typedef struct  s_shell
@@ -55,13 +59,12 @@ typedef struct  s_shell
     char    *input; // allocated
 
     // Env
-    t_envp  *my_envp; // allocated
+    t_envp  *my_envp_h; // allocated list
+
 
     // Signals
     struct sigaction sa_int;
     struct sigaction sa_quit;
-
-
 
 
 }   t_shell;

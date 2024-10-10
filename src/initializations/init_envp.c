@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/09 18:48:57 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/10 13:33:34 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //!     Vale a pena checar se envp esta vazio? vai que 
 //!     um ninja apaga tudo antes de rodar o minishell xD
 
-static char    *ft_extract_key(char *line)
+static char     *ft_extract_key(char *line)
 {
     char    *key;
     int     end;    
@@ -37,7 +37,7 @@ static char    *ft_extract_key(char *line)
     return (key);
 }
 
-static char    *ft_extract_value(char *line)
+static char     *ft_extract_value(char *line)
 {
     char    *value;
     int     start;
@@ -57,21 +57,35 @@ static char    *ft_extract_value(char *line)
     return (value);
 }
 
+static t_envp   *ft_new_node(char *envp_line)
+{
+    t_envp  *new_node;
+
+    new_node = (t_envp*)malloc(sizeof(t_envp));
+
+    new_node->key = ft_extract_key(envp_line);
+    new_node->value = ft_extract_value(envp_line);
+    new_node->next = NULL;
+    return (new_node);
+}
+
 void    ft_init_envp(t_shell *shell, char *envp[])
 {
     int i;
+    t_envp  *curr;
+    t_envp  *new;
 
-    i = 0;
-    while (envp[i])
-        i++;
-    shell->my_envp = (t_envp*)malloc(sizeof(t_envp) * i + 1);
-    i = 0;
+    curr = NULL;
+    i = 0; 
+    shell->my_envp_h = NULL;
     while (envp[i] != NULL)
     {
-        shell->my_envp[i].key = ft_extract_key(envp[i]);
-        shell->my_envp[i].value = ft_extract_value(envp[i]);
+        new = ft_new_node(envp[i]);
+        if (shell->my_envp_h == NULL)
+            shell->my_envp_h = new;
+        else
+            curr->next = new;
+        curr = new;
         i++;        
     }
-    shell->my_envp[i].key = NULL;
-    shell->my_envp[i].value = NULL;
 }
