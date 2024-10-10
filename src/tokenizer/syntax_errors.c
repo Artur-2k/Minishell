@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
+#include "minishell.h"
 
-bool    ft_check_unclosed_quotes(char **tkn_arr)
+static bool    ft_check_unclosed_quotes(char **tkn_arr)
 {
     int     i;
     int     j;
@@ -31,11 +29,11 @@ bool    ft_check_unclosed_quotes(char **tkn_arr)
     return (false);
 }
 
-bool    ft_check_redirecitons(char **tkn_arr)
+static bool    ft_check_redirecitons(char **tkn_arr)
 {
 	int	i;
 
-	// pipe at the beggining
+	// pipe no inicio
 	if (tkn_arr[0] && tkn_arr[0][0] == '|')
 		return (true);
 
@@ -50,6 +48,7 @@ bool    ft_check_redirecitons(char **tkn_arr)
 		}
 		i++;
 	}
+
 	// > < | at the end(double redir are filtered)
 	--i;
 	if (tkn_arr[i][0] == '|' || tkn_arr[i][0] == '<' || tkn_arr[i][0] == '>')
@@ -57,22 +56,27 @@ bool    ft_check_redirecitons(char **tkn_arr)
 	return (false);
 }
 
-int main()
+ static void ft_find_syntax_errors(char **tkn_arr)
 {
-	/*
-	 *  | bla bla bla
-	 *  bla bla bla |
-	 *  bla | | bla
-	 *  > bla | > bla bla
-	 *  > > bla bla lba
-	 *  bla bla bla bla
-	 *  bla bla bla <<
-	 *  bla bla bla >>
-	 *  bla bla bla >
-	 *  bla bla bla <
-	*/
-	char *str = "";
-    int result = ft_check_redirecitons(str);
-    printf("Redir check ==> %d\n", result);
-    return 0;
+/*
+ *   pipe at the start and end   | .................|           ✅
+ *   heredoc no eof             ...  <<{nothing after}          ✅
+ *   > >> e < without file      ...   > file < file >> file ... ✅
+ *   double pipe token          ...     | |        ...          ✅
+ *   pipe or redir              ...     | >                     ✅
+ *   double redir token         ...  << >  > <  >> < ...        ✅
+ *   "" '' nao fechadas											✅
+ *      /MAIS NAO PLEASE T-T ❌
+*/
+
+
+    if (ft_check_unclosed_quotes(tkn_arr)) //todo
+        ft_error(); // todo
+    if (ft_check_double_redireciton(tkn_arr)) // todo atencao aspas
+        ft_error();
+    if (ft_check_pipes(tkn_arr)) // todo  atencao aspas
+        ft_error();
+    if (ft_check_redirs(tkn_arr)) // todo atencao aspas
+        ft_error();
+
 }
