@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/10 17:06:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:15:15 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ bool    ft_check_unclosed_quotes(char **tkn_arr)
     }
     return (false);
 }
-/* 
 
 bool    ft_check_double_redireciton(char *token)
 {
@@ -129,8 +128,6 @@ void    ft_tokenizer(t_shell *shell)
     free(space_input);
     //ft_find_syntax_errors(token_arr);
 
-    for (int i = 0; token_arr[i]; i++)
-        printf("token : [%s]\thas unclosed quotes: [%d]\n", token_arr[i], ft_check_unclosed_quotes(token_arr));
     
     
 
