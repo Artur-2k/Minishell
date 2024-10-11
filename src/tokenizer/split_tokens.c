@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/11 16:42:21 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/11 22:41:37 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 static int  ft_count_tokens(char *str)
 {
+	char	quote_char;
     int     count;
     int     i;
-    
+
     count = 0;
     i = 0;
     if (str[i])
@@ -25,7 +26,7 @@ static int  ft_count_tokens(char *str)
     {
         if (str[i] == '\'' || str[i] == '"')
         {
-            char quote_char = str[i++];
+            quote_char = str[i++];
             while (str[i] && str[i] != quote_char)
                 i++;
         }
