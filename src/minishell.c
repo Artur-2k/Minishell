@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/10 13:39:45 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/11 12:06:46 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int     main(int ac, char** av, char *envp[])
 {
     t_shell    shell;
 
-    // dont know if needed but for flags
+    // dont know if needed but for Wflags
     (void)ac;
     (void)av;
     
@@ -31,6 +31,7 @@ int     main(int ac, char** av, char *envp[])
         if (shell.input == NULL)
             break;
         
+        // tokenizes the input and checks for syntax errors
         ft_tokenizer(&shell);
         
 
