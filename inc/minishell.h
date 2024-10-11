@@ -35,19 +35,6 @@ typedef enum     e_errors
     PARSE_ERROR = 2
 }   t_errors;
 
-// Free helper
-typedef enum    e_resource_type
-{
-    // basic types
-    PTR = 1,
-
-    // strings array NULL
-    STR_ARR = 2,
-
-    // env list
-    ENV_PTR = 3
-}   t_resource_type;
-
 // Env
 typedef struct  s_envp
 {
