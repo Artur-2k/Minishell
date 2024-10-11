@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_errors.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/11 16:15:42 by artuda-s          #+#    #+#             */
+/*   Updated: 2024/10/11 16:36:33 by artuda-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static bool    ft_check_unclosed_quotes(char **tkn_arr)
@@ -7,7 +19,7 @@ static bool    ft_check_unclosed_quotes(char **tkn_arr)
     char    quote_char;
 
     j = 0;
-    while (tkn_arr[++j])
+    while (tkn_arr[j])
     {
         i = 0;
         while (tkn_arr[j][i])
@@ -33,30 +45,32 @@ static bool    ft_check_redirecitons(char **tkn_arr)
 {
 	int	i;
 
+	i = 0;
 	// pipe no inicio
 	if (tkn_arr[0] && tkn_arr[0][0] == '|')
-		return (true);
+		return (ft_printf("Parse error near %c\n", tkn_arr[i][0]), true);
 
 	// double redirs || |> ><...
-	i = 0;
 	while (tkn_arr[i] != NULL)
 	{
-		if (tkn_arr[i][0] == '|' || tkn_arr[i][0] == '<' || tkn_arr[i][0] == '>')
+        if (ft_strchr("<|>", tkn_arr[i][0]))
 		{
-			if (tkn_arr[i + 1] && (tkn_arr[i + 1][0] == '|' || tkn_arr[i + 1][0] == '<' || tkn_arr[i + 1][0] == '>'))
-				return (true);
+            if (tkn_arr[i + 1] && ft_strchr("<|>", tkn_arr[i + 1][0]))
+		        return (ft_printf("Parse error near %c\n", tkn_arr[i][0]), true);
 		}
 		i++;
 	}
 
 	// > < | at the end(double redir are filtered)
 	--i;
-	if (tkn_arr[i][0] == '|' || tkn_arr[i][0] == '<' || tkn_arr[i][0] == '>')
-		return (true);
+    if (ft_strchr("<>", tkn_arr[i][0]))
+        return (ft_printf("Parse error near %c\n", tkn_arr[i][0]), true);
+    else if (tkn_arr[i][0] == '|')
+		return (ft_printf("Minihell doens't handle | at the end\n", true));
 	return (false);
 }
 
- static void ft_find_syntax_errors(char **tkn_arr)
+int ft_find_syntax_errors(char **tkn_arr)
 {
 /*
  *   pipe at the start and end   | .................|           ✅
@@ -69,14 +83,13 @@ static bool    ft_check_redirecitons(char **tkn_arr)
  *      /MAIS NAO PLEASE T-T ❌
 */
 
+    for (int z = 0; tkn_arr[z] != NULL; z++)
+        printf("i: %d  ->  [%s]\n",z, tkn_arr[z]);
 
-    if (ft_check_unclosed_quotes(tkn_arr)) //todo
-        ft_error(); // todo
-    if (ft_check_double_redireciton(tkn_arr)) // todo atencao aspas
-        ft_error();
-    if (ft_check_pipes(tkn_arr)) // todo  atencao aspas
-        ft_error();
-    if (ft_check_redirs(tkn_arr)) // todo atencao aspas
-        ft_error();
+    if (ft_check_unclosed_quotes(tkn_arr))
+        return (ft_printf("Minihell doenst handle unclosed quotes\n"), 1);
+    if (ft_check_redirecitons(tkn_arr)) 
+        return 1;
 
+    return 0;
 }

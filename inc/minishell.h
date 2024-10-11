@@ -68,11 +68,15 @@ void    ft_init_signals(t_shell *shell);
 void    ft_init_envp(t_shell *shell, char *envp[]);
 
 // Tokenizer
-void    ft_tokenizer(t_shell *shell);
+int    ft_tokenizer(t_shell *shell);
 char    **ft_split_tokens(char *str);
 char    *ft_space_tokens(char *str);
+int ft_find_syntax_errors(char **tkn_arr);
 
 // Frees
-void        ft_free_resources(int count, ...);
+void ft_free_str_arr(char **arr);
+void ft_free_envp_lst(t_envp *my_envp);
 
+// Error
+void ft_error(); // todo
 #endif
