@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/11 22:41:37 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/14 21:02:40 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char    **ft_split_tokens(char *str)
     // quantos tokens?  [ola teste "ol   a" teste] ==> 3
     int no_tokens = ft_count_tokens(str);
 
-    token_arr = (char **)malloc(sizeof(char *) * no_tokens + 1);
+    token_arr = (char **)malloc(sizeof(char *) * (no_tokens + 1));
 
     int i = 0;
     int start = 0;
