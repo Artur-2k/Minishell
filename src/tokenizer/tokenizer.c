@@ -6,78 +6,108 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/11 22:37:51 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/14 19:00:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //TODO 🗹
-//! add a struct for shell to point to
-//! free the array
-
+//* free the array
 //* read into an array of tokens 🗹
+//* syntax errors
+
 //! expand ""
 //! expand $
-//! syntax errors
+//! add a struct for shell to point to
 //! store everything
 
-char	*ft_expand_token(char* token)
+
+
+char	*ft_expand_token(char* token, t_envp *envp)
 {
-	/*
-	 * $KEY  	=> expand
-	 * "$KEY"	=> expand + remove ""
-	 * ''		=> remove ''
-	*/
-	int		i;
-	int		j;
-	char	quote_char;
 	char	*new;
 
-	j = 0;
-	i = 0;
-	while(token[i])
+	new = NULL;
+	while (*token)
 	{
-		if (token[i] == '\'' || token[i] == '"')
+		if (*token == '\'') // single quotes
 		{
-            quote_char = token[i++];
-			while (token[i] && token[i] != quote_char) //todo aspas
+			token++;
+			while (*token && *token != '\'')
 			{
-                i++;
+				new = ft_append_char_to_str(new, *token);
+				token++;
 			}
 		}
-		else if (token[i] == '$' && token[i + 1])
+		else if (*token == '\"') // double quotes
 		{
-			if (token[i] == token[i + 1]) // $$
-				new = ft_expand_to_pid();//todo
-			else if(token[++i] == "\"" || token[i] == "\'") //todo $"str" => PATH & $'str' => str
-				new = ft_handle_this_shit(); //todo
-			else if(token[++i]) // $key
+			token++;
+			while (*token && *token != '\"')
 			{
-				int len  = 0;
-				// $PATH"
-				/* len = 0
-				 * P ✅ len 1
-				 * A ✅ len 2
-				 * T ✅ len 3
-				 * H ✅ len 4
-				 * \0 X
-				*/
-				while (token[i] && !ft_strchr("\"\'$", token[i]))
+				if (*token != '$') // normal letter
+					new = ft_append_char_to_str(new, *token);
+				else
 				{
-					i++;
-					len++;
+					token++;
+					if (!*token) // nunca vai acontecer se correr tudo bem xd
+						break ;
+					else if (*token == '\"') // "...$"
+					{
+						ft_append_char_to_str(new, '$');
+						break ;
+					}
+					else if (*token == '$') // "...$$asd"
+						new = ft_strjoin(new, ft_itoa(ft_get_pid()));
+					else // "$key"
+					{
+						int len = 1;
+						while (token[len] != '\"' && token[len] != '\'' && token[len] != ' ')
+							len++;
+						if (ft_has_key(token, envp))
+						{
+							char *key = ft_substr(token, 0, len);
+							new = ft_strjoin(new, ft_get_value(key, envp));
+							free(key);
+							token += len - 1; // -1 para nao saltar dois a seguir
+						}
+					}
 				}
-				new = ft_expand_to_value(&token[i], len); // todo (len da para ver quanto do token leio ate substituir no caso de encontrar " ' se len= 0 e ate ao fim)
+				token++;
 			}
 		}
+		else if (*token == '$') // normal expandables
+		{
+			token++;
+			if (!*token) // ... $ => ... $
+			{
+				new = ft_append_char_to_str(new, '$');
+				break ;
+			}
+			else if (*token == '\"' || *token == '\'') // ...$"..." => ......
+				continue ;
+			else if (*token == '$') // ...$$asd  
+				new = ft_strjoin(new, ft_itoa(ft_get_pid()));
+			else // "$key"
+			{
+				int len = 0;
+				while (token[len] && token[len] != '\"' && token[len] != '\'' && token[len] != ' ')
+					len++;
+				if (ft_has_key(token, envp))
+				{
+					char *key = ft_substr(token, 0, len);
+					new = ft_strjoin(new, ft_get_value(key, envp));
+					free(key);
+					token += len- 1; // ola"
+				}
+			}
+		}
+		else // normal char
+			new = ft_append_char_to_str(new, *token);
 
-
-
-		i++;
+		token++;
 	}
-
-	return (0); // success
+	return (new); // success
 }
 
 int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
@@ -88,19 +118,19 @@ int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
 	*/
 
 	int	i;
-	int	j;
+	char *temp;
 
 	i = 0;
 	while (tkn_arr[i])
 	{
-		j = 0;
-		{
-
-		}
-
+		temp = tkn_arr[i];
+		tkn_arr[i] = ft_expand_token(tkn_arr[i], envp);
+		free(temp);
 		i++;
 	}
-
+	printf("ola mundo\n");
+	for (int j = 0; tkn_arr[j] != NULL; j++)
+		printf("%d: %s\n", j, tkn_arr[j]);
 
 	return (0);
 }
@@ -117,11 +147,11 @@ int	ft_tokenizer(t_shell *shell)
     token_arr = ft_split_tokens(space_input);
     free(space_input);
 
-    if (ft_find_syntax_errors(token_arr))
-        return(ft_free_str_arr(token_arr), -2);
+	if (ft_find_syntax_errors(token_arr))
+		return(ft_free_str_arr(token_arr), -2);
 
-	if (ft_expand_tokens(token_arr, shell))
-        return(ft_free_str_arr(token_arr), -3);
+	if (ft_expand_tokens(token_arr, shell->my_envp_h))
+		return(ft_free_str_arr(token_arr), -3);
 
 
 

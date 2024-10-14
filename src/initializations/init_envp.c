@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/10 13:33:34 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:06:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 //todo Could add some error checking for malloc on
 //todo    str dup, substr and t_envp
-//!     Vale a pena checar se envp esta vazio? vai que 
+//!     Vale a pena checar se envp esta vazio? vai que
 //!     um ninja apaga tudo antes de rodar o minishell xD
 
 static char     *ft_extract_key(char *line)
 {
     char    *key;
-    int     end;    
+    int     end;
 
     key = NULL;
     end = 0;
@@ -30,7 +30,7 @@ static char     *ft_extract_key(char *line)
         {
             key = ft_substr(line, 0, end);
             break ;
-        }    
+        }
         else
             end++;
     }
@@ -57,7 +57,9 @@ static char     *ft_extract_value(char *line)
     return (value);
 }
 
-static t_envp   *ft_new_node(char *envp_line)
+
+
+t_envp   *ft_new_node(char *envp_line)
 {
     t_envp  *new_node;
 
@@ -76,7 +78,7 @@ void    ft_init_envp(t_shell *shell, char *envp[])
     t_envp  *new;
 
     curr = NULL;
-    i = 0; 
+    i = 0;
     shell->my_envp_h = NULL;
     while (envp[i] != NULL)
     {
@@ -86,6 +88,6 @@ void    ft_init_envp(t_shell *shell, char *envp[])
         else
             curr->next = new;
         curr = new;
-        i++;        
+        i++;
     }
 }

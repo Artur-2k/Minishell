@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/11 12:06:46 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:42:08 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,28 @@ int     main(int ac, char** av, char *envp[])
     // dont know if needed but for Wflags
     (void)ac;
     (void)av;
-    
+
     // probably init shell bools and shit
     ft_init_signals(&shell);
-    ft_init_envp(&shell, envp); //todo  
-    
+    ft_init_envp(&shell, envp); //todo
+
     while (true)
     {
         shell.input = readline("\033[0;31mMinihell => \033[0m");
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
-        
+
         // tokenizes the input and checks for syntax errors
         ft_tokenizer(&shell);
-        
+
 
         // Verifica se o input não está vazio antes de adicionar ao histórico
-        if (*shell.input != '\0') 
+        if (*shell.input != '\0')
             add_history(shell.input);
         free(shell.input);
     }
-    
+
     //release everything
 
     printf("exit\n");
