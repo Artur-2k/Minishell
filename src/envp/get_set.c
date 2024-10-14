@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-bool	ft_has_key(char *try, t_envp *envp)
+bool	ft_has_key(char *try, int len,  t_envp *envp)
 {
 	if (!*try || !try || !envp)
 		return (false);
 	while (envp != NULL)
 	{
-		if (!ft_strcmp(try, envp->key))
+		if (!ft_strncmp(try, envp->key, len))
 			return (true);
 		envp = envp->next;
 	}

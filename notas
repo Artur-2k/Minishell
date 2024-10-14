@@ -1,0 +1,3 @@
+ Ver Input quando metes um texto muito grande ele reescreve a primeira linha. ver porque e como corrigir
+ ver quando copiar e colar input no readline para nao bugar (como e que deram handle)
+ "ola" "'ola'" "$SHLVL" "'$SHLVL'"    ver segfaults e double frees neste Input

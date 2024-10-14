@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 19:00:41 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/14 21:19:26 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ char	*ft_expand_token(char* token, t_envp *envp)
 						new = ft_strjoin(new, ft_itoa(ft_get_pid()));
 					else // "$key"
 					{
-						int len = 1;
+						int len = 0;
 						while (token[len] != '\"' && token[len] != '\'' && token[len] != ' ')
 							len++;
-						if (ft_has_key(token, envp))
+						if (ft_has_key(token,len, envp))
 						{
 							char *key = ft_substr(token, 0, len);
 							new = ft_strjoin(new, ft_get_value(key, envp));
@@ -86,14 +86,14 @@ char	*ft_expand_token(char* token, t_envp *envp)
 			}
 			else if (*token == '\"' || *token == '\'') // ...$"..." => ......
 				continue ;
-			else if (*token == '$') // ...$$asd  
+			else if (*token == '$') // ...$$asd
 				new = ft_strjoin(new, ft_itoa(ft_get_pid()));
 			else // "$key"
 			{
 				int len = 0;
 				while (token[len] && token[len] != '\"' && token[len] != '\'' && token[len] != ' ')
 					len++;
-				if (ft_has_key(token, envp))
+				if (ft_has_key(token,len,  envp))
 				{
 					char *key = ft_substr(token, 0, len);
 					new = ft_strjoin(new, ft_get_value(key, envp));
@@ -128,7 +128,6 @@ int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
 		free(temp);
 		i++;
 	}
-	printf("ola mundo\n");
 	for (int j = 0; tkn_arr[j] != NULL; j++)
 		printf("%d: %s\n", j, tkn_arr[j]);
 
