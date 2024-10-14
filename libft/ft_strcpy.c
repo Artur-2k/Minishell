@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 16:05:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 17:56:59 by artuda-s         ###   ########.fr       */
+/*   Created: 2024/10/14 17:51:39 by artuda-s          #+#    #+#             */
+/*   Updated: 2024/10/14 17:56:11 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *str)
+char	*ft_strcpy(char *dest, char *src)
 {
-	size_t	i;
+	int	i;
 
-	if (!str)
-		return (0);
 	i = 0;
-	while (str[i])
+	while(src[i])
+	{
+		dest[i] = src[i];
 		i++;
-	return (i);
+	}
+	dest[i] = 0;
+	return (dest);
 }

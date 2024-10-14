@@ -3,54 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:42:29 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/04/18 13:42:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:57:58 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_strcpy(char *dest, const char *src)
-{
-	size_t	i;
-
-	i = 0;
-	while (*src)
-	{
-		dest[i] = *src;
-		src++;
-		i++;
-	}
-	dest[i] = 0;
-	return (dest);
-}
-
-static char	*ft_strcat(char *dest, const char *src)
-{
-	size_t	i;
-
-	i = ft_strlen(dest);
-	while (*src)
-	{
-		dest[i] = *src;
-		i++;
-		src++;
-	}
-	dest[i] = 0;
-	return (dest);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*nstr;
+	int		i;
+	int		j;
 
 	nstr = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!nstr)
 		return (NULL);
-	ft_strcpy(nstr, s1);
-	ft_strcat(nstr, s2);
+	i = 0;
+	while (s1 && s1[i])
+	{
+		nstr[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2 && s2[j])
+		nstr[i++] = s2[j++];
+	nstr[i] = 0;
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
 	return (nstr);
 }
 /*
