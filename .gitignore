@@ -2,4 +2,7 @@
 minishell
 obj/
 libft/*.o
-libft/*.a
+libft/*.a  
+leaks-old.log
+leaks.log
+supressions

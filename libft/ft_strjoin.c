@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:42:29 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 18:57:58 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:29:06 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	nstr[i] = 0;
 	if (s1)
 		free(s1);
-	if (s2)
-		free(s2);
 	return (nstr);
 }
 /*
