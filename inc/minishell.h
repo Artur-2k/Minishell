@@ -43,6 +43,15 @@ typedef struct  s_envp
     char *value;
 } t_envp;
 
+typedef struct   s_command
+{
+    char **cmd_arr;
+
+    char *in_redir;
+    char *out_redir;
+    char *app_redir;
+
+}   t_command;
 
 // root struct
 typedef struct  s_shell
@@ -56,7 +65,7 @@ typedef struct  s_shell
     t_envp  *my_envp_h; // allocated list
 
 	// Tokens
-
+    
 
     // Signals
     struct sigaction sa_int;

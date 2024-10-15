@@ -8,8 +8,8 @@
 
 #include "../libft/libft.h" // ft_split (strtok) ft_strdup
 
-#define MAX_ENV_VARS 100 // ter em atencao quando atingir este numero tens de dar handle corretamente
-#define MAX_PATHS 100 // same
+#define MAX_ENV_VARS 100  
+#define MAX_PATHS 100  
 
 char **ft_copy_envp(char *envp[])
 {

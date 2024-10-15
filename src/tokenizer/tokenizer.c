@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/15 14:16:02 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:59:36 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_tokenizer(t_shell *shell)
 
     if (!shell->input || !*shell->input)
         return (-1);
-
+	
     space_input = ft_space_tokens(shell->input);
     token_arr = ft_split_tokens(space_input);
     free(space_input);
@@ -54,12 +54,15 @@ int	ft_tokenizer(t_shell *shell)
 	if (ft_find_syntax_errors(token_arr))
 		return(ft_free_str_arr(token_arr), -2);
 
-	if (ft_expand_tokens(token_arr, shell->my_envp_h))
+	if (ft_expand_tokens(token_arr, shell->my_envp_h)) // todo error checking
 		return(ft_free_str_arr(token_arr), -3);
+
+	if (ft_create_commands(token_arr, shell))
+		return(ft_free_str_arr(token_arr), -4);
 
 	for (int i =0; token_arr[i]; i++)
 		printf("[%d] : [%s]\n", i, token_arr[i]);
 
-   ft_free_str_arr(token_arr);
-   return 0;
+   	ft_free_str_arr(token_arr);
+   	return 0;
 }

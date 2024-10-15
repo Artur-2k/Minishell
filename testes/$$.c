@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-// TODO TESTAR NO PC DA ESCOLA SE ESTE FICHEIRO ESTA NO MESMO SITIO!!!!!
 int main()
 {
 	int	fd = open("/proc/self/stat", O_RDONLY);

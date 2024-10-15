@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:15:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/11 16:36:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/15 15:04:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static bool    ft_check_redirecitons(char **tkn_arr)
 	return (false);
 }
 
-int ft_find_syntax_errors(char **tkn_arr)
+int ft_find_syntax_errors(char **tkn_arr) // todo VER qual caso nao da erro <> ou >< e corrigir
 {
 /*
  *   pipe at the start and end   | .................|           ✅
@@ -82,6 +82,8 @@ int ft_find_syntax_errors(char **tkn_arr)
  *   "" '' nao fechadas											✅
  *      /MAIS NAO PLEASE T-T ❌
 */
+
+
 
     for (int z = 0; tkn_arr[z] != NULL; z++)
         printf("i: %d  ->  [%s]\n",z, tkn_arr[z]);

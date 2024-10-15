@@ -1,41 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_frees.c                                         :+:      :+:    :+:   */
+/*   command_creation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/15 14:29:52 by artuda-s         ###   ########.fr       */
+/*   Created: 2024/10/15 14:29:30 by artuda-s          #+#    #+#             */
+/*   Updated: 2024/10/15 15:59:50 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-  
-void ft_free_str_arr(char **arr)
+
+
+/*
+ * REDIRECTIONS 
+ *  primeiro heardocs. depois outros redirs. 
+ *  > file1 > file2 abre file1 e file2 se nao existir e escreve apenas no ultimo
+ * 
+ * 
+ * 
+*/
+
+int ft_create_commands(char **tkn_arr, t_shell *shell)
 {
-	int	i;
+    
 
-	i = 0;
-	while (arr[i] != NULL)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
+    return (0); // success
 }
-
-void ft_free_envp_lst(t_envp *my_envp)
-{
-    t_envp  *temp;
-
-    while (my_envp != NULL)
-    {
-        temp = my_envp->next;
-        free(my_envp->key);
-        free(my_envp->value);
-        free(my_envp);
-        my_envp = temp;
-    }
-}
-
