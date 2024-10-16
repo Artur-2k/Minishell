@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:15:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/15 15:04:41 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:07:28 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,6 @@ int ft_find_syntax_errors(char **tkn_arr) // todo VER qual caso nao da erro <> o
 */
 
 
-
-    for (int z = 0; tkn_arr[z] != NULL; z++)
-        printf("i: %d  ->  [%s]\n",z, tkn_arr[z]);
 
     if (ft_check_unclosed_quotes(tkn_arr))
         return (ft_printf("Minihell doenst handle unclosed quotes\n"), 1);

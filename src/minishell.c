@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 17:42:08 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:25:11 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int     main(int ac, char** av, char *envp[])
         // Verifica se o input não está vazio antes de adicionar ao histórico
         if (*shell.input != '\0')
             add_history(shell.input);
+
         free(shell.input);
     }
 

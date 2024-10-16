@@ -27,6 +27,10 @@
 #define RES \033[0m
 
 
+// PIPE ENDS
+#define WRITE_END 1
+#define READ_END 0
+
 // Errors
 typedef enum     e_errors
 {
@@ -45,11 +49,14 @@ typedef struct  s_envp
 
 typedef struct   s_command
 {
-    char **cmd_arr;
+    // echo arg1 arg2...
+    char                **cmd_arr;
+    char                *in_redir;
+    char                *out_redir;
+    bool                append;
+    bool                piping;
 
-    char *in_redir;
-    char *out_redir;
-    char *app_redir;
+    struct s_command    *next;
 
 }   t_command;
 
@@ -57,14 +64,15 @@ typedef struct   s_command
 typedef struct  s_shell
 {
     //PID
-    pid_t   pid; // todo
+    pid_t    pid; // todo
     // Input
-    char    *input; // allocated
+    char     *input; // allocated
 
     // Env
-    t_envp  *my_envp_h; // allocated list
+    t_envp   *my_envp_h; // allocated list
 
-	// Tokens
+	// Comands
+    t_command *cmd_list;
     
 
     // Signals
@@ -89,6 +97,9 @@ char    **ft_split_tokens(char *str);
 char    *ft_space_tokens(char *str);
 int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
+
+// Comand stuff
+int ft_create_commands(char **tkn_arr, t_shell *shell);
 
 // Frees
 void    ft_free_str_arr(char **arr);
