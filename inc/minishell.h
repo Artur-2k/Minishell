@@ -31,6 +31,46 @@
 #define WRITE_END 1
 #define READ_END 0
 
+// NODE TYPES
+#define PIPE    1
+#define EXEC    2
+#define INREDIR   3
+#define OUTREDIR   4
+#define APPREDIR   5
+#define HDREDIR   6
+
+typedef struct s_cmd
+{
+    int type;
+}   t_cmd;
+
+
+typedef struct  s_pipe
+{
+    int type;
+
+    void    *left;
+    void    *right;
+
+}   t_pipe;
+
+typedef struct  s_redir
+{
+    int             type;
+    
+    char            *redir;
+    struct s_redir  *next;
+}   t_redir;
+
+typedef struct  s_exec
+{
+    int type;
+    
+    char    **av;
+    t_redir *redir_list;
+
+}   t_exec;
+
 // Errors
 typedef enum     e_errors
 {
@@ -47,18 +87,6 @@ typedef struct  s_envp
     char *value;
 } t_envp;
 
-typedef struct   s_command
-{
-    // echo arg1 arg2...
-    char                **cmd_arr;
-    char                *in_redir;
-    char                *out_redir;
-    bool                append;
-    bool                piping;
-
-    struct s_command    *next;
-
-}   t_command;
 
 // root struct
 typedef struct  s_shell
@@ -72,7 +100,7 @@ typedef struct  s_shell
     t_envp   *my_envp_h; // allocated list
 
 	// Comands
-    t_command *cmd_list;
+    t_cmd   *cmd_tree;
     
 
     // Signals
@@ -99,7 +127,7 @@ int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
 
 // Comand stuff
-int ft_create_commands(char **tkn_arr, t_shell *shell);
+int ft_build(char **tkn_arr);
 
 // Frees
 void    ft_free_str_arr(char **arr);

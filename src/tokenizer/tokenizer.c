@@ -6,21 +6,11 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/16 16:26:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/18 17:46:57 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//TODO 🗹
-//* free the array
-//* read into an array of tokens 🗹
-//* syntax errors
-//* expand "" 
-//* expand $
-
-//! add a struct for shell to point to
-//! store everything
 
 // Goes through each token and extends each token
 static int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
@@ -49,7 +39,6 @@ int	ft_tokenizer(t_shell *shell)
 	
     space_input = ft_space_tokens(shell->input);
     token_arr = ft_split_tokens(space_input);
-	printf("space input => %s\n", space_input);
     free(space_input);
 
 	if (ft_find_syntax_errors(token_arr))
@@ -58,13 +47,9 @@ int	ft_tokenizer(t_shell *shell)
 	if (ft_expand_tokens(token_arr, shell->my_envp_h)) // todo error checking
 		return(ft_free_str_arr(token_arr), -3);
 
-	int pid = fork();
-	
-	if (pid == 0)
-		ft_create_commands(token_arr, shell);
-	else 
-		wait(NULL);
-		
+	shell->cmd_tree = ft_build(token_arr);
+    
+
    	ft_free_str_arr(token_arr);
    	return 0;
 }
