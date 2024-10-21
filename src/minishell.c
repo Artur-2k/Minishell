@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/18 17:45:58 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:49:40 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@ int     main(int ac, char** av, char *envp[])
 
         // tokenizes the input and checks for syntax errors
         ft_tokenizer(&shell);
-        
-        
-        
-
 
         // Verifica se o input não está vazio antes de adicionar ao histórico
         if (*shell.input != '\0')

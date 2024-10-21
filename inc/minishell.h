@@ -127,7 +127,7 @@ int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
 
 // Comand stuff
-int ft_build(char **tkn_arr);
+t_cmd   *ft_build(char **tkn_arr);
 
 // Frees
 void    ft_free_str_arr(char **arr);
