@@ -39,6 +39,14 @@
 #define APPREDIR   5
 #define HDREDIR   6
 
+// Env
+typedef struct  s_envp
+{
+    struct s_envp *next;
+    char *key;
+    char *value;
+} t_envp;
+
 typedef struct s_cmd
 {
     int type;
@@ -67,6 +75,7 @@ typedef struct  s_exec
     int type;
     
     char    **av;
+    t_envp  *envp;
     t_redir *redir_list;
 
 }   t_exec;
@@ -79,13 +88,6 @@ typedef enum     e_errors
     PARSE_ERROR = 2
 }   t_errors;
 
-// Env
-typedef struct  s_envp
-{
-    struct s_envp *next;
-    char *key;
-    char *value;
-} t_envp;
 
 
 // root struct
@@ -127,7 +129,8 @@ int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
 
 // Comand stuff
-t_cmd   *ft_build(char **tkn_arr);
+t_cmd   *ft_build(char **tkn_arr, t_envp *envp);
+void ft_run_tree(t_cmd *node);
 
 // Frees
 void    ft_free_str_arr(char **arr);

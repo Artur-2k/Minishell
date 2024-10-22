@@ -15,8 +15,7 @@ ver export e env diferencas
 export key    nao aparece no env mas aparece no export
 export key=      aparece em ambos com ""
 
-// todo VER qual caso nao da erro <> ou >< e corrigir
-
+O operador <> em shells como o Bash é usado para abrir um arquivo para leitura e escrita ao mesmo tempo.
 
 unset HOME
 cd $HOME    -> erro
@@ -25,4 +24,3 @@ cd ~        -> last home (guardar home num backup nao apagavel
             e se nao encontrar home quando se faz cd ~ dar cd para esse bakcup)
 
 
-<<e > file1   le o heardoc e escreve na file1

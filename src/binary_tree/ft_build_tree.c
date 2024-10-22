@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_create_tree.c                                   :+:      :+:    :+:   */
+/*   ft_build_tree.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:22:12 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/21 14:55:47 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/22 13:02:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-
-    build:
-        node = new_exec_node
-        if |:
-            node = pipe(node, build)
-        return (node);
-
-
-*/
-
 
 static int ft_cmd_len(char **tkn_arr)
 {
@@ -69,7 +57,7 @@ static void    ft_new_redir(t_exec *cmd, char **tkn_arr)
     }
 }
 
-t_cmd  *ft_build_exec(char ***tkn_arr)
+t_cmd  *ft_build_exec(char ***tkn_arr, t_envp *envp)
 {
     t_exec  *cmd;
     int     i;
@@ -92,11 +80,12 @@ t_cmd  *ft_build_exec(char ***tkn_arr)
             cmd->av[j++] = ft_strdup((*tkn_arr)[i++]);
     }
     cmd->av[j] = NULL;
+    cmd->envp = envp;
     *tkn_arr = *tkn_arr + i;
     return ((t_cmd *)cmd);
 }
 
-t_cmd   *ft_build_pipe(t_cmd *cmd, char **tkn_arr)
+t_cmd   *ft_build_pipe(t_cmd *cmd, char **tkn_arr, t_envp *envp)
 {
     t_pipe  *pipe;
 
@@ -105,20 +94,20 @@ t_cmd   *ft_build_pipe(t_cmd *cmd, char **tkn_arr)
     {}
     pipe->type = PIPE;
     pipe->left = cmd;
-    pipe->right = ft_build(tkn_arr);
+    pipe->right = ft_build(tkn_arr, envp);
     
     return ((t_cmd *)pipe);
 }
 
-t_cmd   *ft_build(char **tkn_arr)
+t_cmd   *ft_build(char **tkn_arr, t_envp *envp)
 {
     t_cmd  *cmd;
     
-    cmd = ft_build_exec(&tkn_arr);
+    cmd = ft_build_exec(&tkn_arr, envp);
     if (*tkn_arr && **tkn_arr == '|')
     {
         tkn_arr++;
-        cmd = ft_build_pipe((t_cmd *)cmd, tkn_arr); // todo
+        cmd = ft_build_pipe((t_cmd *)cmd, tkn_arr, envp);
     }
     return (cmd);
 }

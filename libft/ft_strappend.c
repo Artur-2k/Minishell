@@ -6,13 +6,13 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:42:29 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/22 12:54:24 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:53:32 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strappend(char *s1, char *s2)
 {
 	char	*nstr;
 	int		i;
@@ -31,6 +31,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2 && s2[j])
 		nstr[i++] = s2[j++];
 	nstr[i] = 0;
+	if (s1)
+		free(s1);
 	return (nstr);
 }
 /*

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:05:19 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 17:52:56 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/22 13:01:48 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_list
 
 }					t_list;
 
+char				*ft_strappend(char *s1, char *s2);
 char 				*ft_strcat(char *dest, char *src);
 char				*ft_strcpy(char *dest, char *src);
 int					ft_strcmp(char *s1, char *s2);

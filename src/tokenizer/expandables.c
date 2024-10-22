@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/15 14:16:08 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:53:21 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 	if (ft_has_key(*token, len, envp))
 	{
 		key = ft_substr(*token, 0, len);
-		new = ft_strjoin(new, ft_get_value(key, envp));
+		new = ft_strappend(new, ft_get_value(key, envp));
 		free(key);
 	}
 	(*token) += len - 1; // -1 para nao saltar dois a seguir
@@ -62,7 +62,7 @@ static char	*ft_expand_dquotes(char *new, char **token, t_envp *envp)
 			if (**token == '\"') // "...$" 
 				ft_append_char_to_str(new, '$');
 			else if (**token == '$') // "...$$asd"
-				new = ft_strjoin(new, ft_itoa(ft_get_pid()));
+				new = ft_strappend(new, ft_itoa(ft_get_pid()));
 			else // "$key"
 				new = ft_expand_variable(new, token, envp);
 		}
@@ -78,7 +78,7 @@ static char	*ft_expand_noquotes(char *new, char **token, t_envp *envp)
 	if (!**token || (**token == '\"' || **token == '\'')) // ... $ => ... $ || ...$"..."  ==> ...$...
 		new = ft_append_char_to_str(new, '$');
 	else if (**token == '$') // ...$$asd
-		new = ft_strjoin(new, ft_itoa(ft_get_pid()));
+		new = ft_strappend(new, ft_itoa(ft_get_pid()));
 	else // "$key"
 		new = ft_expand_variable(new, token, envp);
 	return (new);
