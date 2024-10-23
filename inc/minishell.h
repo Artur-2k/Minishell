@@ -40,7 +40,7 @@
 #define APPREDIR    5
 #define HDREDIR     6
 
-// Env 
+// Env
 typedef struct  s_envp
 {
     char            *key;
@@ -67,7 +67,7 @@ typedef struct  s_pipe
 typedef struct  s_redir
 {
     int             type;
-    
+
     char            *redir;
     int             mode;
     struct s_redir  *next;
@@ -87,7 +87,7 @@ typedef struct  s_shell
 {
     //PID
     pid_t    pid; // todo
-    
+
     // Input
     char     *input; // allocated
 
@@ -96,7 +96,7 @@ typedef struct  s_shell
 
 	// Comands
     t_cmd   *cmd_tree; // allocated tree
-    
+
     // Signals
     struct sigaction sa_int;
     struct sigaction sa_quit;
@@ -135,5 +135,6 @@ int 	ft_get_pid(void);
 
 // Error
 void    ft_error(); // todo
+void	ft_what_happened(char *what, char *happend);
 
 #endif

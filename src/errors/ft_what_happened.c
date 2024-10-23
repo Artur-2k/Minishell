@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_what_happened.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 12:37:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 21:02:01 by artuda-s         ###   ########.fr       */
+/*   Created: 2024/10/23 20:54:52 by artuda-s          #+#    #+#             */
+/*   Updated: 2024/10/23 21:31:47 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_putstr_fd(char *s, int fd)
-{
-	int	n;
-
-	if (!s || !*s)
-		return ;
-	n = ft_strlen(s);
-	write(fd, s, n);
-}
 /*
-#include <stdio.h>
-
-int	main(void)
+ * @brief Outputs what happened xD
+ * @param what What is the string that made something explode
+ * @param happened Happened the string associated to the errno
+ * @return Nothing
+*/
+void	ft_what_happened(char *what, char *happend)
 {
-	ft_putstr_fd("ola\n", 1);
-	return (0);
-} */
+	ft_putstr_fd(what, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(happend, STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+}
