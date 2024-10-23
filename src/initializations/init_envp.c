@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 17:06:41 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/23 23:02:09 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 //!     Vale a pena checar se envp esta vazio? vai que
 //!     um ninja apaga tudo antes de rodar o minishell xD
 
+/*
+ * @brief Recieves the env line and returns its key
+ * @return Returns the key or null in case of error
+*/
 static char     *ft_extract_key(char *line)
 {
     char    *key;
@@ -29,6 +33,8 @@ static char     *ft_extract_key(char *line)
         if (line[end] == '=')
         {
             key = ft_substr(line, 0, end);
+			if (!key)
+				return (NULL);
             break ;
         }
         else
@@ -37,6 +43,10 @@ static char     *ft_extract_key(char *line)
     return (key);
 }
 
+/*
+ * @brief Recieves the env line and returns its value
+ * @return Returns the value or null in case of error
+*/
 static char     *ft_extract_value(char *line)
 {
     char    *value;
@@ -50,6 +60,8 @@ static char     *ft_extract_value(char *line)
         {
             start++;
             value = ft_strdup(&line[start]);
+			if (!value)
+				return (NULL);
             break ;
         }
         start++;
@@ -58,22 +70,35 @@ static char     *ft_extract_value(char *line)
 }
 
 
-
+/*
+ * @brief Allocates memory for a new node and it's key and value
+ * @return Returns a pointer to the new node
+*/
 t_envp   *ft_new_node(char *envp_line)
 {
     t_envp  *new_node;
 
     new_node = (t_envp*)malloc(sizeof(t_envp));
-
+	if (!new_node)
+		return (NULL);
     new_node->key = ft_extract_key(envp_line);
+	if (!new_node->key)
+		return (free(new_node), NULL);
     new_node->value = ft_extract_value(envp_line);
+	if (!new_node->value)
+		return (free(new_node), NULL);
     new_node->next = NULL;
     return (new_node);
 }
 
-void    ft_init_envp(t_shell *shell, char *envp[])
+/*
+ * @brief Copies enherited envp to a dynamically allocated
+ * list so we can export and unset new variables
+ * if any allocation fails we free anything allocated and exit
+*/
+int    ft_init_envp(t_shell *shell, char *envp[])
 {
-    int i;
+    int 	i;
     t_envp  *curr;
     t_envp  *new;
 
@@ -83,6 +108,8 @@ void    ft_init_envp(t_shell *shell, char *envp[])
     while (envp[i] != NULL)
     {
         new = ft_new_node(envp[i]);
+		if (!new)
+			return(ft_free_envp_lst(shell->my_envp_h), 1); // error
         if (shell->my_envp_h == NULL)
             shell->my_envp_h = new;
         else
@@ -90,4 +117,5 @@ void    ft_init_envp(t_shell *shell, char *envp[])
         curr = new;
         i++;
     }
+	return (0); // success
 }

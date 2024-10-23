@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 16:17:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/23 23:03:33 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,21 @@ int     main(int ac, char** av, char *envp[])
 
     // probably init shell bools and shit
     ft_init_signals(&shell);
-    ft_init_envp(&shell, envp); //todo
+    if (ft_init_envp(&shell, envp))
+		return (ft_putstr_fd("Malloc error sir\n", STDERR_FILENO), 1);
     shell.cmd_tree = NULL;
     while (true)
     {
+		// Reads input from user
         shell.input = readline(RED"Minihell => "RES);
+
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
 
-        // tokenizes the input and checks for syntax errors
-        ft_tokenizer(&shell);
-        
+        // Tokenizes the input and checks for syntax errors
+        ft_tokenizer(&shell); // TODO error checking a partir daqui is missing
+
         if (shell.cmd_tree)
         {
             int pid = fork();
@@ -42,7 +45,7 @@ int     main(int ac, char** av, char *envp[])
                 ft_run_tree(shell.cmd_tree);
             wait (NULL);
         }
-        
+
         // Verifica se o input não está vazio antes de adicionar ao histórico
         if (*shell.input != '\0')
             add_history(shell.input);

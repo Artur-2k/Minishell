@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:22:21 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 21:31:12 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/23 22:43:01 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ static void    ft_handle_sigint(int signo)
     rl_redisplay();
 }
 
+/*
+ * @brief Removes terminal config to remove control characters print.
+ *
+ * Makes SIGINT clear the line and redisplay prompt.
+ * 
+ * Makes SIGQUIT useless
+*/
 void    ft_init_signals(t_shell *shell)
 {
     // Ignora o caractere ^C do terminal

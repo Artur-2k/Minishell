@@ -107,7 +107,7 @@ typedef struct  s_shell
 void    ft_init_signals(t_shell *shell);
 
 // Env
-void    ft_init_envp(t_shell *shell, char *envp[]);
+int    	ft_init_envp(t_shell *shell, char *envp[]);
 t_envp  *ft_new_node(char *envp_line);
 bool    ft_has_key(char *try, int len, t_envp *envp);
 char    *ft_get_value(char *key, t_envp *envp);
