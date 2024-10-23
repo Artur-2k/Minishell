@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/22 17:12:42 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:17:33 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int     main(int ac, char** av, char *envp[])
     shell.cmd_tree = NULL;
     while (true)
     {
-        shell.input = readline("\033[0;31mMinihella asda  => \033[0m");
+        shell.input = readline(RED"Minihell => "RES);
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
@@ -37,7 +37,8 @@ int     main(int ac, char** av, char *envp[])
         
         if (shell.cmd_tree)
         {
-            if (fork() == 0)
+            int pid = fork();
+            if (pid == 0)
                 ft_run_tree(shell.cmd_tree);
             wait (NULL);
         }

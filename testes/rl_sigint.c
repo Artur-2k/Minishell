@@ -32,7 +32,7 @@ int main() {
     tcsetattr(STDIN_FILENO, TCSANOW, &termios_p); // aplies the new config
 
 
-    sigaction(SIGINT, &sa, NULL); // TODO ver sigaction
+    sigaction(SIGINT, &sa, NULL); 
 
     // Loop que lê várias linhas de entrada
     while (1) {

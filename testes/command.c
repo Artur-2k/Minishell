@@ -43,7 +43,7 @@ char *ft_find_path(char **my_envp)
         }
         j++;
     }
-    if (!path_var || !*path_var) // nao tem path ou nao tem nenhum valor PATH= o
+    if (!path_var || !*path_var) // nao tem path ou nao tem nenhum valor PATH= 
         return NULL;
 	return path_var;
 }

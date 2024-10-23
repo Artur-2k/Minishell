@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/22 13:01:03 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/23 15:04:01 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,11 @@ static int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
 	return (0);
 }
 
-
-
 /* 
  *	
   ! print tree
  *
 */
-
 void	print_tree(t_cmd *cmd)
 {
 	if (cmd->type == EXEC)

@@ -58,7 +58,6 @@ $(OBJ_DIR):
 	@mkdir -p $@
 
 clean:
-	@echo OLA
 	@$(MAKE) --silent -C $(LIB_DIR) clean
 	@rm -rf $(OBJ_DIR)
 	@echo "${RED}➾ Cleaned the workspace${RES}"
