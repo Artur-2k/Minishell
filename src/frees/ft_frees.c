@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/15 14:29:52 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 13:33:33 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,3 +39,35 @@ void ft_free_envp_lst(t_envp *my_envp)
     }
 }
 
+void    ft_free_redir_list(t_redir **redirs)
+{
+    t_redir *temp;
+
+    while (*redirs != NULL)
+    {
+        free((*redirs)->redir);
+        temp = (*redirs)->next;
+        free(*redirs);
+        *redirs = temp;
+    }
+}
+
+void    ft_free_tree(t_cmd *tree)
+{
+    t_exec  *execn;
+    t_pipe  *pipen;
+    if (tree->type == EXEC)
+    {
+        execn = (t_exec *)tree;
+        ft_free_str_arr(execn->av);
+        ft_free_redir_list(&execn->redir_list);
+        free(execn);
+    }
+    else if (tree->type == PIPE)
+    {
+        pipen = (t_pipe *)tree;
+        ft_free_tree((t_cmd *)pipen->left);
+        ft_free_tree((t_cmd *)pipen->right);
+        free(pipen);
+    }
+}

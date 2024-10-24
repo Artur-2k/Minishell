@@ -51,12 +51,12 @@ typedef struct  s_envp
 
 // Command stuff
 
-typedef struct s_cmd
+typedef struct s_cmd 
 {
     int             type;
 }   t_cmd;
 
-typedef struct  s_pipe
+typedef struct  s_pipe // limpar
 {
     int              type;
 
@@ -64,22 +64,21 @@ typedef struct  s_pipe
     void            *right;
 }   t_pipe;
 
-typedef struct  s_redir
+typedef struct  s_redir // limpar
 {
     int             type;
 
-    char            *redir;
-    int             mode;
+    char            *redir; // limpar
     struct s_redir  *next;
 }   t_redir;
 
-typedef struct  s_exec
+typedef struct  s_exec // limpar
 {
     int             type;
 
     char            **av;
-    t_envp          *envp;
-    t_redir         *redir_list;
+    t_envp          *envp; // limpar na shell only
+    t_redir         *redir_list; // limpar
 }   t_exec;
 
 // Root struct
@@ -129,6 +128,8 @@ char    *ft_check_paths_for_cmd(char **paths, char *cmd);
 // Frees
 void    ft_free_str_arr(char **arr);
 void    ft_free_envp_lst(t_envp *my_envp);
+void    ft_free_redir_list(t_redir **redirs);
+void    ft_free_tree(t_cmd *tree);
 
 // Utils
 int 	ft_get_pid(void);

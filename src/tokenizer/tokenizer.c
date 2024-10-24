@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 12:12:46 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 13:07:37 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,21 @@ int	ft_tokenizer(t_shell *shell)
     char    **token_arr;
 
     if (!shell->input || !*shell->input)
-        return (-1);
-	
-    space_input = ft_space_tokens(shell->input);
+		return (-1);
 
-	
-    token_arr = ft_split_tokens(space_input);
+    // Uniforming data
+	space_input = ft_space_tokens(shell->input); //*✅*//
+    if (!space_input)
+		return (-4);
+
+	// Splitting data into tokens
+	token_arr = ft_split_tokens(space_input);
     free(space_input);
+	if (!token_arr)
+		return (-5);
+	
+	for (int i = 0; token_arr[i]; i++)
+		printf("%d: [%s]\n", i , token_arr[i]);
 
 	if (ft_find_syntax_errors(token_arr))
 		return(ft_free_str_arr(token_arr), -2);
@@ -87,6 +95,8 @@ int	ft_tokenizer(t_shell *shell)
 	
 	shell->cmd_tree = ft_build(token_arr, shell->my_envp_h);
 		
+	print_tree(shell->cmd_tree);
+	
    	ft_free_str_arr(token_arr);
    	return 0;
 }

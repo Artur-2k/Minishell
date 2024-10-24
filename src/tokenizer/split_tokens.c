@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/14 21:02:40 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 13:06:15 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,44 @@ static int	ft_token_lenght(char *str)
 	}
 	return (len);
 }
+
+static char *ft_populate_tkn_arr(char *str, int *start)
+{
+    int         tkn_len;
+    char        *ret;
+    
+    if (str[*start] == ' ')
+        (*start)++;
+    tkn_len = ft_token_lenght(&str[*start]);
+    ret = ft_substr(str, *start, tkn_len);
+    if (!ret)
+        return (NULL);
+    *start = *start + tkn_len;
+    return (ret);
+}
+
 char    **ft_split_tokens(char *str)
 {
     char    **token_arr;
+    int     no_tokens;
+    int     i;
+    int     start;
 
-    //alocar memoria
-    // quantos tokens?  [ola teste "ol   a" teste] ==> 3
-    int no_tokens = ft_count_tokens(str);
 
+    if (!str || !*str)
+        return (NULL);
+    no_tokens = ft_count_tokens(str);
     token_arr = (char **)malloc(sizeof(char *) * (no_tokens + 1));
-
-    int i = 0;
-    int start = 0;
-    int tknlen = 0;
+    i = 0;
+    start = 0;
     while (i < no_tokens)
     {
-        if (str[start] == ' ')
-            start++;
-        tknlen = ft_token_lenght(&str[start]);
-        token_arr[i] = ft_substr(str, start, tknlen);
-        start += tknlen;
+        printf("%d\n", start);
+        token_arr[i] = ft_populate_tkn_arr(str, &start);
+        if (!token_arr[i])
+            return (ft_free_str_arr(token_arr), NULL);
         i++;
     }
     token_arr[i] = NULL;
-
     return (token_arr);
 }
