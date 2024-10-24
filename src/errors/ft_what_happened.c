@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_what_happened.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 20:54:52 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 21:31:47 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 10:00:42 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
 */
 void	ft_what_happened(char *what, char *happend)
 {
+	ft_putstr_fd("Minihell: ", STDERR_FILENO);
 	ft_putstr_fd(what, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(happend, STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
+	ft_putstr_fd(", sir\n", STDERR_FILENO);
 }

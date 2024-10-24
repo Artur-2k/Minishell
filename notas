@@ -23,3 +23,6 @@ cd ~        -> last home (guardar home num backup nao apagavel
 
 setar sempre a errno para 0 antes de verificar erros porque qualquer resize or wte o readline mete errono para qq merda
 check fucking path
+
+export ola="ls -la"
+$ola ==> executa ls -la

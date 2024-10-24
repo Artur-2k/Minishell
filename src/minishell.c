@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 23:03:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 10:00:00 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int     main(int ac, char** av, char *envp[])
     // probably init shell bools and shit
     ft_init_signals(&shell);
     if (ft_init_envp(&shell, envp))
-		return (ft_putstr_fd("Malloc error sir\n", STDERR_FILENO), 1);
+		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
     shell.cmd_tree = NULL;
     while (true)
     {

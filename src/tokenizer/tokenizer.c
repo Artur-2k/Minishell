@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 15:04:01 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 12:12:46 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	ft_tokenizer(t_shell *shell)
         return (-1);
 	
     space_input = ft_space_tokens(shell->input);
+
+	
     token_arr = ft_split_tokens(space_input);
     free(space_input);
 

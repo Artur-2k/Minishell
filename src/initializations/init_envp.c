@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 23:02:09 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 09:58:51 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ t_envp   *ft_new_node(char *envp_line)
 
 /*
  * @brief Copies enherited envp to a dynamically allocated
- * list so we can export and unset new variables
- * if any allocation fails we free anything allocated and exit
+ *      list so we can export and unset new variables
+ *      if any allocation fails we free anything allocated and exit
 */
 int    ft_init_envp(t_shell *shell, char *envp[])
 {
