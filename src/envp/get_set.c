@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_set.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:30:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/15 14:30:01 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/25 19:48:38 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	ft_has_key(char *try, int len,  t_envp *envp)
 char *ft_get_value(char *key, t_envp *envp)
 {
 	if (!key || !*key || !envp)
-		return ("");
+		return (NULL);
 
 	while (envp != NULL)
 	{

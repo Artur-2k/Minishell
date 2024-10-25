@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:15:50 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 17:16:29 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/25 20:03:06 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,21 @@ char    **ft_recreate_envp(t_envp *l_envp)
 
 char *ft_check_paths_for_cmd(char **paths, char *cmd)
 {
-    char *full_path;
-    int j = 0;
-    while (paths[j] != NULL)
+    char	*full_path;
+	int		i;
+
+    i = 0;
+    while (paths[i] != NULL)
     {
-        paths[j] = ft_append_char_to_str(paths[j], '/');
-        full_path = ft_strjoin(paths[j], cmd);
+		full_path = ft_strjoin(paths[i], "/");
+		if (!full_path)
+			return (NULL);
+        full_path = ft_strappend(full_path, cmd);
         if (access(full_path, X_OK) == 0)
             break ;
         free(full_path); // comando errado freed
         full_path = NULL;
-        j++;
+        i++;
     }
-    return full_path;
+    return (full_path);
 }

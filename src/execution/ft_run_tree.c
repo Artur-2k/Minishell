@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_run_tree.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/25 19:27:57 by artuda-s          #+#    #+#             */
+/*   Updated: 2024/10/25 22:38:28 by artuda-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 
@@ -26,35 +38,42 @@ int ft_is_dir(char *path)
         errno = 0;
         if (stat(path, &file_stat))
         {
-            printf("error1\t");
             ft_what_happened(path, strerror(errno));
             exit (1); // TODO
         }
         if (S_ISDIR(file_stat.st_mode))
         {
-            printf("error2\t");
-
             ft_what_happened(path, ": Is a directory");
             exit (126); // TODO
-        }   
+        }
     }
     return (0); // success
 }
 
-/* char    *ft_get_cmd_path(char *cmd, char **envp)
+char    *ft_get_cmd_path(char *cmd, t_envp *envp)
 {
-  
+	char    *full_path;
+    char    *path_var;
+    char    **paths;
 
-
-    return 
-} */
+	path_var = ft_get_value("PATH", envp);
+	if (!path_var)
+		return (errno = ENOCMD, NULL);
+    paths = ft_split(path_var, ':');
+	if (!paths)
+		return (errno = EMALLOC, NULL);
+    free(path_var);
+    full_path = ft_check_paths_for_cmd(paths, cmd);
+    ft_free_str_arr(paths);
+	if (!full_path)
+		return (errno = ENOCMD, NULL);
+    return (full_path);
+}
 
 void    ft_exec(t_exec *node)
 {
+	char *cmd;
 
-  char    *full_path;
-    char    *path_var;
-    char    **paths;
     // apply redirects
     if (ft_redirects(node->redir_list))
         {exit (1);} // TODO ERROR CHECK
@@ -64,9 +83,6 @@ void    ft_exec(t_exec *node)
         {exit(1);} // TODO ERROR CHECK
 
     //* strchr(.. /) tendo execve n tendo paths
-
-
-
     if (ft_strchr(node->av[0], '/')) // path absoluto ==> execve
     {
         errno = 0;
@@ -80,31 +96,20 @@ void    ft_exec(t_exec *node)
     }
     else // find path
     {
-        path_var = ft_get_value("PATH", node->envp);
-        if (!path_var || !*path_var) // ==>execve
-            ft_what_happened(node->av[0], ": No such file or directory");
-        else
-        {
-            paths = ft_split(path_var, ':');
-            //todo (if !paths)...
-            free(path_var);
-            full_path = ft_check_paths_for_cmd(paths, node->av[0]);
-            ft_free_str_arr(paths);
-            if (!full_path)
-            {
-                ft_putstr_fd(node->av[0], 2);
-                ft_putstr_fd(": command not found\n", 2);
-                //todo ver mais error handling
-                exit (1);
-            }
-            else
-            {
-                free(node->av[0]);
-                node->av[0] = ft_strdup(full_path);
-                execve(node->av[0], node->av, node->tenvp);
-                free(full_path);
-            }
-        }
+		cmd = ft_get_cmd_path(node->av[0], node->envp);
+		if (!cmd)
+		{
+			if (errno == ENOCMD)
+				ft_what_happened(node->av[0], "command not found");
+			else if (errno == EMALLOC)
+				ft_putstr_fd("Malloc error, sir\n", 2);
+			exit(1); //TODO
+		}
+	   	free(node->av[0]);
+        node->av[0] = ft_strdup(cmd);
+        execve(node->av[0], node->av, node->tenvp);
+		ft_what_happened(node->av[0], strerror(errno));
+		exit(1); //TODO
     }
 }
 

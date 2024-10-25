@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 13:07:37 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/25 22:05:55 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
 	return (0);
 }
 
-/* 
- *	
+/*
+ *
   ! print tree
  *
 */
@@ -43,7 +43,7 @@ void	print_tree(t_cmd *cmd)
 		printf("\nNew argv:\n");
 		for (int i = 0; exec->av[i]; i++)
 			printf("AV[%i]: [%s]\n", i , exec->av[i]);
-		// redir list	
+		// redir list
 		t_redir *curr = exec->redir_list;
 		printf("REDIRES:\n");
 		while (curr != NULL)
@@ -53,7 +53,7 @@ void	print_tree(t_cmd *cmd)
 			// redir
 				printf("FILE: [%s]\n", curr->redir);
 			curr = curr->next;
-		}		
+		}
 	}
 	else if (cmd->type == PIPE)
 	{
@@ -83,20 +83,16 @@ int	ft_tokenizer(t_shell *shell)
     free(space_input);
 	if (!token_arr)
 		return (-5);
-	
-	for (int i = 0; token_arr[i]; i++)
-		printf("%d: [%s]\n", i , token_arr[i]);
 
 	if (ft_find_syntax_errors(token_arr))
 		return(ft_free_str_arr(token_arr), -2);
 
 	if (ft_expand_tokens(token_arr, shell->my_envp_h)) // todo error checking
 		return(ft_free_str_arr(token_arr), -3);
-	
+
 	shell->cmd_tree = ft_build(token_arr, shell->my_envp_h);
-		
-	print_tree(shell->cmd_tree);
-	
+
+
    	ft_free_str_arr(token_arr);
    	return 0;
 }

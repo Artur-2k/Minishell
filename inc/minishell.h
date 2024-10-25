@@ -40,6 +40,10 @@
 #define APPREDIR    5
 #define HDREDIR     6
 
+// Error types
+#define EMALLOC 	1
+#define ENOCMD		2
+
 // Env
 typedef struct  s_envp
 {
@@ -51,7 +55,7 @@ typedef struct  s_envp
 
 // Command stuff
 
-typedef struct s_cmd 
+typedef struct s_cmd
 {
     int             type;
 }   t_cmd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 13:06:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/25 22:07:06 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char *ft_populate_tkn_arr(char *str, int *start)
 {
     int         tkn_len;
     char        *ret;
-    
+
     if (str[*start] == ' ')
         (*start)++;
     tkn_len = ft_token_lenght(&str[*start]);
@@ -86,7 +86,6 @@ char    **ft_split_tokens(char *str)
     start = 0;
     while (i < no_tokens)
     {
-        printf("%d\n", start);
         token_arr[i] = ft_populate_tkn_arr(str, &start);
         if (!token_arr[i])
             return (ft_free_str_arr(token_arr), NULL);
