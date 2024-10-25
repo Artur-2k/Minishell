@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 13:33:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:47:26 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void    ft_free_tree(t_cmd *tree)
     {
         execn = (t_exec *)tree;
         ft_free_str_arr(execn->av);
+        ft_free_str_arr(execn->tenvp);
         ft_free_redir_list(&execn->redir_list);
         free(execn);
     }

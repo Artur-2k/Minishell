@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirects.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:30 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 22:36:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/25 10:06:42 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int ft_redirects(t_redir *redir)
 	int	err;
 
 	err = 0;
-    while (redir || !err)
+    while (redir && !err)
     {
         if (redir->type == INREDIR)
 			err = ft_redirect_in(redir);

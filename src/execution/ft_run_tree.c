@@ -1,22 +1,10 @@
 #include "minishell.h"
 
-void    ft_exec(t_exec *node)
+
+int ft_is_dir(char *path)
 {
-    char *full_path;
-    char *path_var;
-    char    **paths;
-    char    **envp;
-
-    if (node->envp)
-        envp = ft_recreate_envp(node->envp);
-
-    if (node->redir_list) // TODO
-    {
-        if (ft_redirects(node->redir_list))
-        {exit (1);} // TODO ERROR CHECK
-    }
-
-    // check if it is a dir
+    if (!path) // TODO
+        exit(2);
     struct stat file_stat;
     /*
      *   st_size: Tamanho do arquivo em bytes.
@@ -32,48 +20,69 @@ void    ft_exec(t_exec *node)
      *  S_ISREG(m): Verifica se o arquivo é regular.
      *  S_ISDIR(m): Verifica se é um diretório.
     */
-    stat(node->av[0], &file_stat);
     // so reconhece diretorios quando tem uma / e quando e diretorio
-    if (ft_strchr(node->av[0], '/') && S_ISDIR(file_stat.st_mode))
+    if (ft_strchr(path, '/'))
     {
-        ft_putstr_fd(node->av[0], 2);
-        ft_putstr_fd(": is a directory sir\n", 2);
-        exit (1);
-    }
+        errno = 0;
+        if (stat(path, &file_stat))
+        {
+            printf("error1\t");
+            ft_what_happened(path, strerror(errno));
+            exit (1); // TODO
+        }
+        if (S_ISDIR(file_stat.st_mode))
+        {
+            printf("error2\t");
 
+            ft_what_happened(path, ": Is a directory");
+            exit (126); // TODO
+        }   
+    }
+    return (0); // success
+}
+
+/* char    *ft_get_cmd_path(char *cmd, char **envp)
+{
+  
+
+
+    return 
+} */
+
+void    ft_exec(t_exec *node)
+{
+
+  char    *full_path;
+    char    *path_var;
+    char    **paths;
+    // apply redirects
+    if (ft_redirects(node->redir_list))
+        {exit (1);} // TODO ERROR CHECK
+
+    // check if it is a dir
+    if (ft_is_dir(node->av[0]))
+        {exit(1);} // TODO ERROR CHECK
 
     //* strchr(.. /) tendo execve n tendo paths
+
+
+
     if (ft_strchr(node->av[0], '/')) // path absoluto ==> execve
     {
+        errno = 0;
         if (access(node->av[0], X_OK) == 0)
         {
-            execve(node->av[0], node->av, envp);
-            // TODO ERROR CHECK
+            errno = 0;
+            execve(node->av[0], node->av, node->tenvp);
         }
-        else // bin doesnt exist, no permission
-        {
-            // TODO ERROR CHECK
-            printf("ERRO MALANDRO1\n");
-            exit (1);
-        }
+        ft_what_happened(node->av[0], strerror(errno));
+        exit (1); // TODO ERROR CHECK
     }
     else // find path
     {
         path_var = ft_get_value("PATH", node->envp);
         if (!path_var || !*path_var) // ==>execve
-        {
-            if (access(node->av[0], X_OK) == 0)
-            {
-                execve(node->av[0], node->av, envp);
-                // TODO ERROR CHECK
-            }
-            else // bin doesnt exist, no permission
-            {
-                // TODO ERROR CHECK
-                printf("ERRO MALANDRO2\n");
-                exit (1);
-            }
-        }
+            ft_what_happened(node->av[0], ": No such file or directory");
         else
         {
             paths = ft_split(path_var, ':');
@@ -92,7 +101,7 @@ void    ft_exec(t_exec *node)
             {
                 free(node->av[0]);
                 node->av[0] = ft_strdup(full_path);
-                execve(node->av[0], node->av, envp);
+                execve(node->av[0], node->av, node->tenvp);
                 free(full_path);
             }
         }

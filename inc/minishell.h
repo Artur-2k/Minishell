@@ -78,6 +78,7 @@ typedef struct  s_exec // limpar
 
     char            **av;
     t_envp          *envp; // limpar na shell only
+    char            **tenvp;
     t_redir         *redir_list; // limpar
 }   t_exec;
 

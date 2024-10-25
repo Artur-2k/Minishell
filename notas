@@ -26,3 +26,8 @@ check fucking path
 
 export ola="ls -la"
 $ola ==> executa ls -la
+
+
+for signals 128 + SIGTYPE
+126 Permission problem or command is not an executable
+127

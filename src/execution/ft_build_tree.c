@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:22:12 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/22 13:02:10 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:40:59 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ t_cmd  *ft_build_exec(char ***tkn_arr, t_envp *envp)
     }
     cmd->av[j] = NULL;
     cmd->envp = envp;
+    if (envp)
+        cmd->tenvp = ft_recreate_envp(envp);
     *tkn_arr = *tkn_arr + i;
     return ((t_cmd *)cmd);
 }

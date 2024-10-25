@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 13:15:42 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:44:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int     main(int ac, char** av, char *envp[])
 
     //release everything
     // envp, tree (! pais e filhos)
+    ft_free_envp_lst(shell.my_envp_h);
+    
     printf("exit\n");
     return (0);
 }
