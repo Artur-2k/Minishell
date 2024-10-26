@@ -125,10 +125,12 @@ char	*ft_expand_token(char* token, t_envp *envp);
 
 // Comand stuff
 t_cmd   *ft_build(char **tkn_arr, t_envp *envp);
-void    ft_run_tree(t_cmd *node);
+void	ft_run_tree(t_cmd *node, t_shell *shell);
 int     ft_redirects(t_redir *redir);
 char    **ft_recreate_envp(t_envp *l_envp);
 char    *ft_check_paths_for_cmd(char **paths, char *cmd);
+int    ft_exec(t_exec *node);
+void	ft_pipe(t_pipe *node, t_shell *shell);
 
 // Frees
 void    ft_free_str_arr(char **arr);
