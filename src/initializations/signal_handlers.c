@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:22:21 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/25 10:46:08 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/26 19:41:25 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+unsigned char	g_signal_pressed;
+
 static void    ft_handle_sigint(int signo)
 {
-    (void)signo;
+    g_signal_pressed = 128 + signo;
     printf("\n");
     // Notifica o Readline que uma nova linha será iniciada
     rl_on_new_line();
@@ -28,7 +30,7 @@ static void    ft_handle_sigint(int signo)
  * @brief Removes terminal config to remove control characters print.
  *
  * Makes SIGINT clear the line and redisplay prompt.
- * 
+ *
  * Makes SIGQUIT useless
 */
 void    ft_init_signals(t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/25 22:05:55 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:48:04 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,41 +29,7 @@ static int	ft_expand_tokens(char **tkn_arr, t_envp *envp)
 	return (0);
 }
 
-/*
- *
-  ! print tree
- *
-*/
-void	print_tree(t_cmd *cmd)
-{
-	if (cmd->type == EXEC)
-	{
-		t_exec	*exec = (t_exec *)cmd;
-		//* AV
-		printf("\nNew argv:\n");
-		for (int i = 0; exec->av[i]; i++)
-			printf("AV[%i]: [%s]\n", i , exec->av[i]);
-		// redir list
-		t_redir *curr = exec->redir_list;
-		printf("REDIRES:\n");
-		while (curr != NULL)
-		{
-			// type de redir
-				printf("TYPE: [%i]\t", curr->type);
-			// redir
-				printf("FILE: [%s]\n", curr->redir);
-			curr = curr->next;
-		}
-	}
-	else if (cmd->type == PIPE)
-	{
-		t_pipe *pipe = (t_pipe *)cmd;
-		// chamar para printar esquerdo
-		print_tree((t_cmd *)pipe->left);
-		// chamar para a direita
-		print_tree((t_cmd *)pipe->right);
-	}
-}
+
 
 int	ft_tokenizer(t_shell *shell)
 {

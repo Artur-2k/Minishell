@@ -6,12 +6,14 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 13:24:17 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:46:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Global for signal
+extern unsigned char	g_signal_pressed;
 
 int     main(int ac, char** av, char *envp[])
 {
@@ -28,9 +30,13 @@ int     main(int ac, char** av, char *envp[])
     shell.cmd_tree = NULL;
     while (true)
     {
+		g_signal_pressed = 0;
+
 		// Reads input from user
         shell.input = readline(RED"Minihell => "RES);
 
+		if (g_signal_pressed)
+			shell.exit_status = g_signal_pressed;
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
@@ -40,15 +46,21 @@ int     main(int ac, char** av, char *envp[])
 
         if (shell.cmd_tree)
         {
-            int pid = fork();
+            int	status;
+			int	pid;
+
+			pid = fork();
             if (pid == 0)
                 ft_run_tree(shell.cmd_tree, &shell);
-            wait (NULL);
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status))
+				shell.exit_status = WEXITSTATUS(status);
             ft_free_tree(shell.cmd_tree);
 			shell.cmd_tree = NULL;
         }
         // Verifica se o input não está vazio antes de adicionar ao histórico
-        if (*shell.input != '\0')
+
+	    if (*shell.input != '\0')
             add_history(shell.input);
 
         free(shell.input);

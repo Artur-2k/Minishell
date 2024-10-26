@@ -44,6 +44,7 @@
 #define EMALLOC 	1
 #define ENOCMD		2
 
+
 // Env
 typedef struct  s_envp
 {
@@ -101,6 +102,8 @@ typedef struct  s_shell
 	// Comands
     t_cmd   *cmd_tree; // allocated tree
 
+	// Exit status
+	unsigned char	exit_status;
     // Signals
     struct sigaction sa_int;
     struct sigaction sa_quit;
