@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 09:58:51 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/26 21:33:08 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_envp   *ft_new_node(char *envp_line)
 		return (free(new_node), NULL);
     new_node->value = ft_extract_value(envp_line);
 	if (!new_node->value)
-		return (free(new_node), NULL);
+		return (free(new_node->key), free(new_node), NULL);
     new_node->next = NULL;
     return (new_node);
 }

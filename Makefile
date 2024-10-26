@@ -4,7 +4,7 @@ BIN = minishell
 # Compiler
 CC = cc
 CFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -Wall -Wextra -Werror -g
-VG = valgrind --leak-check=full --show-leak-kinds=all --suppressions=supressions --track-origins=yes --log-file=leaks.log
+VG = valgrind --leak-check=full --show-leak-kinds=all --suppressions=supressions --track-fds=all --track-origins=yes --log-file=leaks.log
 
 # Color variables
 RED = \033[0;31m

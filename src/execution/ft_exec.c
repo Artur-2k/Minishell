@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 13:22:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/26 22:03:18 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ static int	ft_is_dir(char *path)
 {
     struct stat	file_stat;
 
-	if (!path) // TODO
-        exit(2);
     // so reconhece diretorios se o path tiver uma barra no fim */
     if (ft_strchr(path, '/'))
     {
@@ -40,12 +38,12 @@ static int	ft_is_dir(char *path)
         if (stat(path, &file_stat))
         {
             ft_what_happened(path, strerror(errno));
-            exit (1); // TODO
+        	return (1);
         }
         if (S_ISDIR(file_stat.st_mode))
         {
             ft_what_happened(path, ": Is a directory");
-            exit (126); // TODO
+            return (2);
         }
     }
     return (0); // Not a dir
@@ -63,7 +61,6 @@ static char    *ft_get_cmd_path(char *cmd, t_envp *envp)
     paths = ft_split(path_var, ':');
 	if (!paths)
 		return (ft_putstr_fd("Malloc error, sir\n", 2), NULL);
-    free(path_var);
     full_path = ft_check_paths_for_cmd(paths, cmd);
     ft_free_str_arr(paths);
 	if (!full_path)
@@ -89,32 +86,34 @@ static int	ft_exec_no_path(t_exec *ecmd)
 
 	cmd = ft_get_cmd_path(ecmd->av[0], ecmd->envp);
 	if (!cmd)
-		exit(1); //TODO
+		return (1); // error
    	free(ecmd->av[0]);
     ecmd->av[0] = ft_strdup(cmd);
     execve(ecmd->av[0], ecmd->av, ecmd->tenvp);
 	ft_what_happened(ecmd->av[0], strerror(errno));
-	return (1); // error
+	return (2); // error
 }
 
 int    ft_exec(t_exec *node)
 {
     // apply redirects
     if (ft_redirects(node->redir_list))
-        {exit (1);} // TODO ERROR CHECK
+		return (-1);
 
     // check if it is a dir
     if (ft_is_dir(node->av[0]))
-        {exit(1);} // TODO ERROR CHECK
+		return (-2);
 
     //* strchr(.. /) tendo execve n tendo paths
     if (ft_strchr(node->av[0], '/')) // path absoluto ==> execve
 	{
 		if (ft_exec_path(node))
-				exit (1); //TODO
+			return (-3);
 	}
     else // find path (access on getcmdpath)
+	{
 		if (ft_exec_no_path(node))
-			exit (1); //TODO
-	return (0); // TODO
+				return (-3);
+	}
+	return (-4);
 }

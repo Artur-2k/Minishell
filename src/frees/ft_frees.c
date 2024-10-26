@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_frees.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/24 15:47:26 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/26 21:53:05 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-  
+
 void ft_free_str_arr(char **arr)
 {
 	int	i;
@@ -32,8 +32,8 @@ void ft_free_envp_lst(t_envp *my_envp)
     while (my_envp != NULL)
     {
         temp = my_envp->next;
-        free(my_envp->key);
         free(my_envp->value);
+        free(my_envp->key);
         free(my_envp);
         my_envp = temp;
     }
