@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:15:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/16 15:07:28 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/27 13:17:34 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,9 @@ int ft_find_syntax_errors(char **tkn_arr) // todo VER qual caso nao da erro <> o
  *   "" '' nao fechadas											✅
  *      /MAIS NAO PLEASE T-T ❌
 */
-
-
-
     if (ft_check_unclosed_quotes(tkn_arr))
         return (ft_printf("Minihell doenst handle unclosed quotes\n"), 1);
-    if (ft_check_redirecitons(tkn_arr)) 
+    if (ft_check_redirecitons(tkn_arr))
         return 1;
 
     return 0;

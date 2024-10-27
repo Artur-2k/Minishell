@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/25 22:07:06 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/27 22:54:04 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,19 @@ char    **ft_split_tokens(char *str)
     int     i;
     int     start;
 
-
     if (!str || !*str)
         return (NULL);
-    no_tokens = ft_count_tokens(str);
-    token_arr = (char **)malloc(sizeof(char *) * (no_tokens + 1));
+    no_tokens = ft_count_tokens(str); // no of tokens to be allocated
+    token_arr = (char **)malloc(sizeof(char *) * (no_tokens + 1)); // null terminate the arrate too!
     i = 0;
     start = 0;
     while (i < no_tokens)
     {
-        token_arr[i] = ft_populate_tkn_arr(str, &start);
+        token_arr[i] = ft_populate_tkn_arr(str, &start); // fetches the token
         if (!token_arr[i])
             return (ft_free_str_arr(token_arr), NULL);
         i++;
     }
-    token_arr[i] = NULL;
+    token_arr[i] = NULL; // null terminates
     return (token_arr);
 }
