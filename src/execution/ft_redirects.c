@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:30 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/25 10:06:42 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:30:49 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ static int	ft_redirect_in(t_redir *redir)
 	}
 	return (0); // success
 }
+
+/* 
+	fd = open ...
+	dup2 (fd, 0);
+ */
 
 // Tries to redirect the stdout with truncate mode to the
 // redir file name

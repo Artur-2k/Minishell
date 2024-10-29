@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/27 22:54:04 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:26:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static int  ft_count_tokens(char *str)
         }
         if (str[i] && str[i] == ' ' && str[i + 1])
 			count++;
-        i++;
+        if (str[i])
+            i++;
     }
     return (count);
 }
@@ -50,7 +51,8 @@ static int	ft_token_lenght(char *str)
             while (str[len] && str[len] != quote_char)
                 len++;
         }
-		len++;
+        if (str[len])
+            len++;
 	}
 	return (len);
 }

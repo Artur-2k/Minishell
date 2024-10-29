@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 22:03:18 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:25:27 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,7 @@ static int	ft_exec_no_path(t_exec *ecmd)
 	cmd = ft_get_cmd_path(ecmd->av[0], ecmd->envp);
 	if (!cmd)
 		return (1); // error
-   	free(ecmd->av[0]);
-    ecmd->av[0] = ft_strdup(cmd);
-    execve(ecmd->av[0], ecmd->av, ecmd->tenvp);
+    execve(cmd, ecmd->av, ecmd->tenvp);
 	ft_what_happened(ecmd->av[0], strerror(errno));
 	return (2); // error
 }

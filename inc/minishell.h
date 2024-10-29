@@ -90,9 +90,6 @@ typedef struct  s_exec // limpar
 // Root struct
 typedef struct  s_shell
 {
-    //PID
-    pid_t    pid; // todo
-
     // Input
     char     *input; // allocated
 
@@ -101,9 +98,13 @@ typedef struct  s_shell
 
 	// Comands
     t_cmd   *cmd_tree; // allocated tree
+    // helpers
+    int n;
+    int *tkn_types;
 
 	// Exit status
 	unsigned char	exit_status;
+
     // Signals
     struct sigaction sa_int;
     struct sigaction sa_quit;
@@ -127,7 +128,7 @@ int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
 
 // Comand stuff
-t_cmd   *ft_build(char **tkn_arr, t_envp *envp);
+t_cmd   *ft_build(char **tkn_arr, t_shell *shell);
 void	ft_run_tree(t_cmd *node, t_shell *shell);
 int     ft_redirects(t_redir *redir);
 char    **ft_recreate_envp(t_envp *l_envp);

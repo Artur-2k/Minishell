@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/22 12:53:21 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/29 09:36:53 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 	int	len;
 	char *key;
 
+	key = NULL;
 	len = 0;	
 	while ((*token)[len] && (*token)[len] != '\"' && (*token)[len] != '\'' && (*token)[len] != ' ')
 		len++;
