@@ -53,6 +53,12 @@ typedef struct  s_envp
     struct s_envp   *next;
 } t_envp;
 
+// Tokens
+typedef	struct s_tokens
+{
+	char	*token;
+	int		type;	
+}	t_tokens;
 
 // Command stuff
 
@@ -99,8 +105,7 @@ typedef struct  s_shell
 	// Comands
     t_cmd   *cmd_tree; // allocated tree
     // helpers
-    int n;
-    int *tkn_types;
+    t_tokens    **tokens;
 
 	// Exit status
 	unsigned char	exit_status;
@@ -128,7 +133,7 @@ int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
 
 // Comand stuff
-t_cmd   *ft_build(char **tkn_arr, t_shell *shell);
+t_cmd   *ft_build(t_tokens **tokens, t_shell *shell);
 void	ft_run_tree(t_cmd *node, t_shell *shell);
 int     ft_redirects(t_redir *redir);
 char    **ft_recreate_envp(t_envp *l_envp);
@@ -148,5 +153,8 @@ int 	ft_get_pid(void);
 // Error
 void    ft_error(); // todo
 void	ft_what_happened(char *what, char *happend);
+
+// Debugging
+void	print_tree(t_cmd *cmd);
 
 #endif
