@@ -131,6 +131,8 @@ char    *ft_space_tokens(char *str);
 char    **ft_split_tokens(char *str);
 int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
+int	ft_emenda(char **tkn_arr, t_shell *shell);
+
 
 // Comand stuff
 t_cmd   *ft_build(t_tokens **tokens, t_shell *shell);

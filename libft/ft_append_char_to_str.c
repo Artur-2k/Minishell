@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_append_char_to_str.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 14:01:08 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/09 14:01:13 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:30:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_append_char_to_str(char *str, char c)
 		len = ft_strlen((const char *)str);
 	nstr = (char *)malloc(sizeof(char) * len + 2);
 	if (!nstr)
-		return (free(str), NULL);
+		return (errno = 1, free(str), NULL);
 	len = 0;
 	while (str && str[len])
 	{

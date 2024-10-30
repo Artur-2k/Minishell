@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 16:13:44 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:34:50 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int     main(int ac, char** av, char *envp[])
             ft_free_tree(shell.cmd_tree);
 			shell.cmd_tree = NULL;
         }
-        // Verifica se o input não está vazio antes de adicionar ao histórico
 
+        // Verifica se o input não está vazio antes de adicionar ao histórico
 	    if (*shell.input != '\0')
             add_history(shell.input);
 

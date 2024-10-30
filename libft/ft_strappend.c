@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strappend.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:42:29 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/23 14:23:03 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:30:17 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strappend(char *s1, char *s2)
 
 	nstr = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!nstr)
-		return (NULL);
+		return (errno = 1, free(s1), NULL);
 	i = 0;
 	while (s1 && s1[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 18:00:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 18:22:22 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:46:20 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,14 @@ static int ft_find_type(char *tkn)
 		return (EXEC);
 }
 
-
+/*
+ * @brief Allocates memory for a t_tokens ** array that stores
+ * the type of token and the actual token so we can have now NULL
+ * tokens after expansions and filter it out as bash does.
+ * @param tkn_arr The token array.
+ * @param shell The root struct that contains our token array.
+ * @return Non zero on error.
+*/
 int	ft_emenda(char **tkn_arr, t_shell *shell)
 {
 	int	i;
@@ -47,7 +54,7 @@ int	ft_emenda(char **tkn_arr, t_shell *shell)
 	if (!shell->tokens)
 		return (1); // malloc error
 
-	// Allocate and set tokens from `tkn_arr`
+	// Allocate and set tokens type
 	i = 0;
 	while (tkn_arr[i])
 	{
@@ -61,8 +68,7 @@ int	ft_emenda(char **tkn_arr, t_shell *shell)
 
 		// Matches the type of token
 		shell->tokens[i]->type = ft_find_type(tkn_arr[i]);
-		// Saves the actual token
-		shell->tokens[i]->token = ft_strdup(tkn_arr[i]);
+		
 		i++;
 	}
 	return (0);
