@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expandables.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/29 09:36:53 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:56:12 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*ft_expand_squotes(char *new, char	**token)
 	return (new);
 }
 
-// Copies the value of the environment variable if there is one and 
+// Copies the value of the environment variable if there is one and
 // concatenates to the new token and if there wasnt one doesnt add nothing
 // and just skips the $key
 static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
@@ -33,8 +33,12 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 	char *key;
 
 	key = NULL;
-	len = 0;	
-	while ((*token)[len] && (*token)[len] != '\"' && (*token)[len] != '\'' && (*token)[len] != ' ')
+	len = 0;
+	while ((*token)[len] &&
+			(*token)[len] != '\"' &&
+			(*token)[len] != '\'' &&
+			(*token)[len] != ' ' &&
+ 			(*token)[len] != '$')
 		len++;
 	if (ft_has_key(*token, len, envp))
 	{
@@ -44,7 +48,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 	}
 	(*token) += len - 1; // -1 para nao saltar dois a seguir
 	return (new);
-} 
+}
 
 // while there is no expansion it just copies the same way as squote
 // in the case or $"" it just appends the $
@@ -60,7 +64,7 @@ static char	*ft_expand_dquotes(char *new, char **token, t_envp *envp)
 		else
 		{
 			(*token)++;
-			if (**token == '\"') // "...$" 
+			if (**token == '\"') // "...$"
 				ft_append_char_to_str(new, '$');
 			else if (**token == '$') // "...$$asd"
 				new = ft_strappend(new, ft_itoa(ft_get_pid()));
@@ -72,7 +76,7 @@ static char	*ft_expand_dquotes(char *new, char **token, t_envp *envp)
 	return (new);
 }
 
-// 
+//
 static char	*ft_expand_noquotes(char *new, char **token, t_envp *envp)
 {
 	(*token)++;
@@ -83,15 +87,17 @@ static char	*ft_expand_noquotes(char *new, char **token, t_envp *envp)
 	else // "$key"
 		new = ft_expand_variable(new, token, envp);
 	return (new);
-}   
+}
 
 // Checks each character and see what it has to do
 // See next functions
-char	*ft_expand_token(char* token, t_envp *envp)
+char	*ft_expand_token(char *token, t_envp *envp)
 {
 	char	*new;
 
 	new = NULL;
+	if (!ft_strcmp("\"\"", token) || !ft_strcmp("\'\'", token))
+		return (ft_strdup(""));
 	while (*token)
 	{
 		if (*token == '\'') // single quotes

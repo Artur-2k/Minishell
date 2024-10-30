@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_build_tree.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:22:12 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/29 19:39:45 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:57:12 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int ft_cmd_len(t_tokens **tkns)
 {
     int len;
     int i;
-    
+
 
     len = 0;
     // cat < file1 | teste arg2 > file2
@@ -25,10 +25,11 @@ static int ft_cmd_len(t_tokens **tkns)
     {
         if (tkns[i]->type == PIPE)
             break ;
-        if (tkns[i]->type == EXEC)
+        if (tkns[i]->token && tkns[i]->type == EXEC)
             len++;
         i++;
     }
+	printf("cmd len = [%d]\n", len); // TODO deleteme
     return (len);
 }
 
@@ -36,7 +37,7 @@ static void    ft_new_redir(t_exec *cmd, t_tokens **tkns)
 {
     t_redir *new;
     t_redir   *cur;
-    
+
     new = (t_redir*)ft_calloc(1, sizeof(t_redir));
     if (!new) {}; // TODO malloc error
     if (!ft_strcmp(tkns[0]->token, "<"))
@@ -73,16 +74,22 @@ t_cmd  *ft_build_exec(t_tokens ***tkns, t_shell *shell)
     if (!cmd->av){}; // TODO malloc error
     i = 0;
     j = 0;
-    // cmd ola < infile | cmd > outfile
-    while ((*tkns)[i] && (*tkns)[i]->type != PIPE)
+    // (null) cmd ola < infile | cmd > outfile
+     while ((*tkns)[i] && (*tkns)[i]->type != PIPE)
     {
-        if ((*tkns)[i]->type != EXEC)
+		if ((*tkns)[i]->token == NULL)
+			i++;
+        else if ((*tkns)[i]->type != EXEC)
         {
-            ft_new_redir(cmd, &(*tkns)[i]); 
+            ft_new_redir(cmd, &(*tkns)[i]);
             i += 2;
         }
         else
-            cmd->av[j++] = ft_strdup((*tkns)[i++]->token);
+		{
+            cmd->av[j] = ft_strdup((*tkns)[i]->token);
+			j++;
+			i++;
+		}
     }
     cmd->av[j] = NULL;
     cmd->envp = shell->my_envp_h;
@@ -102,7 +109,7 @@ t_cmd   *ft_build_pipe(t_cmd *cmd, t_tokens **tkns ,t_shell *shell)
     pipe->type = PIPE;
     pipe->left = cmd;
     pipe->right = ft_build(tkns, shell);
-    
+
     return ((t_cmd *)pipe);
 }
 

@@ -57,7 +57,7 @@ typedef struct  s_envp
 typedef	struct s_tokens
 {
 	char	*token;
-	int		type;	
+	int		type;
 }	t_tokens;
 
 // Command stuff
@@ -146,6 +146,7 @@ void    ft_free_str_arr(char **arr);
 void    ft_free_envp_lst(t_envp *my_envp);
 void    ft_free_redir_list(t_redir **redirs);
 void    ft_free_tree(t_cmd *tree);
+void	ft_free_tokens(t_tokens **tokens);
 
 // Utils
 int 	ft_get_pid(void);

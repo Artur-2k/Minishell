@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/28 15:25:27 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:52:52 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,14 @@ static int	ft_exec_no_path(t_exec *ecmd)
 
 int    ft_exec(t_exec *node)
 {
+	if (node->av[0] == NULL) // $a
+		return (0);
+	if (node->av[0][0] == '\0') // "" || ''
+	{
+		ft_putstr_fd("Comando '' não encontrado\n", 2);
+		return (127);
+	}
+
     // apply redirects
     if (ft_redirects(node->redir_list))
 		return (-1);

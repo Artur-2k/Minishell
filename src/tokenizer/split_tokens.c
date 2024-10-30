@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   split_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/28 17:26:10 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:23:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * @brief Will search for a white space that is not quoted and count the number
+ * of tokens. Note: The string is already trimmed and has only 1 space between
+ * tokens
+ * @param str The string which will count tokens
+ * @return The number of tokens
+*/
 static int  ft_count_tokens(char *str)
 {
 	char	quote_char;
@@ -38,6 +45,14 @@ static int  ft_count_tokens(char *str)
     return (count);
 }
 
+/*
+ * @brief Will recieve a string and will count the lenght of the first token
+ * (so if we need the second we should pass to this function the address of the
+ * starting character of the token and so on). It ignores spaces that are between
+ * quotes
+ * @param str The string starting at the token we want to examine
+ * @return The length of the current token
+*/
 static int	ft_token_lenght(char *str)
 {
 	int len;
@@ -57,6 +72,13 @@ static int	ft_token_lenght(char *str)
 	return (len);
 }
 
+/*
+ * @brief Will find the token len and create a new allocated string
+ * of the current token. Updates the starting to the end of the token
+ * @param str The string to extract from
+ * @param start The index of the starting char
+ * @return The allocated extracted token. In case of error returns NULL
+*/
 static char *ft_populate_tkn_arr(char *str, int *start)
 {
     int         tkn_len;
@@ -72,6 +94,14 @@ static char *ft_populate_tkn_arr(char *str, int *start)
     return (ret);
 }
 
+/*
+ * @brief Starts by counting the number of tokens a proceeds to
+ * duplicate each token into each element of the string array.
+ * At the end NULL terminates the pointer array.
+ * @param str The string to split into tokens
+ * @return Returns a NULL terminated string array
+ * with a token for each string. Return NULL if any error occurs
+*/
 char    **ft_split_tokens(char *str)
 {
     char    **token_arr;
@@ -82,7 +112,10 @@ char    **ft_split_tokens(char *str)
     if (!str || !*str)
         return (NULL);
     no_tokens = ft_count_tokens(str); // no of tokens to be allocated
-    token_arr = (char **)malloc(sizeof(char *) * (no_tokens + 1)); // null terminate the arrate too!
+    token_arr = (char **)malloc(sizeof(char *) * (no_tokens + 1)); // null terminate the array too!
+	if (!token_arr)
+		return (ft_putstr_fd("Malloc error, sir\n", 2), NULL);
+
     i = 0;
     start = 0;
     while (i < no_tokens)

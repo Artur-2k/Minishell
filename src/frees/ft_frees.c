@@ -6,11 +6,26 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 21:53:05 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:11:58 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_free_tokens(t_tokens **tokens)
+{
+	int i = 0;
+	while (tokens[i])
+	{
+	    if (tokens[i]->token)
+		    free(tokens[i]->token);
+	    free(tokens[i]);
+		i++;
+	}
+	free(tokens);
+	return ;
+}
+
 
 void ft_free_str_arr(char **arr)
 {

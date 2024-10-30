@@ -6,9 +6,16 @@ void	print_tree(t_cmd *cmd)
 	{
 		t_exec	*exec = (t_exec *)cmd;
 		//* AV
-		printf("\nNew argv:\n");
-		for (int i = 0; exec->av[i]; i++)
+		printf("\nExec Node:\n");
+		printf("av &:[ %p ]\n", &exec->av);
+		int i = 0;
+		while (exec->av[i])
+		{
 			printf("AV[%i]: [%s]\n", i , exec->av[i]);
+			i++;
+		}
+		printf("AV[%i]: [%s]\n", i , exec->av[i]);
+
 		// redir list
 		t_redir *curr = exec->redir_list;
 		printf("REDIRES:\n");
@@ -26,6 +33,8 @@ void	print_tree(t_cmd *cmd)
 		t_pipe *pipe = (t_pipe *)cmd;
 		// chamar para printar esquerdo
 		print_tree((t_cmd *)pipe->left);
+
+		printf(GRN"\nPIPALHAO HEHE\n"RES);
 		// chamar para a direita
 		print_tree((t_cmd *)pipe->right);
 	}

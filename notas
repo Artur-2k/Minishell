@@ -17,7 +17,7 @@ O operador <> em shells como o Bash é usado para abrir um arquivo para leitura 
 unset HOME
 cd $HOME    -> erro
 cd          -> erro
-cd ~        -> last home (guardar home num backup nao apagavel 
+cd ~        -> last home (guardar home num backup nao apagavel
             e se nao encontrar home quando se faz cd ~ dar cd para esse bakcup)
 
 
@@ -31,3 +31,7 @@ $ola ==> executa ls -la
 for signals 128 + SIGTYPE
 126 Permission problem or command is not an executable
 127
+
+
+
+NAO QUERO SEQUER DAR HANDLE A EXPANDABLES DENTRO DE EXPANDABLES NEM TOKENIZER DENTRO DE EXPANDABLES. IDE PO CARALHO EU SEI QUE E FIXE MAS FACAM VOCES SE QUISEREM PUTA QUE PARIU O ESTRACA FODA SE

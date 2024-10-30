@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/27 12:52:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:13:44 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int     main(int ac, char** av, char *envp[])
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status))
 				shell.exit_status = WEXITSTATUS(status);
+			else if (WTERMSIG(status)){} //TODO signal e tal
+
             ft_free_tree(shell.cmd_tree);
 			shell.cmd_tree = NULL;
         }
