@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 18:34:50 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:32:16 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int     main(int ac, char** av, char *envp[])
     //release everything
     // envp, tree (! pais e filhos)
     ft_free_envp_lst(shell.my_envp_h);
-
+    rl_clear_history();
     printf("exit\n");
     return (0);
 }

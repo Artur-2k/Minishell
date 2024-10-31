@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_frees.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 18:11:58 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:58:01 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ void	ft_free_tokens(t_tokens **tokens)
 	{
 	    if (tokens[i]->token)
 		    free(tokens[i]->token);
-	    free(tokens[i]);
+	    if (tokens[i])
+            free(tokens[i]);
 		i++;
 	}
-	free(tokens);
-	return ;
+    if (tokens)
+        free(tokens);
+
+    return ;
 }
 
 
@@ -34,10 +37,13 @@ void ft_free_str_arr(char **arr)
 	i = 0;
 	while (arr[i] != NULL)
 	{
-		free(arr[i]);
-		i++;
+        if (arr[i])
+            free(arr[i]);
+
+        i++;
 	}
-	free(arr);
+    if (arr)
+    	free(arr);
 }
 
 void ft_free_envp_lst(t_envp *my_envp)
@@ -47,9 +53,12 @@ void ft_free_envp_lst(t_envp *my_envp)
     while (my_envp != NULL)
     {
         temp = my_envp->next;
-        free(my_envp->value);
-        free(my_envp->key);
-        free(my_envp);
+        if (my_envp->value)
+            free(my_envp->value);
+        if (my_envp->key)
+            free(my_envp->key);
+        if (my_envp)
+            free(my_envp);
         my_envp = temp;
     }
 }
@@ -60,9 +69,11 @@ void    ft_free_redir_list(t_redir **redirs)
 
     while (*redirs != NULL)
     {
-        free((*redirs)->redir);
+        if ((*redirs)->redir)
+            free((*redirs)->redir);
         temp = (*redirs)->next;
-        free(*redirs);
+        if (*redirs)
+            free(*redirs);
         *redirs = temp;
     }
 }
@@ -71,19 +82,22 @@ void    ft_free_tree(t_cmd *tree)
 {
     t_exec  *execn;
     t_pipe  *pipen;
+    
     if (tree->type == EXEC)
     {
         execn = (t_exec *)tree;
         ft_free_str_arr(execn->av);
         ft_free_str_arr(execn->tenvp);
         ft_free_redir_list(&execn->redir_list);
-        free(execn);
+        if (execn)
+            free(execn);
     }
     else if (tree->type == PIPE)
     {
         pipen = (t_pipe *)tree;
         ft_free_tree((t_cmd *)pipen->left);
         ft_free_tree((t_cmd *)pipen->right);
-        free(pipen);
+        if (pipen)
+            free(pipen);
     }
 }

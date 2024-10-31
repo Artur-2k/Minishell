@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_run_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 19:27:57 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 22:04:05 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:54:32 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void ft_run_tree(t_cmd *node, t_shell *shell)
 	exit_status = 0;
     if (node->type == EXEC)
     {
-        exit_status = ft_exec((t_exec *)node);
+        exit_status = ft_exec((t_exec *)node); 
         //todo error
     }
     else if (node->type == PIPE)
@@ -33,5 +33,6 @@ void ft_run_tree(t_cmd *node, t_shell *shell)
 	free(shell->input);
 	ft_free_tree(shell->cmd_tree);
     ft_free_envp_lst(shell->my_envp_h);
+    rl_clear_history();
 	exit (exit_status);
 }

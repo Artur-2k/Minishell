@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 19:37:57 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:14:20 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	ft_tokenizer(t_shell *shell)
 	if (ft_emenda(token_arr, shell)) //*✅*//
 		return(ft_free_str_arr(token_arr), -3);
 
+	//
 	if (ft_expand_tokens(token_arr, shell)) //*✅*//
 		return(ft_free_str_arr(token_arr),
 				ft_free_tokens(shell->tokens), -4);
@@ -71,7 +72,8 @@ int	ft_tokenizer(t_shell *shell)
 
 	//!------------------------------------
 	shell->cmd_tree = ft_build(shell->tokens, shell);
-
+	if (!shell->cmd_tree)
+		return (-5);
 	printf("----Tree-----\n");
 	print_tree(shell->cmd_tree);
 	printf("------------\n");

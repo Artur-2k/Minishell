@@ -133,15 +133,19 @@ int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
 int	ft_emenda(char **tkn_arr, t_shell *shell);
 
-
-// Comand stuff
+// Command building
 t_cmd   *ft_build(t_tokens **tokens, t_shell *shell);
-void	ft_run_tree(t_cmd *node, t_shell *shell);
+t_cmd   *ft_build_exec(t_tokens ***tkns, t_shell *shell);
+t_cmd   *ft_build_pipe(t_cmd *cmd, t_tokens **tkns ,t_shell *shell);
+
 int     ft_redirects(t_redir *redir);
-char    **ft_recreate_envp(t_envp *l_envp);
-char    *ft_check_paths_for_cmd(char **paths, char *cmd);
-int    ft_exec(t_exec *node);
+
+// Comand Exec
+void	ft_run_tree(t_cmd *node, t_shell *shell);
+int     ft_exec(t_exec *node);
 void	ft_pipe(t_pipe *node, t_shell *shell);
+// Comand Exec Helpers
+char    *ft_check_paths_for_cmd(char **paths, char *cmd);
 
 // Frees
 void    ft_free_str_arr(char **arr);

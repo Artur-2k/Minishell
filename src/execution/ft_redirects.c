@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:30 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/28 16:30:49 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/10/31 14:35:08 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	ft_redirect_out(t_redir *redir)
 {
 	close(STDOUT_FILENO);
     errno = 0;
-    if (open(redir->redir, O_CREAT | O_WRONLY | O_TRUNC, 0777) < 0)
+    if (open(redir->redir, O_CREAT | O_WRONLY | O_TRUNC, 0644) < 0)
 	{
 		ft_what_happened(redir->redir, strerror(errno));
  		return (-2); // error
@@ -56,7 +56,7 @@ static int	ft_redirect_append(t_redir *redir)
 {
 	close(STDOUT_FILENO);
     errno = 0;
-    if (open(redir->redir, O_CREAT | O_WRONLY | O_APPEND, 0777) < 0)
+    if (open(redir->redir, O_CREAT | O_WRONLY | O_APPEND, 0644) < 0)
 	{
 		ft_what_happened(redir->redir, strerror(errno));
  		return (-3); // error
