@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/31 10:32:16 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:42:45 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,28 @@
 
 // Global for signal
 extern unsigned char	g_signal_pressed;
+
+
+void    ft_run_cmd(t_shell *shell)
+{
+    int	status;
+    int	pid;
+    
+    if (!shell->cmd_tree)
+        return ;
+    pid = fork();
+    // child doenst return back here it exits
+    if (pid == 0)
+        ft_run_tree(shell->cmd_tree, shell);
+        
+    waitpid(pid, &status, 0);
+    if (WIFEXITED(status))
+        shell->exit_status = WEXITSTATUS(status);
+    else if (WTERMSIG(status)){} //TODO signal e tal
+
+    ft_free_tree(shell->cmd_tree);
+    shell->cmd_tree = NULL;
+}
 
 int     main(int ac, char** av, char *envp[])
 {
@@ -30,8 +52,6 @@ int     main(int ac, char** av, char *envp[])
     shell.cmd_tree = NULL;
     while (true)
     {
-		g_signal_pressed = 0;
-
 		// Reads input from user
         shell.input = readline(RED"Minihell => "RES);
 
@@ -42,24 +62,20 @@ int     main(int ac, char** av, char *envp[])
             break;
 
         // Tokenizes the input and checks for syntax errors
-        ft_tokenizer(&shell); // TODO error checking a partir daqui is missing
-
-        if (shell.cmd_tree)
+        int t;
+        t = ft_tokenizer(&shell);
+        if (t)
         {
-            int	status;
-			int	pid;
-
-			pid = fork();
-            if (pid == 0)
-                ft_run_tree(shell.cmd_tree, &shell);
-			waitpid(pid, &status, 0);
-			if (WIFEXITED(status))
-				shell.exit_status = WEXITSTATUS(status);
-			else if (WTERMSIG(status)){} //TODO signal e tal
-
-            ft_free_tree(shell.cmd_tree);
-			shell.cmd_tree = NULL;
+            printf("%d oioi\n", t);
+            shell.exit_status = 1;
+            free(shell.input);
+            continue ;
         }
+        print_tree(shell.cmd_tree);
+        
+        // TODO error checking a partir daqui is missing
+        // This function doesnt need a return statement
+        ft_run_cmd(&shell);
 
         // Verifica se o input não está vazio antes de adicionar ao histórico
 	    if (*shell.input != '\0')

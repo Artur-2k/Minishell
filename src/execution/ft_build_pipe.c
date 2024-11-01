@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:19:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/01 15:20:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:43:57 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_cmd   *ft_build_pipe(t_cmd *cmd, t_tokens **tkns ,t_shell *shell)
     pipe->type = PIPE;
     pipe->left = cmd;
     pipe->right = ft_build(tkns, shell);
-    if (pipe->right)
+    if (!pipe->right)
     {
         return (free(pipe), NULL);
     }

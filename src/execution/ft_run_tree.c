@@ -6,19 +6,23 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 19:27:57 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/31 10:54:32 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/01 17:45:31 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-
+/*
+ * 
+ *
+ *
+*/
 void ft_run_tree(t_cmd *node, t_shell *shell)
 {
 	int	exit_status;
 
-	exit_status = 0;
+	exit_status = 1;
     if (node->type == EXEC)
     {
         exit_status = ft_exec((t_exec *)node); 

@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/01 15:23:46 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:43:02 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	ft_tokenizer(t_shell *shell)
 	// Builds a right descendent recursive tree-like data structure (it's easy relax)
 	shell->cmd_tree = ft_build(shell->tokens, shell); //*✅*//
 	if (!shell->cmd_tree)
-		return (-5);
+		return (-6);
 
 	ft_free_tokens(shell->tokens);
    	return 0; // Success

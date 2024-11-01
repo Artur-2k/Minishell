@@ -97,17 +97,18 @@ typedef struct  s_exec // limpar
 typedef struct  s_shell
 {
     // Input
-    char     *input; // allocated
+    char            *input; // allocated
 
     // Env
-    t_envp   *my_envp_h; // allocated list
+    t_envp          *my_envp_h; // allocated list
 
 	// Comands
-    t_cmd   *cmd_tree; // allocated tree
+    t_cmd           *cmd_tree; // allocated tree
     // helpers
-    t_tokens    **tokens;
+    t_tokens        **tokens;
 
 	// Exit status
+	int         	status;
 	unsigned char	exit_status;
 
     // Signals
@@ -131,7 +132,7 @@ char    *ft_space_tokens(char *str);
 char    **ft_split_tokens(char *str);
 int     ft_find_syntax_errors(char **tkn_arr);
 char	*ft_expand_token(char* token, t_envp *envp);
-int	ft_emenda(char **tkn_arr, t_shell *shell);
+int 	ft_emenda(char **tkn_arr, t_shell *shell);
 
 // Command building
 t_cmd   *ft_build(t_tokens **tokens, t_shell *shell);
