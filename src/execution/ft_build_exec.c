@@ -6,12 +6,17 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/31 15:29:44 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:17:55 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * @brief Creates a char **envp to send to exec with the same contents as 
+ * the envp list
+ * @return Returns the char **envp or NULL for malloc errors
+*/
 static char    **ft_recreate_envp(t_envp *l_envp)
 {
     char    **envp;
@@ -20,14 +25,19 @@ static char    **ft_recreate_envp(t_envp *l_envp)
 
     if (!l_envp)
         return (NULL);
+    
     backup = l_envp;
     len = 0;
+    // List lenght for malloc
     while (l_envp && ++len) //! short circuiting for lines WATCH OUT
         l_envp = l_envp->next;
-    l_envp = backup;
+    
     envp = (char **)malloc(sizeof(char *) * (len + 1));
     if (!envp)
         return (NULL);
+    
+    // Copies the concatenated result of key, = and value from the envp list to the new envp
+    l_envp = backup;
     len = 0;
     while (l_envp)
     {
@@ -38,16 +48,20 @@ static char    **ft_recreate_envp(t_envp *l_envp)
         l_envp = l_envp->next;
     }
     envp[len] = NULL;
+    
     return (envp);
 }
 
 
-
+/*
+ * @brief Counts the lenght in tokens of the current command.
+ * Skips while the token type isnt exec and stops at the end of the
+ * token list or when a pipe is found
+*/
 static int ft_cmd_len(t_tokens **tkns)
 {
     int len;
     int i;
-
 
     len = 0;
     // cat < file1 | teste arg2 > file2
@@ -60,10 +74,17 @@ static int ft_cmd_len(t_tokens **tkns)
             len++;
         i++;
     }
-	printf("cmd len = [%d]\n", len); // TODO deleteme
     return (len);
 }
 
+/*
+ * @brief Allocates memory for a new redir node and fills it up 
+ * and adds it to the end of the list
+ * @param *cmd A pointer to the command so we can add it to the end of
+ * it's redir list
+ * @param tkns Token list
+ * return Returns 0 on success and a non-zero value on malloc errors
+*/
 static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
 {
     t_redir *new;
@@ -71,7 +92,9 @@ static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
 
     new = (t_redir*)ft_calloc(1, sizeof(t_redir));
     if (!new) // Malloc error
-        return (1); // Malloc error
+        return (1);
+    
+    // Redir type
     if (!ft_strcmp(tkns[0]->token, "<"))
         new->type = INREDIR;
     else if (!ft_strcmp(tkns[0]->token, "<<"))
@@ -80,9 +103,13 @@ static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
         new->type = OUTREDIR;
     else
         new->type = APPREDIR;
+        
+    // Redir path
     new->redir = ft_strdup(tkns[1]->token);
     if (!new->redir)
         return (free(new), ft_free_redir_list(&cmd->redir_list), 2); // Malloc error
+    
+    // Add to the back of the list
     if (cmd->redir_list == NULL)
         cmd->redir_list = new;
     else
@@ -95,6 +122,14 @@ static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
     return (0); // Success
 }
 
+
+/*
+* @brief allocates memory for a exec node and for it's content (argv and redirection
+* list) and fills them. Ignores NULL tokens but not empty tokens!
+* @param tkns Token list
+* @param shell Root struct
+* @return An exec node typecasted into cmd node or NULL for malloc errors
+*/
 t_cmd  *ft_build_exec(t_tokens ***tkns, t_shell *shell)
 {
     t_exec  *cmd;
@@ -112,7 +147,7 @@ t_cmd  *ft_build_exec(t_tokens ***tkns, t_shell *shell)
     i = 0;
     j = 0;
     // (null) cmd ola < infile | cmd > outfile
-     while ((*tkns)[i] && (*tkns)[i]->type != PIPE)
+    while ((*tkns)[i] && (*tkns)[i]->type != PIPE)
     {
 		if ((*tkns)[i]->token == NULL)
 			i++;

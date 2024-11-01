@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/31 15:14:20 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:23:46 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,22 @@ int	ft_tokenizer(t_shell *shell)
 	if (ft_find_syntax_errors(token_arr)) //*✅*//
 		return(ft_free_str_arr(token_arr), -2);
 
-	// Creates a t_token** with the char* token and int type
+	// (for tokenization on expandables might want to transform into a linked list)
+	// Creates a t_token** with an int type
 	if (ft_emenda(token_arr, shell)) //*✅*//
 		return(ft_free_str_arr(token_arr), -3);
 
-	//
+	// Expands the tokens and sets it to the token array 
 	if (ft_expand_tokens(token_arr, shell)) //*✅*//
 		return(ft_free_str_arr(token_arr),
 				ft_free_tokens(shell->tokens), -4);
    	ft_free_str_arr(token_arr);
 
-
-	//!------------------------------------
-	shell->cmd_tree = ft_build(shell->tokens, shell);
+	// Builds a right descendent recursive tree-like data structure (it's easy relax)
+	shell->cmd_tree = ft_build(shell->tokens, shell); //*✅*//
 	if (!shell->cmd_tree)
 		return (-5);
-	printf("----Tree-----\n");
-	print_tree(shell->cmd_tree);
-	printf("------------\n");
-
 
 	ft_free_tokens(shell->tokens);
-   	return 0;
+   	return 0; // Success
 }
