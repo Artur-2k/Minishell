@@ -73,7 +73,6 @@ struct s_tokens
 };
 
 // Command stuff
-
 struct s_cmd
 {
     int             type;

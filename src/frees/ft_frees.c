@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/31 15:58:01 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:38:30 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void ft_free_str_arr(char **arr)
 	int	i;
 
 	i = 0;
-	while (arr[i] != NULL)
+	while (arr && arr[i] != NULL)
 	{
         if (arr[i])
             free(arr[i]);
@@ -67,7 +67,7 @@ void    ft_free_redir_list(t_redir **redirs)
 {
     t_redir *temp;
 
-    while (*redirs != NULL)
+    while (redirs && *redirs != NULL)
     {
         if ((*redirs)->redir)
             free((*redirs)->redir);

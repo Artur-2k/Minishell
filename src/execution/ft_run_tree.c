@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 19:27:57 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 17:18:59 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:01:00 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@
 */
 void ft_run_tree(t_cmd *node, t_shell *shell)
 {
-	int	exit_status;
-
-	exit_status = 1;
     if (node->type == EXEC)
 	{
 		ft_signal_restore();
-        exit_status = ft_exec((t_exec *)node); 
+        shell->exit_status = ft_exec((t_exec *)node); 
 	}
     else if (node->type == PIPE)
+	{
 		ft_pipe((t_pipe *)node, shell);
+		
+	}
 
 	free(shell->input);
 	free(shell->spid);
@@ -37,5 +37,7 @@ void ft_run_tree(t_cmd *node, t_shell *shell)
 	ft_free_tree(shell->cmd_tree);
     ft_free_envp_lst(shell->my_envp_h);
     rl_clear_history();
-	exit (exit_status);
+    
+	
+	exit (shell->exit_status);
 }

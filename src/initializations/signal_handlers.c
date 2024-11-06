@@ -6,11 +6,13 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:22:21 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 09:53:03 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:17:36 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+unsigned char   g_signal;
 
 void    ft_config_terminal(void)
 {
@@ -29,7 +31,7 @@ void    ft_config_terminal(void)
 */
 static void    ft_handle_sigint(int signo)
 {
-    (void)signo;
+    g_signal = signo;
     
     printf("\n");
     // Notifica o Readline que uma nova linha será iniciada

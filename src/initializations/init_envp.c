@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 21:33:08 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:47:30 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int    ft_init_envp(t_shell *shell, char *envp[])
     curr = NULL;
     i = 0;
     shell->my_envp_h = NULL;
-    while (envp[i] != NULL)
+    while (envp && envp[i] != NULL)
     {
         new = ft_new_node(envp[i]);
 		if (!new)

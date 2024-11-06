@@ -6,15 +6,16 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 17:04:49 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:55:02 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+extern unsigned char g_signal;
+
 void    ft_run_cmd(t_shell *shell)
 {
-    int	status;
     int	pid;
     
     if (!shell->cmd_tree)
@@ -27,13 +28,21 @@ void    ft_run_cmd(t_shell *shell)
         ft_run_tree(shell->cmd_tree, shell);
     
     
-    waitpid(pid, &status, 0);
+    waitpid(pid, &shell->status, 0);
     
-    if (WIFEXITED(status))
-        shell->exit_status = WEXITSTATUS(status);
-    else if (WTERMSIG(status)){} //TODO signal e tal
+    if (WIFEXITED(shell->status))
+        shell->exit_status = WEXITSTATUS(shell->status);
+    else if (WIFSIGNALED(shell->status))
+    {
+        int signo;
+        signo = WTERMSIG(shell->status);
+        if (signo == SIGINT)
+            ft_putstr_fd("\n", 2);
+        else if (signo == SIGQUIT)
+            ft_putstr_fd("Quit (core dumped), sir\n", 2);
+        shell->exit_status = 128 + signo;
+    }
 
-    
     // Replace exit status
     free(shell->sexit_status);
     shell->sexit_status = ft_itoa(shell->exit_status);
@@ -42,20 +51,31 @@ void    ft_run_cmd(t_shell *shell)
     shell->cmd_tree = NULL;
 }
 
+
 int     main(int ac, char** av, char *envp[])
 {
     t_shell    shell;
+    
 
     // dont know if needed but for Wflags
     (void)ac;
     (void)av;
-    
-
+    envp = NULL;
     // probably init shell bools and shit
+    
     
     ft_config_terminal();
     if (ft_init_envp(&shell, envp))
 		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
+    
+    t_envp *eenvp =shell.my_envp_h;
+    
+    while (eenvp)
+    {
+        printf("%s=%s\n", eenvp->key, eenvp->value);
+        eenvp = eenvp->next;
+    }
+
     
     // TODO SHELL INIT 
     shell.cmd_tree = NULL;
@@ -68,12 +88,11 @@ int     main(int ac, char** av, char *envp[])
     shell.spid = ft_itoa(shell.pid);
 
 
-    
-
-    
 
     while (true)
     {
+        // Ctrl C
+        g_signal = 0;
 
         ft_init_signals();
 		// Reads input from user
@@ -82,6 +101,9 @@ int     main(int ac, char** av, char *envp[])
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
+        if (g_signal)
+            shell.exit_status = 128 + g_signal;
+        
 
         // Tokenizes the input and checks for syntax errors
         if (ft_tokenizer(&shell))
@@ -91,15 +113,17 @@ int     main(int ac, char** av, char *envp[])
             continue ;
         }
         
-        // TODO error checking a partir daqui is missing
         // This function doesnt need a return statement
         ft_run_cmd(&shell);
+
+        printf("fiiiiim \n");
+
 
         // Verifica se o input não está vazio antes de adicionar ao histórico
 	    if (*shell.input != '\0')
             add_history(shell.input);
 
-        free(shell.input);
+        free(shell.input); // input
     }
 
     //release everything
@@ -108,8 +132,8 @@ int     main(int ac, char** av, char *envp[])
     free (shell.sexit_status);
     
     
-    ft_free_envp_lst(shell.my_envp_h);
-    rl_clear_history();
+    ft_free_envp_lst(shell.my_envp_h); // envp list
+    rl_clear_history(); // history
     printf("exit\n");
     return (0);
 }

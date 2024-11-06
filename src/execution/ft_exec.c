@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 12:38:48 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:29:27 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,15 +116,20 @@ int    ft_exec(t_exec *node)
 		return (EXIT_404);
 	}
 
+
     // check if it is a dir
     error = ft_is_dir(node->av[0]);
     if (error)
 		return (error);
         
+
+
     // apply redirects
     error = ft_redirects(node->redir_list);
     if (error)
 		return (error);
+
+
 
     //* strchr(.. /) tendo execve n tendo paths
     if (ft_strchr(node->av[0], '/')) // path absoluto ==> execve

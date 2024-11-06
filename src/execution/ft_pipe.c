@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:57:38 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 14:54:41 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:43:30 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static void	ft_redir_stdin(int fd[2])
     close(fd[WRITE_END]);
     close(fd[READ_END]);
 }
-
 
 void    ft_exit_pipe(t_shell *shell)
 {
@@ -64,7 +63,28 @@ void	ft_pipe(t_pipe *node, t_shell *shell)
 	}
     close(fd[WRITE_END]);
     close(fd[READ_END]);
-    wait (0);
-    wait (0);
-	return ;
+
+
+
+    int status[2];
+    int exit[2];
+    
+    waitpid (pid1, &status[0], 0);
+    waitpid (pid2, &status[1], 0);
+    
+    if (WIFSIGNALED(status[0]) || WIFSIGNALED(status[1]))
+    {
+        exit[0] = WTERMSIG(status[0]);  
+        exit[1] = WTERMSIG(status[1]);  
+        
+        if (exit[0] == SIGINT && exit[1] == SIGINT)
+            ft_putstr_fd("\n", STDOUT_FILENO);
+        if (exit[0] == SIGQUIT && exit[1] ==  SIGQUIT)
+            ft_putstr_fd("Quit (core dumped), sir\n", STDOUT_FILENO);
+        if (WIFSIGNALED(exit[1]))
+            shell->exit_status = 128 + exit[1];
+    }
+    else
+        shell->exit_status = WEXITSTATUS(status[1]);
+    return ;
 }

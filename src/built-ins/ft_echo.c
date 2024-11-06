@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:01:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/05 17:23:12 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:45:23 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,6 @@ doenst do anything
  * @brief Simple echo that only had the -n flag
  * @param cmd Echo command (we need the argv)
  * @retval None
- *
- *
- *
 */
 void	ft_echo(t_exec *cmd)
 {
