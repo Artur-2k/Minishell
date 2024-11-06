@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/01 16:43:02 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:48:04 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	ft_expand_tokens(char **tkn_arr, t_shell *shell)
 	while (tkn_arr[i])
 	{
 		errno = 0;
-		shell->tokens[i]->token = ft_expand_token(tkn_arr[i], shell->my_envp_h); //! falta a partir daqui
+		shell->tokens[i]->token = ft_expand_token(tkn_arr[i], shell); //! falta a partir daqui
 		if (errno == EMALLOC)
 			return (ft_putstr_fd("Malloc error, sir\n", 2), 1);
 		if (!shell->tokens[i]->token && i >= 1 &&

@@ -28,11 +28,11 @@
 #define WHT "\033[0;37m"
 #define RES "\033[0m"
 
-// PIPE ENDS
+// Pipe Ends
 #define WRITE_END   1
 #define READ_END    0
 
-// NODE TYPES
+// Node Types
 #define PIPE        1
 #define EXEC        2
 #define INREDIR     3
@@ -40,50 +40,62 @@
 #define APPREDIR    5
 #define HDREDIR     6
 
-// Error types
+// Error Types
 #define EMALLOC 	1
 #define ENOCMD		2
 
+// Exit Codes
+#define EXIT_FNOK   126
+#define EXIT_404    127
+
+// Typedefs
+typedef struct s_envp	t_envp;
+typedef	struct s_tokens	t_tokens;
+typedef struct s_cmd	t_cmd;
+typedef struct s_redir	t_redir;
+typedef struct s_pipe	t_pipe;
+typedef struct s_exec	t_exec;
+typedef struct s_shell	t_shell;
 
 // Env
-typedef struct  s_envp
+struct  s_envp
 {
     char            *key;
     char            *value;
     struct s_envp   *next;
-} t_envp;
+};
 
 // Tokens
-typedef	struct s_tokens
+struct s_tokens
 {
 	char	*token;
 	int		type;
-}	t_tokens;
+};
 
 // Command stuff
 
-typedef struct s_cmd
+struct s_cmd
 {
     int             type;
-}   t_cmd;
+};
 
-typedef struct  s_pipe // limpar
+struct  s_pipe // limpar
 {
     int              type;
 
     void            *left;
     void            *right;
-}   t_pipe;
+};
 
-typedef struct  s_redir // limpar
+struct  s_redir // limpar
 {
     int             type;
 
     char            *redir; // limpar
     struct s_redir  *next;
-}   t_redir;
+};
 
-typedef struct  s_exec // limpar
+struct  s_exec // limpar
 {
     int             type;
 
@@ -91,10 +103,11 @@ typedef struct  s_exec // limpar
     t_envp          *envp; // limpar na shell only
     char            **tenvp;
     t_redir         *redir_list; // limpar
-}   t_exec;
+    t_shell			*shell;
+};
 
 // Root struct
-typedef struct  s_shell
+struct  s_shell
 {
     // Input
     char            *input; // allocated
@@ -110,15 +123,26 @@ typedef struct  s_shell
 	// Exit status
 	int         	status;
 	unsigned char	exit_status;
+    char            *sexit_status;
+
+    // PID
+    int             pid;
+    char            *spid;
 
     // Signals
-    struct sigaction sa_int;
-    struct sigaction sa_quit;
-}   t_shell;
+
+   
+};
 
 // Prototypes
 //Signals
-void    ft_init_signals(t_shell *shell);
+void    ft_init_signals(void);
+void    ft_config_terminal(void);
+
+void    ft_signal_restore(void);
+void    ft_signal_ignore(void);
+
+
 
 // Env
 int    	ft_init_envp(t_shell *shell, char *envp[]);
@@ -131,7 +155,7 @@ int     ft_tokenizer(t_shell *shell);
 char    *ft_space_tokens(char *str);
 char    **ft_split_tokens(char *str);
 int     ft_find_syntax_errors(char **tkn_arr);
-char	*ft_expand_token(char* token, t_envp *envp);
+char	*ft_expand_token(char *token, t_shell *shell);  
 int 	ft_emenda(char **tkn_arr, t_shell *shell);
 
 // Command building

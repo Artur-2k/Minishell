@@ -3,20 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:22:21 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 19:41:25 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:53:03 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-unsigned char	g_signal_pressed;
+void    ft_config_terminal(void)
+{
+    // Ignora o caractere ^C do terminal
+    // Tem de ser configurado antes de poder receber um sinal
+    struct termios  termios_p;
+    
+    tcgetattr(STDIN_FILENO, &termios_p); // reads the config
+    termios_p.c_lflag &= ~ECHOCTL; // Nega esta flag para Ctrl+C e Ctrl+D (switch on and off)
+    tcsetattr(STDIN_FILENO, TCSANOW, &termios_p); // aplies the new config
+}
 
+
+/*
+ * @brief Removes terminal config to remove control characters print.
+*/
 static void    ft_handle_sigint(int signo)
 {
-    g_signal_pressed = 128 + signo;
+    (void)signo;
+    
     printf("\n");
     // Notifica o Readline que uma nova linha será iniciada
     rl_on_new_line();
@@ -27,30 +41,42 @@ static void    ft_handle_sigint(int signo)
 }
 
 /*
- * @brief Removes terminal config to remove control characters print.
- *
+ * @brief Utility redefinition on sigint and sigquit
  * Makes SIGINT clear the line and redisplay prompt.
- *
  * Makes SIGQUIT useless
 */
-void    ft_init_signals(t_shell *shell)
+void    ft_init_signals(void)
 {
-    // Ignora o caractere ^C do terminal
-    // Tem de ser configurado antes de poder receber um sinal
-    struct termios termios_p;
-    tcgetattr(STDIN_FILENO, &termios_p); // reads the config
-    termios_p.c_lflag &= ~ECHOCTL; // Nega esta flag para Ctrl+C e Ctrl+D (switch on and off)
-    tcsetattr(STDIN_FILENO, TCSANOW, &termios_p); // aplies the new config
-
+    struct sigaction    sa_int;
+    struct sigaction    sa_quit;
+    
     // Sigint
-    shell->sa_int.sa_handler = ft_handle_sigint;
-    shell->sa_int.sa_flags = 0;
-    sigemptyset(&shell->sa_int.sa_mask);
-    sigaction(SIGINT, &shell->sa_int, NULL);
+    sa_int.sa_handler = ft_handle_sigint;
+    sa_int.sa_flags = 0;
+    sigemptyset(&sa_int.sa_mask);
+    sigaction(SIGINT, &sa_int, NULL);
 
     // Sigquit
-    shell->sa_quit.sa_handler = SIG_IGN;
-    shell->sa_quit.sa_flags = 0;
-    sigemptyset(&shell->sa_quit.sa_mask);
-    sigaction(SIGQUIT, &shell->sa_quit, NULL);
+    sa_quit.sa_handler = SIG_IGN;
+    sa_quit.sa_flags = 0;
+    sigemptyset(&sa_quit.sa_mask);
+    sigaction(SIGQUIT, &sa_quit, NULL);
+}
+
+void    ft_signal_restore(void)
+{
+    struct sigaction    sa_dft;
+    
+    sa_dft.sa_handler = SIG_DFL;
+    sa_dft.sa_flags = 0;
+    sigemptyset(&sa_dft.sa_mask);
+    
+    sigaction(SIGINT, &sa_dft, NULL);
+    sigaction(SIGQUIT, &sa_dft, NULL);
+}
+
+void    ft_signal_ignore(void)
+{
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/05 21:11:35 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:03:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,38 +32,6 @@
 !		exits with status to 2
 
 */
-
-//TODO adicionar ao header estes typedefs
-/*
-// Typedefs
-typedef struct s_envp	t_envp;
-typedef	struct s_tokens	t_tokens;
-typedef struct s_cmd	t_cmd;
-typedef struct s_redir	t_redir;
-typedef struct s_pipe	t_pipe;
-typedef struct s_exec	t_exec;
-typedef struct s_shell	t_shell;
-*/
-
-//TODO adicionar ao exec node um shell pointer
-/*
-struct  s_exec // limpar
-{
-	 int             type;
-
-	 char            **av;
-	 t_envp          *envp; // limpar na shell only
-	 char            **tenvp;
-	 t_redir         *redir_list; // limpar
-!	 t_shell			*shell;
-};
-*/
-
-//TODO adicionar esta linha no final do ft_build_exec
-/*
-	cmd->shell = shell;
-*/
-
 
 static void	ft_str_digits(t_exec *cmd)
 {

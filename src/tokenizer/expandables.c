@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expandables.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 19:36:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:25:13 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 // in the case or $"" it just appends the $
 // no need to check for $\0 cuz there we've made sure it has ending quotes
 // extra: $$ isnt asked but i handled
-static char	*ft_expand_dquotes(char *new, char **token, t_envp *envp)
+static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 {
 	(*token)++;
 	while (**token && **token != '\"')
@@ -75,9 +75,11 @@ static char	*ft_expand_dquotes(char *new, char **token, t_envp *envp)
 			if (**token == '\"') // "...$"
 				new = ft_append_char_to_str(new, '$');
 			else if (**token == '$') // "...$$asd"
-				new = ft_strappend(new, ft_itoa(ft_get_pid()));
+				new = ft_strappend(new, shell->spid);
+			else if (**token == '?') // "...$?..."
+				new = ft_strappend(new, shell->sexit_status);
 			else // "$key"
-				new = ft_expand_variable(new, token, envp);
+				new = ft_expand_variable(new, token, shell->my_envp_h);
 		}
 		// str append e append char put errno to 1 on malloc error
 		if (errno == EMALLOC)
@@ -88,15 +90,17 @@ static char	*ft_expand_dquotes(char *new, char **token, t_envp *envp)
 }
 
 //
-static char	*ft_expand_noquotes(char *new, char **token, t_envp *envp)
+static char	*ft_expand_noquotes(char *new, char **token, t_shell *shell)
 {
 	(*token)++;
 	if (!**token || (**token == '\"' || **token == '\'')) // ... $ => ... $ || ...$"..."  ==> ...$...
 		new = ft_append_char_to_str(new, '$');
 	else if (**token == '$') // ...$$asd
-		new = ft_strappend(new, ft_itoa(ft_get_pid()));
+		new = ft_strappend(new, shell->spid);
+	else if (**token == '?') // "...$?..."
+		new = ft_strappend(new, shell->sexit_status);
 	else // "$key"
-		new = ft_expand_variable(new, token, envp);
+		new = ft_expand_variable(new, token, shell->my_envp_h);
 	if (errno == EMALLOC)
 		return (NULL);
 	return (new);
@@ -104,7 +108,7 @@ static char	*ft_expand_noquotes(char *new, char **token, t_envp *envp)
 
 // Checks each character and see what it has to do
 // See next functions
-char	*ft_expand_token(char *token, t_envp *envp)
+char	*ft_expand_token(char *token, t_shell *shell)
 {
 	char	*new;
 
@@ -117,9 +121,9 @@ char	*ft_expand_token(char *token, t_envp *envp)
 		if (*token == '\'') // single quotes
 			new = ft_expand_squotes(new, &token);
 		else if (*token == '\"') // double quotes
-			new = ft_expand_dquotes(new, &token, envp);
+			new = ft_expand_dquotes(new, &token, shell);
 		else if (*token == '$') // normal expandables
-			new = ft_expand_noquotes(new, &token, envp);
+			new = ft_expand_noquotes(new, &token, shell);
 		else // normal char
 			new = ft_append_char_to_str(new, *token);
 		if (errno == EMALLOC)
