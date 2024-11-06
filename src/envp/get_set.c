@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_set.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:30:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/26 22:03:23 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:57:31 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,29 @@ char *ft_get_value(char *key, t_envp *envp)
 	return ("");
 }
 
+//TODO error checking
+void	ft_set_value(char *key, char *value, t_envp *envp)
+{
+	t_envp *cur;
 
+	if (!key || !*key || !value)
+		return ;
+	if (!envp)
+		envp = ft_new_env_node(key, value, envp);
+	cur = envp;
+	while (cur)
+	{
+		if (ft_strcmp(key, cur->key) == 0)
+		{
+			free(cur->value);
+			cur->value = ft_strdup(value);
+			return ;
+		}
+		cur = cur->next;
+	}
+	cur = envp;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = ft_new_env_node(key, value, envp);
+	return ;
+}

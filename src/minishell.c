@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 15:55:02 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:15:28 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,12 @@ int     main(int ac, char** av, char *envp[])
     // dont know if needed but for Wflags
     (void)ac;
     (void)av;
-    envp = NULL;
     // probably init shell bools and shit
     
     
     ft_config_terminal();
     if (ft_init_envp(&shell, envp))
 		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
-    
-    t_envp *eenvp =shell.my_envp_h;
-    
-    while (eenvp)
-    {
-        printf("%s=%s\n", eenvp->key, eenvp->value);
-        eenvp = eenvp->next;
-    }
-
     
     // TODO SHELL INIT 
     shell.cmd_tree = NULL;

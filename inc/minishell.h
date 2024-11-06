@@ -149,6 +149,10 @@ t_envp  *ft_new_node(char *envp_line);
 bool    ft_has_key(char *try, int len, t_envp *envp);
 char    *ft_get_value(char *key, t_envp *envp);
 
+t_envp   *ft_new_env_node(char *key, char *value, t_envp *s_envp);
+void	ft_set_value(char *key, char *value, t_envp *envp);
+
+
 // Tokenizer
 int     ft_tokenizer(t_shell *shell);
 char    *ft_space_tokens(char *str);
