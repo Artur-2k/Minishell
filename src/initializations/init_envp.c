@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 15:47:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:14:12 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,3 +119,5 @@ int    ft_init_envp(t_shell *shell, char *envp[])
     }
 	return (0); // success
 }
+
+

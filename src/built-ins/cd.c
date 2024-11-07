@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:02:41 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 19:24:12 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:04:52 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void    ft_cd(t_exec *cmd)
         return ;
     }
 
-    // cd path
+    // cd path 
     {
         char *curpwd;
         
@@ -126,13 +126,16 @@ void    ft_cd(t_exec *cmd)
         {
             ft_what_happened(cmd->av[0], strerror(errno));
             cmd->shell->exit_status = 1;
+            free(curpwd);
             return ;
         }
-
-        // PWD set to home value    
-        ft_set_value("PWD", cmd->av[1], cmd->shell->my_envp_h);
         // OLDPWD set to home value
         ft_set_value("OLPWD", curpwd, cmd->shell->my_envp_h);
+        free(curpwd);
+
+        curpwd = getcwd(NULL, 0);
+        // PWD set to home value    
+        ft_set_value("PWD", curpwd, cmd->shell->my_envp_h);
         free(curpwd);
         cmd->shell->exit_status = 0;
         return ;

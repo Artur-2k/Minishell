@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 18:15:28 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:59:34 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,17 @@ int     main(int ac, char** av, char *envp[])
     // dont know if needed but for Wflags
     (void)ac;
     (void)av;
-    // probably init shell bools and shit
     
-    
+
+    // init shit    
     ft_config_terminal();
     if (ft_init_envp(&shell, envp))
 		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
+    if (ft_init_envp2lol(&shell, envp))
+		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
     
     // TODO SHELL INIT 
+    shell.envp2lol_h = NULL;
     shell.cmd_tree = NULL;
     shell.status = 0;
     
@@ -81,16 +84,17 @@ int     main(int ac, char** av, char *envp[])
 
     while (true)
     {
+        ft_init_signals();
         // Ctrl C
         g_signal = 0;
 
-        ft_init_signals();
 		// Reads input from user
         shell.input = readline(RED"Minihell => "RES);
 
         // Ctrl+D (EOF), readline retorna NULL
         if (shell.input == NULL)
             break;
+            
         if (g_signal)
             shell.exit_status = 128 + g_signal;
         
@@ -105,9 +109,6 @@ int     main(int ac, char** av, char *envp[])
         
         // This function doesnt need a return statement
         ft_run_cmd(&shell);
-
-        printf("fiiiiim \n");
-
 
         // Verifica se o input não está vazio antes de adicionar ao histórico
 	    if (*shell.input != '\0')

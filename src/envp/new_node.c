@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 18:43:27 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 18:49:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:23:39 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * THE SAME THING TWICE STFU
  * @return Returns a pointer to the new node
 */
-t_envp   *ft_new_env_node(char *key, char *value, t_envp *s_envp)
+t_envp   *ft_new_env_node(char *key, char *value)
 {
     t_envp  *new_node;
 
