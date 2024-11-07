@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 18:18:31 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 21:32:15 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 ?    export  z
 ?        env             export
         ----            declare -x z
-    
+
 ?    export  zz=
 ?        env             export
         zz=            declare -x zz=""
@@ -30,7 +30,7 @@
 ?    export  zzzz=a
 ?        env             export
         zzzz=a           declare -x zzzz="a"
-    
+
 ?    export  z   zz=   zzzz=a
 ?       env             export
         ----            declare -x z
@@ -56,7 +56,7 @@ int ft_add_entry_env(t_envp **head, char *key, char *value)
             return (1);
         return (0); // Success
     }
-    
+
     if (*head == NULL)
     {
         *head = ft_new_env_node(key, value);
@@ -94,18 +94,18 @@ int     ft_add_entry_env2(t_envp **head, char *key, char *value)
     t_envp  *new = ft_new_env_node(key, value);
     if (!new) //TODO malloc error
         return (1);
-    
+
     if (*head == NULL || ft_strcmp((*head)->key, key) > 0)
     {
         new->next = *head;
         *head = new;
         return (0); // Success
     }
-    
+
     t_envp  *cur = *head;
     // procurar sitio certo
     while (cur->next != NULL && ft_strcmp(cur->next->key, new->key) < 0)
-        cur = cur->next;        
+        cur = cur->next;
     new->next = cur->next;
     cur->next = new;
 
@@ -127,7 +127,7 @@ void    ft_export(t_exec *cmd)
             printf("declare -x %s", cur->key);
             if (cur->value) // ="..."
                 printf("=\"%s\"", cur->value);
-            cur = cur->next;            
+            cur = cur->next;
         }
     }
 
@@ -140,19 +140,19 @@ void    ft_export(t_exec *cmd)
         {
             char *key;
             char *value;
-            
+
             key = ft_extract_key(cmd->av[i]);
             if (!key) {} // TODO malloc error
-            
+
             if (ft_strchr(cmd->av[i], '=')) // export a=asd  a=
             {
                 if (cmd->av[i][0] == '\0')
-                    value = ft_strdup("");    
+                    value = ft_strdup("");
                 else
                     value = ft_extract_value(cmd->av[i]);
                 if (!value) {}; // TODO malloc error
 
-                ft_add_entry_env(cmd->shell->envp2lol_h, key, value); //TODO  check for error
+                ft_add_entry_env(cmd->shell->my_envp_h, key, value); //TODO  check for error
                 ft_add_entry_env2(cmd->shell->envp2lol_h, key, value); //TODO check for error
             }
             else // export a
@@ -163,6 +163,7 @@ void    ft_export(t_exec *cmd)
             }
             free(key);
             free(value);
+			i++;
         }
-    }   
+    }
 }
