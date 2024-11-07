@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 14:14:12 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:57:25 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * @brief Recieves the env line and returns its key
  * @return Returns the key or null in case of error
 */
-static char     *ft_extract_key(char *line)
+char     *ft_extract_key(char *line)
 {
     char    *key;
     int     end;
@@ -47,7 +47,7 @@ static char     *ft_extract_key(char *line)
  * @brief Recieves the env line and returns its value
  * @return Returns the value or null in case of error
 */
-static char     *ft_extract_value(char *line)
+char     *ft_extract_value(char *line)
 {
     char    *value;
     int     start;

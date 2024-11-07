@@ -145,12 +145,17 @@ void    ft_signal_ignore(void);
 int    	ft_init_envp(t_shell *shell, char *envp[]);
 int     ft_init_envp2lol(t_shell *shell, char *envp[]);
 
-
+// Env Helpers
+char    *ft_extract_key(char *line);
+char     *ft_extract_value(char *line);
+t_envp  *ft_new_env_node(char *key, char *value);
 t_envp  *ft_new_node(char *envp_line);
 bool    ft_has_key(char *try, int len, t_envp *envp);
-char    *ft_get_value(char *key, t_envp *envp);
 
-t_envp   *ft_new_env_node(char *key, char *value, t_envp *s_envp);
+
+
+
+char    *ft_get_value(char *key, t_envp *envp);
 void	ft_set_value(char *key, char *value, t_envp *envp);
 
 

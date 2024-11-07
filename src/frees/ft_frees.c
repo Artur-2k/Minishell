@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:51 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 15:38:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:34:57 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,20 @@ void ft_free_str_arr(char **arr)
     	free(arr);
 }
 
-void ft_free_envp_lst(t_envp *my_envp)
+void ft_free_envp_lst(t_envp *cur)
 {
     t_envp  *temp;
 
-    while (my_envp != NULL)
+    while (cur != NULL)
     {
-        temp = my_envp->next;
-        if (my_envp->value)
-            free(my_envp->value);
-        if (my_envp->key)
-            free(my_envp->key);
-        if (my_envp)
-            free(my_envp);
-        my_envp = temp;
+        temp = cur->next;
+        if (cur->value)
+            free(cur->value);
+        if (cur->key)
+            free(cur->key);
+        if (cur)
+            free(cur);
+        cur = temp;
     }
 }
 

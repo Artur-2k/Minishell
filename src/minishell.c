@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 13:59:34 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:40:35 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int     main(int ac, char** av, char *envp[])
     free (shell.spid);
     free (shell.sexit_status);
     
-    
+    ft_free_envp_lst(shell.envp2lol_h); // envp list
     ft_free_envp_lst(shell.my_envp_h); // envp list
     rl_clear_history(); // history
     printf("exit\n");

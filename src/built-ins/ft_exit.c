@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 12:48:53 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:37:19 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void		ft_clean(t_shell *shell)
     free (shell->sexit_status);
 	ft_free_tree(shell->cmd_tree);
     ft_free_envp_lst(shell->my_envp_h); // envp list
+	ft_free_envp_lst(shell->envp2lol_h); // envp list
+
     rl_clear_history(); // history
 }
 

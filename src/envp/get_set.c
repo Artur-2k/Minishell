@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:30:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 18:57:31 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:45:03 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_set_value(char *key, char *value, t_envp *envp)
 	if (!key || !*key || !value)
 		return ;
 	if (!envp)
-		envp = ft_new_env_node(key, value, envp);
+		envp = ft_new_env_node(key, value);
 	cur = envp;
 	while (cur)
 	{
@@ -62,6 +62,6 @@ void	ft_set_value(char *key, char *value, t_envp *envp)
 	cur = envp;
 	while (cur->next)
 		cur = cur->next;
-	cur->next = ft_new_env_node(key, value, envp);
+	cur->next = ft_new_env_node(key, value);
 	return ;
 }

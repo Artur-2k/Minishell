@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:57:38 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 14:43:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:38:58 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ static void	ft_redir_stdin(int fd[2])
 
 void    ft_exit_pipe(t_shell *shell)
 {
+ 
 	free(shell->input);
-	free (shell->spid);
-    free (shell->sexit_status);
+	free(shell->spid);
+    free(shell->sexit_status);
 	ft_free_tree(shell->cmd_tree);
     ft_free_envp_lst(shell->my_envp_h);
+    ft_free_envp_lst(shell->envp2lol_h); // envp list
     rl_clear_history();
     exit (EXIT_FAILURE);
 }

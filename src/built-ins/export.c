@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 15:18:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:18:31 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,81 @@
         zzzz=a          declare -x zzzz="a"
 */
 
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+int ft_add_entry_env(t_envp **head, char *key, char *value)
+{
+
+    if (ft_has_key(key, ft_strlen(key), *head))
+    {
+        t_envp *cur = *head;
+        while (ft_strcmp(key, cur->key) != 0)
+            cur = cur->next;
+        if (cur->value)
+            free(cur->value);
+        cur->value = ft_strdup(value);
+        if (!cur->value) // TODO malloc error
+            return (1);
+        return (0); // Success
+    }
+    
+    if (*head == NULL)
+    {
+        *head = ft_new_env_node(key, value);
+        if (!*head) // TODO malloc error
+            return (1);
+    }
+    else
+    {
+        // Ir até ao fim e adicionar no final
+        t_envp *temp = *head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = ft_new_env_node(key, value);
+        if (!temp->next) // TODO malloc error
+            return (2);
+    }
+    return (0); // Success
+}
+
+int     ft_add_entry_env2(t_envp **head, char *key, char *value)
+{
+    if (ft_has_key(key, ft_strlen(key), *head))
+    {
+        t_envp  *cur = *head;
+        while (ft_strcmp(key, cur->key) != 0)
+            cur = cur->next;
+        if (cur->value)
+            free(cur->value);
+        cur->value = ft_strdup(value);
+        if (!cur->value) // TODO malloc error
+            return (1);
+        return (0); // Success
+    }
+
+    t_envp  *new = ft_new_env_node(key, value);
+    if (!new) //TODO malloc error
+        return (1);
+    
+    if (*head == NULL || ft_strcmp((*head)->key, key) > 0)
+    {
+        new->next = *head;
+        *head = new;
+        return (0); // Success
+    }
+    
+    t_envp  *cur = *head;
+    // procurar sitio certo
+    while (cur->next != NULL && ft_strcmp(cur->next->key, new->key) < 0)
+        cur = cur->next;        
+    new->next = cur->next;
+    cur->next = new;
+
+    return (0); // Success
+}
+
+
 // envp ordenado exenvp
 void    ft_export(t_exec *cmd)
 {
@@ -66,23 +141,28 @@ void    ft_export(t_exec *cmd)
             char *key;
             char *value;
             
-            key = ft_extract_key(cmd->av[i]); // TODO
+            key = ft_extract_key(cmd->av[i]);
             if (!key) {} // TODO malloc error
             
             if (ft_strchr(cmd->av[i], '=')) // export a=asd  a=
             {
-                value = ft_extract_value(); // TODO
-                if (!value) {} // TODO
+                if (cmd->av[i][0] == '\0')
+                    value = ft_strdup("");    
+                else
+                    value = ft_extract_value(cmd->av[i]);
+                if (!value) {}; // TODO malloc error
+
+                ft_add_entry_env(cmd->shell->envp2lol_h, key, value); //TODO  check for error
+                ft_add_entry_env2(cmd->shell->envp2lol_h, key, value); //TODO check for error
             }
             else // export a
             {
-                value = ft_strdup("");    
+                value = ft_strdup("");
+                if (!value) {}; // TODO malloc free
+                ft_add_entry_env2(cmd->shell->envp2lol_h, key, value); //todo
             }
-            ft_add_entry_env(cmd->shell->envp2lol_h, key, value); //todo
-            ft_add_entry_env2(cmd->shell->envp2lol_h, key, value); //todo
+            free(key);
+            free(value);
         }
     }   
-
-
-    
 }
