@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 15:29:27 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:18:12 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 static int	ft_is_dir(char *path)
 {
     struct stat	file_stat;
-    
+
     // so reconhece diretorios se o path tiver uma barra no fim */
     if (ft_strchr(path, '/'))
     {
@@ -79,7 +79,7 @@ static char    *ft_get_cmd_path(char *cmd, t_envp *envp)
 static int	ft_exec_path(t_exec *ecmd)
 {
 	errno = 0;
-    
+
 	if (access(ecmd->av[0], X_OK) != 0)
     {
         ft_what_happened(ecmd->av[0], strerror(errno));
@@ -106,8 +106,7 @@ static int	ft_exec_no_path(t_exec *ecmd)
 int    ft_exec(t_exec *node)
 {
     int error;
-    
-    error = 0;
+
 	if (node->av[0] == NULL) // $a
 		return (0);
 	if (node->av[0][0] == '\0') // "" || ''
@@ -118,10 +117,11 @@ int    ft_exec(t_exec *node)
 
 
     // check if it is a dir
+    error = 0;
     error = ft_is_dir(node->av[0]);
     if (error)
 		return (error);
-        
+
 
 
     // apply redirects
@@ -129,7 +129,11 @@ int    ft_exec(t_exec *node)
     if (error)
 		return (error);
 
-
+	if (ft_is_builtin(node))
+	{
+		ft_redirect_execution(node);
+		return (node->shell->exit_status);
+	}
 
     //* strchr(.. /) tendo execve n tendo paths
     if (ft_strchr(node->av[0], '/')) // path absoluto ==> execve
@@ -140,7 +144,7 @@ int    ft_exec(t_exec *node)
 	}
     else // find path (access on getcmdpath)
 	{
-        error = ft_exec_no_path(node); 
+        error = ft_exec_no_path(node);
 		if (error)
             return (error);
 	}

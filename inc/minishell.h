@@ -189,6 +189,11 @@ void	ft_clean(t_shell *shell);
 void    ft_export(t_exec *cmd);
 void    ft_pwd(t_exec *cmd);
 void	ft_unset(t_exec *cmd);
+// Built ins helper
+bool	ft_is_builtin(t_cmd *cmd);
+void	ft_redirect_execution(t_exec *cmd);
+void	ft_run_builtin(t_exec *cmd);
+
 
 // Frees
 void    ft_free_str_arr(char **arr);
