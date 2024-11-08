@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:22:21 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 12:17:36 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:01:45 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    ft_config_terminal(void)
     // Ignora o caractere ^C do terminal
     // Tem de ser configurado antes de poder receber um sinal
     struct termios  termios_p;
-    
+
     tcgetattr(STDIN_FILENO, &termios_p); // reads the config
     termios_p.c_lflag &= ~ECHOCTL; // Nega esta flag para Ctrl+C e Ctrl+D (switch on and off)
     tcsetattr(STDIN_FILENO, TCSANOW, &termios_p); // aplies the new config
@@ -32,7 +32,7 @@ void    ft_config_terminal(void)
 static void    ft_handle_sigint(int signo)
 {
     g_signal = signo;
-    
+
     printf("\n");
     // Notifica o Readline que uma nova linha será iniciada
     rl_on_new_line();
@@ -43,15 +43,15 @@ static void    ft_handle_sigint(int signo)
 }
 
 /*
- * @brief Utility redefinition on sigint and sigquit
+ * @brief Utility redefinition on sigint and sigquit.
  * Makes SIGINT clear the line and redisplay prompt.
- * Makes SIGQUIT useless
+ * Makes SIGQUIT useless.
 */
 void    ft_init_signals(void)
 {
     struct sigaction    sa_int;
     struct sigaction    sa_quit;
-    
+
     // Sigint
     sa_int.sa_handler = ft_handle_sigint;
     sa_int.sa_flags = 0;
@@ -68,15 +68,16 @@ void    ft_init_signals(void)
 void    ft_signal_restore(void)
 {
     struct sigaction    sa_dft;
-    
+
     sa_dft.sa_handler = SIG_DFL;
     sa_dft.sa_flags = 0;
     sigemptyset(&sa_dft.sa_mask);
-    
+
     sigaction(SIGINT, &sa_dft, NULL);
     sigaction(SIGQUIT, &sa_dft, NULL);
 }
 
+// lazy ass didnt want to use sigaction lol
 void    ft_signal_ignore(void)
 {
     signal(SIGINT, SIG_IGN);

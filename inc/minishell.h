@@ -164,7 +164,7 @@ int     ft_tokenizer(t_shell *shell);
 char    *ft_space_tokens(char *str);
 char    **ft_split_tokens(char *str);
 int     ft_find_syntax_errors(char **tkn_arr);
-char	*ft_expand_token(char *token, t_shell *shell);  
+char	*ft_expand_token(char *token, t_shell *shell);
 int 	ft_emenda(char **tkn_arr, t_shell *shell);
 
 // Command building
@@ -180,6 +180,15 @@ int     ft_exec(t_exec *node);
 void	ft_pipe(t_pipe *node, t_shell *shell);
 // Comand Exec Helpers
 char    *ft_check_paths_for_cmd(char **paths, char *cmd);
+
+// Built ins
+void    ft_cd(t_exec *cmd);
+void	ft_echo(t_exec *cmd);
+void    ft_env(t_exec *cmd);
+void	ft_clean(t_shell *shell);
+void    ft_export(t_exec *cmd);
+void    ft_pwd(t_exec *cmd);
+void	ft_unset(t_exec *cmd);
 
 // Frees
 void    ft_free_str_arr(char **arr);
