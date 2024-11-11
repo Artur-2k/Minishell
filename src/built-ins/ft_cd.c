@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:02:41 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 16:36:08 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:14:29 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void    ft_cd(t_exec *cmd)
     //       cd                   cd --
     if (!cmd->av[1] || !ft_strcmp(cmd->av[1], "--"))
     {
-        if (ft_has_key("HOME", 4, cmd->shell->my_envp_h))
+        if (ft_has_key("HOME", cmd->shell->my_envp_h))
         {
             // OLDPWD set as current directory
             char *curdir = getcwd(NULL, 0);

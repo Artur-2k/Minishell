@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 16:12:13 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:14:44 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 int ft_add_entry_env(t_envp **head, char *key, char *value)
 {
 
-    if (ft_has_key(key, ft_strlen(key), *head))
+    if (ft_has_key(key, *head))
     {
         t_envp *cur = *head;
         while (ft_strcmp(key, cur->key) != 0)
@@ -78,10 +78,10 @@ int ft_add_entry_env(t_envp **head, char *key, char *value)
 
 int     ft_add_entry_env2(t_envp **head, char *key, char *value)
 {
-    if (ft_has_key(key, ft_strlen(key), *head))
+    if (ft_has_key(key, *head))
     {
         t_envp  *cur = *head;
-        while (ft_strcmp(key, cur->key) != 0)
+        while (cur && ft_strcmp(key, cur->key) != 0)
             cur = cur->next;
         if (cur->value)
             free(cur->value);

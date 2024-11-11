@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/08 18:41:38 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:06:28 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int     main(int ac, char** av, char *envp[])
         }
 
         // This function doesnt need a return statement
+
         ft_run_cmd(&shell);
 
         // Verifica se o input não está vazio antes de adicionar ao histórico

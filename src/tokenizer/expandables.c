@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expandables.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 15:25:13 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:15:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 			(*token)[len] != ' ' &&
  			(*token)[len] != '$')
 		len++;
-	if (ft_has_key(*token, len, envp))
+	if (ft_has_key(*token, envp))
 	{
 		key = ft_substr(*token, 0, len);
 		if (!key)

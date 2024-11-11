@@ -150,7 +150,7 @@ char    *ft_extract_key(char *line);
 char     *ft_extract_value(char *line);
 t_envp  *ft_new_env_node(char *key, char *value);
 t_envp  *ft_new_node(char *envp_line);
-bool    ft_has_key(char *try, int len, t_envp *envp);
+bool    ft_has_key(char *try, t_envp *envp);
 
 
 
