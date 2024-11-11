@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/08 18:11:37 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:41:38 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,36 @@ void    ft_run_cmd(t_shell *shell)
     int	pid;
 
     if (!shell->cmd_tree)
-        return ;
+		return ;
 
 	// if there is no pipe and there is a built in it must be ran on main process
 	if (shell->cmd_tree->type == EXEC &&
 		ft_is_builtin(shell->cmd_tree))
-		ft_run_builtin(shell->cmd_tree);
+		ft_run_builtin((t_exec *)shell->cmd_tree);
+	else
+	{
+	    ft_signal_ignore();
+	    pid = fork();
+	    // child doenst return back here it exits
+	    if (pid == 0)
+	        ft_run_tree(shell->cmd_tree, shell);
 
-    ft_signal_ignore();
-    pid = fork();
-    // child doenst return back here it exits
-    if (pid == 0)
-        ft_run_tree(shell->cmd_tree, shell);
 
+	    waitpid(pid, &shell->status, 0);
 
-    waitpid(pid, &shell->status, 0);
-
-    if (WIFEXITED(shell->status))
-        shell->exit_status = WEXITSTATUS(shell->status);
-    else if (WIFSIGNALED(shell->status))
-    {
-        int signo;
-        signo = WTERMSIG(shell->status);
-        if (signo == SIGINT)
-            ft_putstr_fd("\n", 2);
-        else if (signo == SIGQUIT)
-            ft_putstr_fd("Quit (core dumped), sir\n", 2);
-        shell->exit_status = 128 + signo;
-    }
+	    if (WIFEXITED(shell->status))
+	        shell->exit_status = WEXITSTATUS(shell->status);
+	    else if (WIFSIGNALED(shell->status))
+	    {
+	        int signo;
+	        signo = WTERMSIG(shell->status);
+	        if (signo == SIGINT)
+	            ft_putstr_fd("\n", 2);
+	        else if (signo == SIGQUIT)
+	            ft_putstr_fd("Quit (core dumped), sir\n", 2);
+	        shell->exit_status = 128 + signo;
+	    }
+	}
 
     // Replace exit status
     free(shell->sexit_status);
@@ -77,7 +79,6 @@ int     main(int ac, char** av, char *envp[])
 		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
 
     // TODO SHELL INIT
-    shell.envp2lol_h = NULL;
     shell.cmd_tree = NULL;
     shell.status = 0;
 

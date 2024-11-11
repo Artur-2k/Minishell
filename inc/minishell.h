@@ -185,13 +185,13 @@ char    *ft_check_paths_for_cmd(char **paths, char *cmd);
 void    ft_cd(t_exec *cmd);
 void	ft_echo(t_exec *cmd);
 void    ft_env(t_exec *cmd);
-void	ft_clean(t_shell *shell);
+void	ft_exit(t_exec *cmd);
 void    ft_export(t_exec *cmd);
 void    ft_pwd(t_exec *cmd);
 void	ft_unset(t_exec *cmd);
 // Built ins helper
 bool	ft_is_builtin(t_cmd *cmd);
-void	ft_redirect_execution(t_exec *cmd);
+int		ft_redirect_execution(t_exec *cmd);
 void	ft_run_builtin(t_exec *cmd);
 
 

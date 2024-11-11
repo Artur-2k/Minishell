@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 21:32:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/08 20:21:08 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int     ft_add_entry_env2(t_envp **head, char *key, char *value)
             free(cur->value);
         cur->value = ft_strdup(value);
         if (!cur->value) // TODO malloc error
-            return (1);
+	        return (1);
         return (0); // Success
     }
 
@@ -117,7 +117,7 @@ int     ft_add_entry_env2(t_envp **head, char *key, char *value)
 void    ft_export(t_exec *cmd)
 {
     // export
-    if (cmd->av[1] != NULL)
+    if (cmd->av[1] == NULL)
     {
         t_envp  *cur;
 
@@ -127,6 +127,7 @@ void    ft_export(t_exec *cmd)
             printf("declare -x %s", cur->key);
             if (cur->value) // ="..."
                 printf("=\"%s\"", cur->value);
+			printf("\n");
             cur = cur->next;
         }
     }
@@ -141,7 +142,7 @@ void    ft_export(t_exec *cmd)
             char *key;
             char *value;
 
-            key = ft_extract_key(cmd->av[i]);
+            key = ft_extract_key(cmd->av[i]); //TODO extract key but when no = is found too look it up
             if (!key) {} // TODO malloc error
 
             if (ft_strchr(cmd->av[i], '=')) // export a=asd  a=
@@ -152,14 +153,14 @@ void    ft_export(t_exec *cmd)
                     value = ft_extract_value(cmd->av[i]);
                 if (!value) {}; // TODO malloc error
 
-                ft_add_entry_env(cmd->shell->my_envp_h, key, value); //TODO  check for error
-                ft_add_entry_env2(cmd->shell->envp2lol_h, key, value); //TODO check for error
+                ft_add_entry_env(&cmd->shell->my_envp_h, key, value); //TODO  check for error
+                ft_add_entry_env2(&cmd->shell->envp2lol_h, key, value); //TODO check for error
             }
             else // export a
             {
-                value = ft_strdup("");
+                value = NULL;
                 if (!value) {}; // TODO malloc free
-                ft_add_entry_env2(cmd->shell->envp2lol_h, key, value); //todo
+                ft_add_entry_env2(&cmd->shell->envp2lol_h, key, value); //todo
             }
             free(key);
             free(value);

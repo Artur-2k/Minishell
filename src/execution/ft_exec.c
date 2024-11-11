@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/08 18:18:12 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:21:37 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int    ft_exec(t_exec *node)
     if (error)
 		return (error);
 
-	if (ft_is_builtin(node))
+	if (ft_is_builtin((t_cmd *)node))
 	{
 		ft_redirect_execution(node);
 		return (node->shell->exit_status);

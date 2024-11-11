@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 16:57:25 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:16:52 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char     *ft_extract_key(char *line)
     end = 0;
     while (line && line[end])
     {
-        if (line[end] == '=')
+        if ((end > 0 && line[end] == '=') || !line[end])
         {
             key = ft_substr(line, 0, end);
 			if (!key)
