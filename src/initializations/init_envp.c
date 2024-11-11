@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 18:37:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 15:16:52 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:15:56 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char     *ft_extract_key(char *line)
 
     key = NULL;
     end = 0;
-    while (line && line[end])
+    while (line)
     {
         if ((end > 0 && line[end] == '=') || !line[end])
         {

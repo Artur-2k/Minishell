@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/08 20:21:08 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:12:13 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,10 @@ void    ft_export(t_exec *cmd)
             char *key;
             char *value;
 
+			errno = 0;
             key = ft_extract_key(cmd->av[i]); //TODO extract key but when no = is found too look it up
             if (!key) {} // TODO malloc error
+
 
             if (ft_strchr(cmd->av[i], '=')) // export a=asd  a=
             {
