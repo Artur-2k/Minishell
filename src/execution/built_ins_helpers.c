@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 18:11:14 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/08 18:20:17 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 21:46:38 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ bool	ft_is_builtin(t_cmd *cmd)
 		return (true);
 	return (false);
 }
-
+/**
+ * @brief	Prety straight foward...
+ */
 int		ft_redirect_execution(t_exec *cmd)
 {
 	if (ft_strcmp(cmd->av[0], "echo") == 0)
@@ -59,12 +61,18 @@ int		ft_redirect_execution(t_exec *cmd)
 	return (cmd->shell->exit_status);
 }
 
+/**
+ * @brief	We redirect our line of execution depending on what
+ * fucntion must be called and redirect our input and output
+ * and then reseting them back because we are on the main process
+ */
 void	ft_run_builtin(t_exec *cmd)
 {
 	int	error;
 	int	fd_stdin;
 	int	fd_stdout;
 
+	// Backups
 	fd_stdout = dup(STDOUT_FILENO);
 	fd_stdin = dup(STDIN_FILENO);
 
@@ -80,8 +88,10 @@ void	ft_run_builtin(t_exec *cmd)
 		return ;
 	}
 
+	// Execute
 	ft_redirect_execution(cmd);
 
+	// Reset redirects
 	dup2(fd_stdin, STDIN_FILENO);
 	dup2(fd_stdout, STDOUT_FILENO);
 	close(fd_stdin);

@@ -139,20 +139,17 @@ void    ft_config_terminal(void);
 void    ft_signal_restore(void);
 void    ft_signal_ignore(void);
 
-
-
-// Env
+// Initializations
+int		ft_init_everything(t_shell *shell, char *envp[], int ac, char **av);
 int    	ft_init_envp(t_shell *shell, char *envp[]);
 int     ft_init_envp2lol(t_shell *shell, char *envp[]);
 
-// Env Helpers
+// Env
 char    *ft_extract_key(char *line);
 char     *ft_extract_value(char *line);
 t_envp  *ft_new_env_node(char *key, char *value);
 t_envp  *ft_new_node(char *envp_line);
 bool    ft_has_key(char *try, t_envp *envp);
-
-
 
 
 char    *ft_get_value(char *key, t_envp *envp);
@@ -175,6 +172,7 @@ t_cmd   *ft_build_pipe(t_cmd *cmd, t_tokens **tkns ,t_shell *shell);
 int     ft_redirects(t_redir *redir);
 
 // Comand Exec
+void    ft_run_cmd(t_shell *shell);
 void	ft_run_tree(t_cmd *node, t_shell *shell);
 int     ft_exec(t_exec *node);
 void	ft_pipe(t_pipe *node, t_shell *shell);
@@ -206,7 +204,6 @@ void	ft_free_tokens(t_tokens **tokens);
 int 	ft_get_pid(void);
 
 // Error
-void    ft_error(); // todo
 void	ft_what_happened(char *what, char *happend);
 
 // Debugging

@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:22:21 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/08 18:02:50 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 21:06:33 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void    ft_config_terminal(void)
 }
 
 
-/*
+/**
  * @brief Removes terminal config to remove control characters print.
 */
 static void    ft_handle_sigint(int signo)
@@ -42,7 +42,7 @@ static void    ft_handle_sigint(int signo)
     rl_redisplay();
 }
 
-/*
+/**
  * @brief Utility redefinition on sigint and sigquit.
  * Makes SIGINT clear the line and redisplay prompt.
  * Makes SIGQUIT useless.
@@ -65,6 +65,9 @@ void    ft_init_signals(void)
     sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
+/**
+ * @brief Utility restoration on sigint and sigquit.
+*/
 void    ft_signal_restore(void)
 {
     struct sigaction    sa_dft;

@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:15:50 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/31 14:26:50 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 22:21:53 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
+/**
+ * @brief	Loops around the contents of the paths string array and looks for
+ * a match that can be executable (X_OK) and returns it if found.
+ * @return	Returns NULL if not found, and the full path if one is executable
+ */
 char    *ft_check_paths_for_cmd(char **paths, char *cmd)
 {
     char	*full_path;

@@ -6,12 +6,16 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:15:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/27 13:17:34 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 22:30:43 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief	Will look for a quote char and then skip all chars until the same
+ * quote char is found. If none is found and the string ends returns (open quote flag)
+ */
 static bool    ft_check_unclosed_quotes(char **tkn_arr)
 {
     int     i;
@@ -41,6 +45,12 @@ static bool    ft_check_unclosed_quotes(char **tkn_arr)
     return (false);
 }
 
+/**
+ *	@brief	Checks for pipe at the beggining, the double redir token or redir token
+ * at the end (> >> < << |)
+ * *
+ * 	NOTE: each redir is a token
+ */
 static bool    ft_check_redirecitons(char **tkn_arr)
 {
 	int	i;
@@ -70,6 +80,10 @@ static bool    ft_check_redirecitons(char **tkn_arr)
 	return (false);
 }
 
+/**
+ * @brief	Will basically check for open quotes, redirecs at the end, pipe at the start
+ * and redirects mixed with pipes and stuff like that (>< >>> >|| ...)
+ */
 int ft_find_syntax_errors(char **tkn_arr) // todo VER qual caso nao da erro <> ou >< e corrigir
 {
 /*
@@ -85,7 +99,7 @@ int ft_find_syntax_errors(char **tkn_arr) // todo VER qual caso nao da erro <> o
     if (ft_check_unclosed_quotes(tkn_arr))
         return (ft_printf("Minihell doenst handle unclosed quotes\n"), 1);
     if (ft_check_redirecitons(tkn_arr))
-        return 1;
+        return (1);
 
-    return 0;
+    return (0);
 }

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_build_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 10:03:34 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 19:21:00 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
- * @brief Creates a char **envp to send to exec with the same contents as 
+ * @brief Creates a char **envp to send to exec with the same contents as
  * the envp list
  * @return Returns the char **envp or NULL for malloc errors
 */
@@ -25,30 +25,30 @@ static char    **ft_recreate_envp(t_envp *l_envp)
 
     if (!l_envp)
         return (NULL);
-    
+
     backup = l_envp;
     len = 0;
     // List lenght for malloc
-    while (l_envp && ++len) //! short circuiting for lines WATCH OUT
+    while (l_envp && ++len) //! short circuiting for lines 
         l_envp = l_envp->next;
-    
+
     envp = (char **)malloc(sizeof(char *) * (len + 1));
     if (!envp)
         return (NULL);
-    
+
     // Copies the concatenated result of key, = and value from the envp list to the new envp
     l_envp = backup;
     len = 0;
     while (l_envp)
     {
-        envp[len] = ft_strappend(ft_strjoin(l_envp->key, "="), l_envp->value); //! WATCH OUT FOR NULL PARAMS
+        envp[len] = ft_strappend(ft_strjoin(l_envp->key, "="), l_envp->value);
         if (!envp[len])
             return (ft_free_str_arr(envp), NULL);
         len++;
         l_envp = l_envp->next;
     }
     envp[len] = NULL;
-    
+
     return (envp);
 }
 
@@ -78,7 +78,7 @@ static int ft_cmd_len(t_tokens **tkns)
 }
 
 /*
- * @brief Allocates memory for a new redir node and fills it up 
+ * @brief Allocates memory for a new redir node and fills it up
  * and adds it to the end of the list
  * @param *cmd A pointer to the command so we can add it to the end of
  * it's redir list
@@ -93,7 +93,7 @@ static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
     new = (t_redir*)ft_calloc(1, sizeof(t_redir));
     if (!new) // Malloc error
         return (1);
-    
+
     // Redir type
     if (!ft_strcmp(tkns[0]->token, "<"))
         new->type = INREDIR;
@@ -103,12 +103,12 @@ static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
         new->type = OUTREDIR;
     else
         new->type = APPREDIR;
-        
+
     // Redir path
     new->redir = ft_strdup(tkns[1]->token);
     if (!new->redir)
         return (free(new), ft_free_redir_list(&cmd->redir_list), 2); // Malloc error
-    
+
     // Add to the back of the list
     if (cmd->redir_list == NULL)
         cmd->redir_list = new;
@@ -154,7 +154,7 @@ t_cmd  *ft_build_exec(t_tokens ***tkns, t_shell *shell)
         else if ((*tkns)[i]->type != EXEC)
         {
             if (ft_new_redir(cmd, &(*tkns)[i])) // Malloc error
-                return (ft_free_str_arr(cmd->av), free(cmd), NULL);                               
+                return (ft_free_str_arr(cmd->av), free(cmd), NULL);
             i += 2;
         }
         else
