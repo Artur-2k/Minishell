@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:02:41 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 10:04:52 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:36:08 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,10 @@ cd --   -->     HOME ?  muda para $HOME  : printf("minihell: cd: HOME not set,si
 void    ft_cd(t_exec *cmd)
 {
     // cd asdasd asdasd
-    if (cmd->av[2])
+    if (cmd->av[1] && cmd->av[2])
     {
         ft_what_happened(cmd->av[0], "too many arguments");
         cmd->shell->exit_status = 1;
-        return ;
-    }   
-        
-    // cd ""
-    if (cmd->av[1][0] == '\0')
-    {
-        cmd->shell->exit_status = 0;
         return ;
     }
 
@@ -64,9 +57,9 @@ void    ft_cd(t_exec *cmd)
                 cmd->shell->exit_status = 0;
                 return ;
             }
-            
+
             // Change directory to the value
-            if (chdir(cmd->av[1]) < 0)
+            if (chdir(value) < 0)
             {
                 ft_what_happened(cmd->av[0], strerror(errno));
                 cmd->shell->exit_status = 1;
@@ -74,6 +67,7 @@ void    ft_cd(t_exec *cmd)
             }
             // PWD set to home value
             ft_set_value("PWD", value, cmd->shell->my_envp_h);
+			return ;
         }
         else
         {
@@ -81,6 +75,13 @@ void    ft_cd(t_exec *cmd)
             cmd->shell->exit_status = 1;
             return ;
         }
+    }
+
+    // cd ""
+    if (cmd->av[1][0] == '\0')
+    {
+        cmd->shell->exit_status = 0;
+        return ;
     }
 
     // cd -
@@ -106,35 +107,35 @@ void    ft_cd(t_exec *cmd)
             cmd->shell->exit_status = 1;
             return ;
         }
-        // PWD set to home value    
+        // PWD set to home value
         ft_set_value("PWD", oldpwd, cmd->shell->my_envp_h);
         // OLDPWD set to home value
-        ft_set_value("OLPWD", curpwd, cmd->shell->my_envp_h);
+        ft_set_value("OLDPWD", curpwd, cmd->shell->my_envp_h);
         free(curpwd);
         cmd->shell->exit_status = 0;
         return ;
     }
 
-    // cd path 
+    // cd path
     {
         char *curpwd;
-        
+
         curpwd = getcwd(NULL, 0);
 
         // Change directory to the value
         if (chdir(cmd->av[1]) < 0)
         {
-            ft_what_happened(cmd->av[0], strerror(errno));
+            ft_what_happened(cmd->av[1], strerror(errno));
             cmd->shell->exit_status = 1;
             free(curpwd);
             return ;
         }
         // OLDPWD set to home value
-        ft_set_value("OLPWD", curpwd, cmd->shell->my_envp_h);
+        ft_set_value("OLDPWD", curpwd, cmd->shell->my_envp_h);
         free(curpwd);
 
         curpwd = getcwd(NULL, 0);
-        // PWD set to home value    
+        // PWD set to home value
         ft_set_value("PWD", curpwd, cmd->shell->my_envp_h);
         free(curpwd);
         cmd->shell->exit_status = 0;
