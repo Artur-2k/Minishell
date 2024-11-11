@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 17:06:28 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:46:52 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,16 @@ int     main(int ac, char** av, char *envp[])
 {
     t_shell    shell;
 
-
     // dont know if needed but for Wflags
     (void)ac;
     (void)av;
 
-
     // init shit
     ft_config_terminal();
-    if (ft_init_envp(&shell, envp))
-		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
-    if (ft_init_envp2lol(&shell, envp))
+    if (ft_init_envp(&shell, envp) || ft_init_envp2lol(&shell, envp))
 		return (ft_putstr_fd("Malloc error, sir\n", STDERR_FILENO), 1);
 
+	
     // TODO SHELL INIT
     shell.cmd_tree = NULL;
     shell.status = 0;

@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 17:14:44 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:38:08 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int     ft_add_entry_env2(t_envp **head, char *key, char *value)
 {
     if (ft_has_key(key, *head))
     {
+		if (!value)
+			return (0);
         t_envp  *cur = *head;
         while (cur && ft_strcmp(key, cur->key) != 0)
             cur = cur->next;
@@ -113,6 +115,20 @@ int     ft_add_entry_env2(t_envp **head, char *key, char *value)
 }
 
 
+bool	ft_valid_identifier(char *key)
+{
+	if (!key || !*key || ft_isdigit(*key))
+		return (false);
+
+	while (key && *key)
+	{
+		if (!ft_isalnum(*key))
+			return (false);
+		key++;
+	}
+	return (true);
+}
+
 // envp ordenado exenvp
 void    ft_export(t_exec *cmd)
 {
@@ -142,10 +158,18 @@ void    ft_export(t_exec *cmd)
             char *key;
             char *value;
 
+
 			errno = 0;
             key = ft_extract_key(cmd->av[i]); //TODO extract key but when no = is found too look it up
             if (!key) {} // TODO malloc error
 
+			if (!ft_valid_identifier(key))
+			{
+				cmd->shell->exit_status = 1;
+				ft_what_happened(cmd->av[i], "not a valid identifier, sir");
+				i++;
+				continue ;
+			}
 
             if (ft_strchr(cmd->av[i], '=')) // export a=asd  a=
             {
