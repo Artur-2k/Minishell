@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 21:32:33 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 21:32:34 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 22:02:03 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,44 +27,28 @@
 */
 
 
-void	ft_delete_node(char *key, t_envp **head)
+void ft_delete_node(char *key, t_envp **head)
 {
-	t_envp	*cur;
-	t_envp	*prev;
+    t_envp *cur = *head;
+    t_envp *prev = NULL;
 
-	if (*head == NULL)
-		return ;
+    while (cur != NULL)
+    {
+        if (ft_strcmp(key, cur->key) == 0)
+        {
+            if (prev == NULL)
+                *head = cur->next; // Deleting the first node
+            else
+                prev->next = cur->next; // Deleting a middle or last node
 
-	cur = *head;
-	// primeiro node
-	if (ft_strcmp(key, cur->key) == 0)
-	{
-		*head = (*head)->next;
-		if (cur->key)
-			free(cur->key);
-		if (cur->value)
-			free(cur->value);
-		free(cur);
-		return ;
-	}
-
-	prev = cur;
-	cur = cur->next;
-	while (cur != NULL)
-	{
-		if (ft_strcmp(key, cur->key) == 0)
-		{
-			prev->next = cur->next;
-			if (cur->key)
-				free(cur->key);
-			if (cur->value)
-				free(cur->value);
-			free(cur);
-			return ;
-		}
-		prev = cur;
-		cur = cur->next;
-	}
+            free(cur->key);
+            free(cur->value);
+            free(cur);
+            return;
+        }
+        prev = cur;
+        cur = cur->next;
+    }
 }
 
 
