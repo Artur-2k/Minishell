@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/07 16:37:19 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 22:37:46 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@
 
 */
 
-void		ft_clean(t_shell *shell)
+static void		ft_clean(t_shell *shell)
 {
-	free(shell->input); 
+	free(shell->input);
 	free (shell->spid);
     free (shell->sexit_status);
 	ft_free_tree(shell->cmd_tree);
