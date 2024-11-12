@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:30:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 22:14:25 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:42:59 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,20 @@
  * @brief	Checks for a match of the key on envp
  * @return	Returns true if there is one or false if not
  */
-bool	ft_has_key(char *try,  t_envp *envp)
+bool	ft_has_key(char *try, int len,  t_envp *envp)
 {
 	if (!try || !*try || !envp)
 		return (false);
 	while (envp != NULL)
 	{
-		if (!ft_strcmp(try, envp->key))
+		if (!ft_strncmp(try, envp->key, len))
 			return (true);
 		envp = envp->next;
 	}
 	return (false);
 }
+
+
 
 /**
  * @brief	Will look for a match for the key on the envp list

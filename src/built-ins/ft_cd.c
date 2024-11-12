@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:02:41 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 17:14:29 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:55:19 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void    ft_cd(t_exec *cmd)
     //       cd                   cd --
     if (!cmd->av[1] || !ft_strcmp(cmd->av[1], "--"))
     {
-        if (ft_has_key("HOME", cmd->shell->my_envp_h))
+        if (ft_has_key("HOME", 4, cmd->shell->my_envp_h))
         {
             // OLDPWD set as current directory
             char *curdir = getcwd(NULL, 0);
@@ -71,7 +71,7 @@ void    ft_cd(t_exec *cmd)
         }
         else
         {
-            ft_what_happened(cmd->av[0], "HOME not set,sir");
+            ft_what_happened(cmd->av[0], "HOME not set");
             cmd->shell->exit_status = 1;
             return ;
         }
@@ -90,10 +90,11 @@ void    ft_cd(t_exec *cmd)
         char *oldpwd;
         char *curpwd;
 
+
         oldpwd = ft_get_value("OLDPWD", cmd->shell->my_envp_h);
         curpwd = getcwd(NULL, 0);
 
-        if (oldpwd[0] == '\0') // oldpwd == "" || oldpwd not set
+        if (!oldpwd || oldpwd[0] == '\0') // oldpwd == "" || oldpwd not set
         {
             ft_what_happened(cmd->av[0], "OLDPWD not set");
             cmd->shell->exit_status = 1;
@@ -113,7 +114,8 @@ void    ft_cd(t_exec *cmd)
         ft_set_value("OLDPWD", curpwd, cmd->shell->my_envp_h);
         free(curpwd);
         cmd->shell->exit_status = 0;
-        return ;
+
+	    return ;
     }
 
     // cd path

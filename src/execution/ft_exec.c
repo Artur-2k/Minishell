@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 21:58:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:51:06 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	ft_is_dir(char *path)
         }
         if (S_ISDIR(file_stat.st_mode))
         {
-            ft_what_happened(path, ": Is a directory");
+            ft_what_happened(path, "Is a directory");
             return (EXIT_FNOK);
         }
     }
@@ -76,7 +76,7 @@ static char    *ft_get_cmd_path(char *cmd, t_envp *envp)
     char    **paths;
 
 	path_var = ft_get_value("PATH", envp);
-	if (!path_var)
+	if (!path_var || path_var[0] == '\0')
 		return (ft_what_happened(cmd, "command not found"), NULL);
     paths = ft_split(path_var, ':');
 	if (!paths)

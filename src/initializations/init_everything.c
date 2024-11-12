@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:09:25 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 19:12:42 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:36:49 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int ft_init_everything(t_shell *shell, char *envp[], int ac, char **av)
 
     // init shit
     ft_config_terminal();
+	ft_init_signals();
+
     if (ft_init_envp(shell, envp))
 		return (1);
 

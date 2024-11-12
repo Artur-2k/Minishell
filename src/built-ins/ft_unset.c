@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 21:32:33 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 17:14:55 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:32:34 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ void	ft_unset(t_exec *cmd)
 	while (cmd->av[i])
 	{
 		// env list
-		if (ft_has_key(cmd->av[i], cmd->shell->my_envp_h))
+		if (ft_has_key(cmd->av[i], ft_strlen(cmd->av[i]), cmd->shell->my_envp_h))
 			ft_delete_node(cmd->av[i], &cmd->shell->my_envp_h);
 
 		// export list
-		if (ft_has_key(cmd->av[i], cmd->shell->envp2lol_h))
+		if (ft_has_key(cmd->av[i], ft_strlen(cmd->av[i]), cmd->shell->envp2lol_h))
 			ft_delete_node(cmd->av[i], &cmd->shell->envp2lol_h);
 
 		i++;

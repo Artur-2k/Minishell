@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 12:48:04 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:51:24 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	ft_expand_tokens(char **tkn_arr, t_shell *shell)
 	while (tkn_arr[i])
 	{
 		errno = 0;
-		shell->tokens[i]->token = ft_expand_token(tkn_arr[i], shell); //! falta a partir daqui
+		shell->tokens[i]->token = ft_expand_token(tkn_arr[i], shell);
 		if (errno == EMALLOC)
 			return (ft_putstr_fd("Malloc error, sir\n", 2), 1);
 		if (!shell->tokens[i]->token && i >= 1 &&
@@ -64,16 +64,18 @@ int	ft_tokenizer(t_shell *shell)
 	if (ft_emenda(token_arr, shell)) //*✅*//
 		return(ft_free_str_arr(token_arr), -3);
 
-	// Expands the tokens and sets it to the token array 
+	// Expands the tokens and sets it to the token array
 	if (ft_expand_tokens(token_arr, shell)) //*✅*//
 		return(ft_free_str_arr(token_arr),
 				ft_free_tokens(shell->tokens), -4);
    	ft_free_str_arr(token_arr);
 
+
 	// Builds a right descendent recursive tree-like data structure (it's easy relax)
 	shell->cmd_tree = ft_build(shell->tokens, shell); //*✅*//
 	if (!shell->cmd_tree)
 		return (-6);
+
 
 	ft_free_tokens(shell->tokens);
    	return 0; // Success

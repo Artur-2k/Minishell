@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:57:38 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 21:31:19 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:04:41 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  */
 static void	ft_redir_stdout(int fd[2])
 {
-	close(1);
+	close(STDOUT_FILENO);
 	dup(fd[WRITE_END]);
 	close(fd[WRITE_END]);
 	close(fd[READ_END]);
@@ -30,7 +30,7 @@ static void	ft_redir_stdout(int fd[2])
  */
 static void	ft_redir_stdin(int fd[2])
 {
-    close(0);
+    close(STDIN_FILENO);
     dup(fd[READ_END]);
     close(fd[WRITE_END]);
     close(fd[READ_END]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirects.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:30 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/04 11:13:06 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:56:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static int	ft_redirect_in(t_redir *redir)
 	if (open(redir->redir, O_RDONLY) < 0)
 	{
 		ft_what_happened(redir->redir, strerror(errno));
- 		return (1); // errorP
+ 		return (1); // error
 	}
 	return (0); // success
 }
 
-/* 
+/*
 	fd = open ...
 	dup2 (fd, 0);
  */
