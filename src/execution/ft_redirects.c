@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirects.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:30 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 20:56:10 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:26:44 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,18 @@ static int	ft_redirect_append(t_redir *redir)
 	}
 	return (0); // success
 }
+static int	ft_redirect_heredoc(t_redir *redir)
+{
+	close(STDIN_FILENO);
+	errno = 0;
+	if (open(redir->redir, O_RDONLY) < 0)
+	{
+		ft_what_happened(redir->redir, strerror(errno));
+		return (1);
+	}
+	return (0);
+}
+
 // @brief Recieves the node's redir list and tries to redirect
 // it's input &/ output based on the redir list.
 //
@@ -84,7 +96,7 @@ int ft_redirects(t_redir *redir)
         else if (redir->type == APPREDIR)
 			err = ft_redirect_append(redir);
         else if (redir->type == HDREDIR) // TODO HEREDOC
-        {}
+			err = ft_redirect_heredoc(redir);
         else // other bad redir type
             return (ft_putstr_fd("Invalid redirection type error\n", STDERR_FILENO), 1);
         redir = redir->next;

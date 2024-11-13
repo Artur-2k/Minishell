@@ -199,6 +199,9 @@ void    ft_free_redir_list(t_redir **redirs);
 void    ft_free_tree(t_cmd *tree);
 void	ft_free_tokens(t_tokens **tokens);
 
+// HEREDOCS
+int     ft_heredoc_process(char **token_arr, t_shell *shell);
+
 // Utils
 int 	ft_get_pid(void);
 
