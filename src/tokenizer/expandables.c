@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expandables.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 21:33:23 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:55:50 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 		else
 		{
 			(*token)++;
-			if (**token == '\"') // "...$"
+			if (**token == ' ')
+				new = ft_strappend(new, "$ ");
+			else if (**token == '\"' || **token == ' ') // "...$"
 				new = ft_append_char_to_str(new, '$');
 			else if (**token == '$') // "...$$asd"
 				new = ft_strappend(new, shell->spid);
@@ -93,7 +95,7 @@ static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 static char	*ft_expand_noquotes(char *new, char **token, t_shell *shell)
 {
 	(*token)++;
-	if (!**token || (**token == '\"' || **token == '\'')) // ... $ => ... $ || ...$"..."  ==> ...$...
+	if (!**token || **token == ' ') // ... $ => ... $
 		new = ft_append_char_to_str(new, '$');
 	else if (**token == '$') // ...$$asd
 		new = ft_strappend(new, shell->spid);
