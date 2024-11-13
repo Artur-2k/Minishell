@@ -189,8 +189,8 @@ void	ft_unset(t_exec *cmd);
 bool	ft_is_builtin(t_cmd *cmd);
 int		ft_redirect_execution(t_exec *cmd);
 void	ft_run_builtin(t_exec *cmd);
-int 		ft_add_entry_env(t_envp **head, char *key, char *value);
-int     	ft_add_entry_env2(t_envp **head, char *key, char *value);
+int 		ft_add_entry_env(t_envp **head, char *key, char *value, int mode);
+int     	ft_add_entry_env2(t_envp **head, char *key, char *value, int mode);
 
 // Frees
 void    ft_free_str_arr(char **arr);

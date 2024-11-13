@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 20:51:24 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:11:45 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,5 @@ int	ft_tokenizer(t_shell *shell)
 
 
 	ft_free_tokens(shell->tokens);
-   	return 0; // Success
+   	return (0); // Success
 }

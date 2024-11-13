@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 22:38:16 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:26:15 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,20 @@
         zzzz=a          declare -x zzzz="a"
 */
 
-
+#define ENV1    1
+#define ENV2    2
+#define REPLACE 3
+#define APPEND  4
 
 static bool	ft_valid_identifier(char *key)
 {
-	if (!key || !*key || ft_isdigit(*key))
+	if (!key || !*key || *key == '+' || ft_isdigit(*key))
 		return (false);
 
 	while (key && *key)
 	{
+        if (*key == '+' && !*(key + 1))
+            break ;            
 		if (!ft_isalnum(*key))
 			return (false);
 		key++;
@@ -74,25 +79,26 @@ static void	ft_export_print(t_exec *cmd)
 static void	ft_export_check_equal(t_exec *cmd, int i, char *key)
 {
         char	*value;
+        int     mode;
 
+        mode = REPLACE;
         if (ft_strchr(cmd->av[i], '=')) // export a=asd  a=
         {
-
-            if (cmd->av[i][0] == '\0')
-                value = ft_strdup("");
-            else
-                value = ft_extract_value(cmd->av[i]);
-            if (!value) {}; // TODO malloc error
-
-            ft_add_entry_env(&cmd->shell->my_envp_h, key, value); //TODO  check for error
-            ft_add_entry_env2(&cmd->shell->envp2lol_h, key, value); //TODO check for error
+            if (ft_strchr(key, '+')) // export a+=as
+            {
+                mode = APPEND;
+                key[ft_strlen(key) - 1] = 0;
+            }   
+            value = ft_extract_value(cmd->av[i]);
+            ft_add_entry_env(&cmd->shell->my_envp_h, key, value, mode); 
+            ft_add_entry_env2(&cmd->shell->envp2lol_h, key, value, mode);
 	        free(value);
 	    }
         else // export a
         {
             value = NULL;
             if (!value) {}; // TODO malloc free
-            ft_add_entry_env2(&cmd->shell->envp2lol_h, key, value); //todo
+            ft_add_entry_env2(&cmd->shell->envp2lol_h, key, value, mode);
 	        free(value);
         }
 }
