@@ -80,5 +80,5 @@ int	ft_tokenizer(t_shell *shell)
 
 
 	ft_free_tokens(shell->tokens);
-   	return 0; // Success
+   	return (0); // Success
 }
