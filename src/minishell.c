@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 21:48:35 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:14:20 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ int     main(int ac, char** av, char *envp[])
             break;
 
         if (g_signal)
+        {
             shell.exit_status = 128 + g_signal;
+            free(shell.sexit_status);
+            shell.sexit_status = ft_itoa(shell.exit_status);
+        }
 
 
         // Tokenizes the input and checks for syntax errors
