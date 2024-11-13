@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/13 18:15:20 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:48:22 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
             input = ft_append_char_to_str(input, '\n');
 
             ft_putstr_fd(input, fd);
+            free(input);
         }
         /* printf("DELIMITADOR %s\n", delimiter); */
         close(fd);
+        free(input);
     }
     return (0);
 }
