@@ -5,7 +5,7 @@ BIN = minishell
 CC = cc
 CFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -Wall -Wextra -Werror -g
 VG = valgrind --leak-check=full --show-leak-kinds=all --suppressions=supressions --track-origins=yes --log-file=leaks.log
-# --track-fds=all 
+# --track-fds=all
 
 # Color variables
 RED = \033[0;31m
@@ -43,9 +43,8 @@ all: $(BIN)
 
 $(BIN): $(LIB) $(MAIN_FILE) $(OBJ_FILES) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(MAIN_FILE) -lreadline $(OBJ_FILES) $(LIB) -o $@
-	@printf "$(GRN)Compilation progress: $$(echo "$(shell find $(OBJ_DIR) -name "*.o" | wc -l) $(TOTAL_FILES)" | awk '{printf "%.2f", $$1/$$2 * 100}')%%$(RES)\r"
-	@echo "\n$(GRN)${BIN} created$(RES)"
-	@printf "\n"
+	@printf "$(GRN)➾ Compilation progress: $$(echo "$(shell find $(OBJ_DIR) -name "*.o" | wc -l) $(TOTAL_FILES)" | awk '{printf "%.2f", $$1/$$2 * 100}')%% $(RES)\r"
+	@echo "\n$(GRN)➾ [ ${BIN} ] created$(RES)"
 
 $(LIB):
 	@$(MAKE) --silent -C $(LIB_DIR)
