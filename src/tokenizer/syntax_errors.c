@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:15:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 22:30:43 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:26:10 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ static bool    ft_check_redirecitons(char **tkn_arr)
 	if (tkn_arr[0] && tkn_arr[0][0] == '|')
 		return (ft_printf("Parse error near %c\n", tkn_arr[i][0]), true);
 
-	// double redirs || |> ><...
+	// double redirs ||  >< >| |>(valido)...
 	while (tkn_arr[i] != NULL)
 	{
-        if (ft_strchr("<|>", tkn_arr[i][0]))
+        if (tkn_arr[i][0] == '|' &&  tkn_arr[i + 1] && tkn_arr[i + 1][0] == '|')
+		        return (ft_printf("Parse error near %c\n", tkn_arr[i][0]), true);
+        else if (ft_strchr("<>", tkn_arr[i][0]))
 		{
             if (tkn_arr[i + 1] && ft_strchr("<|>", tkn_arr[i + 1][0]))
 		        return (ft_printf("Parse error near %c\n", tkn_arr[i][0]), true);
@@ -91,7 +93,7 @@ int ft_find_syntax_errors(char **tkn_arr) // todo VER qual caso nao da erro <> o
  *   heredoc no eof             ...  <<{nothing after}          ✅
  *   > >> e < without file      ...   > file < file >> file ... ✅
  *   double pipe token          ...     | |        ...          ✅
- *   pipe or redir              ...     | >                     ✅
+ *   pipe or redir              ...     | > valid               ✅
  *   double redir token         ...  << >  > <  >> < ...        ✅
  *   "" '' nao fechadas											✅
  *      /MAIS NAO PLEASE T-T ❌

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:30:20 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 22:36:39 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:06:23 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_replace_value(int envp1_or_2, t_envp **head, char *key, char *value)
+static int	ft_replace_value(int envp1_or_2, t_envp **head, char *key, char *value)
 {
 	if (envp1_or_2 == 2  && !value)
 		return (0);
