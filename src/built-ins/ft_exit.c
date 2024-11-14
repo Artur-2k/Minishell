@@ -6,7 +6,7 @@
 /*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 22:37:46 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:30:00 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@
 
 */
 
+static void		ft_exit_error_print(char *av1, char *error)
+{
+	ft_putstr_fd("Minihell: exit: ", 2);
+	ft_putstr_fd(av1, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putstr_fd(", sir\n", 2);
+}
+
 static void		ft_clean(t_shell *shell)
 {
 	free(shell->input);
@@ -52,24 +61,54 @@ static void	ft_str_digits(t_exec *cmd)
 	i = 0;
 	if (!cmd->av[1][i])
 	{
+		ft_exit_error_print(cmd->av[1], "numeric argument required");
 		ft_clean(cmd->shell);
-		printf("Minihell: exit: %s: numeric argument required, sir\n", cmd->av[1]);
 		exit (2);
 	}
+	if (cmd->av[1][i] == '+' || cmd->av[1][i] == '-')
+		i++;
 	while (cmd->av[1][i])
 	{
 		if (!ft_isdigit(cmd->av[1][i])) // exit 12abc (asdasd)
 		{
+			ft_exit_error_print(cmd->av[1], "numeric argument required");
 			ft_clean(cmd->shell);
-			printf("Minihell: exit: %s: numeric argument required, sir\n", cmd->av[1]);
 			exit (2);
 		}
 		i++;
 	}
 }
 
+static void	ft_check_number_range(t_exec *cmd, char *str)
+{
+	int	len;
+
+	if (*str == '+' || *str == '-')
+		str++;
+	len = ft_strlen(str);
+	if (len > 19)
+	{
+		ft_exit_error_print(str, "numeric argument required");
+		ft_clean(cmd->shell);
+		exit (2);
+	}
+	// -9223372036854775808 --> +9223372036854775807
+    if (len == 19)
+	{
+		if ((cmd->av[1][0] != '-' && ft_strncmp(str, "9223372036854775807", 19) > 0) ||
+    	(cmd->av[1][0] == '-' && ft_strncmp(str, "9223372036854775808", 19) > 0))
+		{
+			ft_exit_error_print(str, "numeric argument required");
+			ft_clean(cmd->shell);
+			exit (2);
+		}
+	}
+}
+
 void	ft_exit(t_exec *cmd)
 {
+	long	exit_code;
+
 	// Always prints exit for some reason
 	printf("exit\n");
 
@@ -82,16 +121,17 @@ void	ft_exit(t_exec *cmd)
 
 	// Check for only digits on av[1]
 	ft_str_digits(cmd); // this function exits on bad input
-
 	// Exit with args
 	if (cmd->av[2] == NULL) // exit 5
 	{
+		ft_check_number_range(cmd, cmd->av[1]);
+		exit_code = (unsigned char)ft_atol(cmd->av[1]);
 		ft_clean(cmd->shell);
-		exit ((unsigned char)ft_atoi(cmd->av[1]));
+		exit (exit_code);
 	}
 	else // exit 5 asdasd
 	{
-		printf("Minihell: exit: too many arguments, sir\n");
+		ft_exit_error_print("", "too many arguments");
 		cmd->shell->exit_status = 1;
 		return ;
 	}
