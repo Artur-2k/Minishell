@@ -212,6 +212,8 @@ void	ft_free_tokens(t_tokens **tokens);
 int     ft_heredoc_process(char **token_arr, t_shell *shell);
 int     ft_theres_heredoc(t_tokens **tkns);
 t_heredoc     *ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc);
+char    *ft_redir_after_heredoc(t_tokens **tkns);
+char    *ft_gen_here_path(void);
 
 // Utils
 int 	ft_get_pid(void);

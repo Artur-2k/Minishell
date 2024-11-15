@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 14:21:05 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/14 17:11:51 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:14:13 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@
 int     ft_theres_heredoc(t_tokens **tkns)
 {
     int i;
-    int count;
+    /* int count; */
     
     i = 0;
-    count = 0;
+    /* count = 0; */
     while(tkns[i] != NULL)
     {
         if (ft_strcmp(tkns[i]->token, "<<") == 0)
-            count++;
+            return (1);
         i++;
     }
-    return (count);
+    return (0);
 }
 
 /* 
@@ -40,9 +40,15 @@ int     ft_theres_heredoc(t_tokens **tkns)
 */
 char    *ft_gen_here_path(void)
 {
-    static int index;
+    static int  index;
+    char        *index_itoa;
+    char        *str;
 
-    return (ft_strjoin("here_doc_v", ft_itoa(index)));
+    index_itoa = ft_itoa(index);
+    str = ft_strjoin("here_doc_v", index_itoa);
+    index++;
+    free(index_itoa);
+    return (str);
 }
 
 t_heredoc     *ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc)
@@ -59,14 +65,16 @@ t_heredoc     *ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc)
     if (num_heredocs)
     {
         while (i++ < num_heredocs)
+        {
+        
             if (!heredoc)
             {
                 heredoc = (t_heredoc *)malloc(sizeof(t_heredoc));
                 if (!heredoc)
                     return (NULL);
                 temp_path = ft_gen_here_path();
-                if (open(temp_path, O_CREAT | O_RDWR | O_TRUNC, 0644) < 0)
-                    return (NULL);
+/*                 if (open(temp_path, O_CREAT | O_RDWR | O_TRUNC, 0644) < 0)
+                    return (NULL); */
                 heredoc->path = temp_path;
                 cur = heredoc;
             }
@@ -81,6 +89,25 @@ t_heredoc     *ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc)
                 heredoc->path = temp_path;
             }
             printf("[DEBUG][GEN_HERE_PATH]: %s\n", heredoc->path);
+        }
     }
     return (heredoc);
+}
+/* 
+ * @brief Retorna o redir do respectivo heredoc
+ * @param (t_tokens**) tkns
+ * @return (String) Pathname 
+*/
+char    *ft_redir_after_heredoc(t_tokens **tkns)
+{
+    int i;
+
+    i = 0;
+    while(tkns[i])
+    {
+        if (ft_strcmp(tkns[i]->token, ">"))
+            return (tkns[i+ 1]->token);
+        i++;
+    }
+    return (NULL);
 }

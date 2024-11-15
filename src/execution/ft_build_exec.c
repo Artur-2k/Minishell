@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/14 17:00:06 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:34:42 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,20 +110,20 @@ static int    ft_new_redir(t_exec *cmd, t_tokens **tkns)
     //TODO LOGICA DOS PATHS PARA HEREDOC
     /* new->redir = ft_strdup(".temp.txt"); */
 
-    for(int i = 0; tkns[i] != NULL; i++)
-        printf("[%d][TOKEN]: %s\n", i, tkns[i]->token);
+    /* for(int i = 0; tkns[i] != NULL; i++)
+        printf("[%d][TOKEN]: %s\n", i, tkns[i]->token); */
 
-    if (ft_theres_heredoc(tkns) && !heredoc)
+/*     if (ft_theres_heredoc(tkns) && !heredoc)
     {
         heredoc = ft_link_heredocs(tkns, heredoc);
         new->redir = ft_strdup(heredoc->path);
     }
     else
-    {
-        new->redir = ft_strdup(tkns[1]->token);
+    { */
+    new->redir = ft_strdup(tkns[1]->token);
         if (!new->redir)
             return (free(new), ft_free_redir_list(&cmd->redir_list), 2); // Malloc error
-    }
+/*     } */
 
     // Add to the back of the list
     if (cmd->redir_list == NULL)

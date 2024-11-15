@@ -6,22 +6,33 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/13 18:48:22 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:32:58 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define TEMP_DIR ".temp"
+#define HERED_ABS_PATH "here_doc_v0"
+
+void     ft_replace_token(char **token_to_swap, int i, char *path)
+{
+    /* free(token_to_swap[i]); */
+    token_to_swap[i] = path;
+}
 
 int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 {
     char *delimiter;
     char *input;
     int  fd;
+    char *dyn_path;
     
     delimiter = token_arr[i + 1];
-    fd = open(TEMP_DIR".txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
+    dyn_path = ft_gen_here_path();
+    //TODO SUBSTITUIR TOKEN POR PATH
+    ft_replace_token(token_arr, i + 1, dyn_path);
+    //TODO LOGICA DE CRIAR OU ACESSAR MESMOS PATHS CRIADO NOS REDIRS
+    fd = open(dyn_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
     if (fd == -1)
         printf("ERRO AO CRIAR FD\n");
     else
@@ -44,7 +55,6 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
         }
         /* printf("DELIMITADOR %s\n", delimiter); */
         close(fd);
-        free(input);
     }
     return (0);
 }
