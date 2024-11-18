@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/15 17:32:58 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:12:26 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,33 @@
 
 void     ft_replace_token(char **token_to_swap, int i, char *path)
 {
-    /* free(token_to_swap[i]); */
+    free(token_to_swap[i]);
     token_to_swap[i] = path;
+}
+
+char     *ft_hered_del(char *tkn, int *i)
+{
+    char *str;
+    int  j;
+
+    j = 0;
+    str = NULL;
+    if (tkn[j] == '\'' || tkn[j] == '\"')
+    {
+        j++;
+        *i = 1;
+        while(tkn[j] && tkn[j] != '\'' && tkn[j] != '\"')
+        {
+            str = ft_append_char_to_str(str, tkn[j]);
+            j++;
+        }
+    }
+    else
+    {
+        while(tkn[j])
+            str = ft_append_char_to_str(str, tkn[j++]);
+    }
+    return (str);
 }
 
 int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
@@ -26,12 +51,13 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
     char *input;
     int  fd;
     char *dyn_path;
+    int  expand = 0;
     
-    delimiter = token_arr[i + 1];
+    /* delimiter = ft_strdup(token_arr[i + 1]); */
+    delimiter = ft_hered_del(token_arr[i + 1], &expand);
+    printf("[DELIMITER]: %s\n", delimiter);
     dyn_path = ft_gen_here_path();
-    //TODO SUBSTITUIR TOKEN POR PATH
     ft_replace_token(token_arr, i + 1, dyn_path);
-    //TODO LOGICA DE CRIAR OU ACESSAR MESMOS PATHS CRIADO NOS REDIRS
     fd = open(dyn_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
     if (fd == -1)
         printf("ERRO AO CRIAR FD\n");
@@ -46,14 +72,15 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 
             if (ft_strcmp(input, delimiter) == 0)
                 break;
-            
-            input = ft_expand_token(input, shell);
+            if (expand == 0)
+                input = ft_heredoc_expand(input, shell);
+
             input = ft_append_char_to_str(input, '\n');
 
             ft_putstr_fd(input, fd);
             free(input);
         }
-        /* printf("DELIMITADOR %s\n", delimiter); */
+        free(delimiter);
         close(fd);
     }
     return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_pid.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 22:18:32 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:18:37 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ int	ft_get_pid(void)
 		return (-2);
 	buffer[bytes_read] = '\0';
 	pid = ft_atoi(buffer);
+      close(fd);
 	return (pid);
 }

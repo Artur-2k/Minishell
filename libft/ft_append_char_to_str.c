@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_append_char_to_str.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 14:01:08 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 19:30:41 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:02:34 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*ft_append_char_to_str(char *str, char c)
 	}
 	nstr[len] = c;
 	nstr[++len] = '\0';
-	free(str);
+	if (str)
+		free(str);
 	return (nstr);
 }
