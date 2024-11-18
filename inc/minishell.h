@@ -55,6 +55,7 @@ typedef struct s_redir	t_redir;
 typedef struct s_pipe	t_pipe;
 typedef struct s_exec	t_exec;
 typedef struct s_shell	t_shell;
+typedef struct s_heredoc t_heredoc;
 
 // Env
 struct  s_envp
@@ -103,6 +104,14 @@ struct  s_exec // limpar
     t_redir         *redir_list; // limpar
     t_shell			*shell;
 };
+
+// heredoc paths
+struct s_heredoc
+{
+    char    *path;
+    struct s_heredoc  *next;
+};
+
 
 // Root struct
 struct  s_shell
@@ -201,6 +210,11 @@ void	ft_free_tokens(t_tokens **tokens);
 
 // HEREDOCS
 int     ft_heredoc_process(char **token_arr, t_shell *shell);
+int     ft_theres_heredoc(t_tokens **tkns);
+t_heredoc     *ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc);
+char    *ft_redir_after_heredoc(t_tokens **tkns);
+char	*ft_heredoc_expand(char *token, t_shell *shell);
+char    *ft_gen_here_path(void);
 
 // Utils
 int 	ft_get_pid(void);

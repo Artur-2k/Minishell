@@ -6,22 +6,59 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/13 18:48:22 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:12:26 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define TEMP_DIR ".temp"
+#define HERED_ABS_PATH "here_doc_v0"
+
+void     ft_replace_token(char **token_to_swap, int i, char *path)
+{
+    free(token_to_swap[i]);
+    token_to_swap[i] = path;
+}
+
+char     *ft_hered_del(char *tkn, int *i)
+{
+    char *str;
+    int  j;
+
+    j = 0;
+    str = NULL;
+    if (tkn[j] == '\'' || tkn[j] == '\"')
+    {
+        j++;
+        *i = 1;
+        while(tkn[j] && tkn[j] != '\'' && tkn[j] != '\"')
+        {
+            str = ft_append_char_to_str(str, tkn[j]);
+            j++;
+        }
+    }
+    else
+    {
+        while(tkn[j])
+            str = ft_append_char_to_str(str, tkn[j++]);
+    }
+    return (str);
+}
 
 int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 {
     char *delimiter;
     char *input;
     int  fd;
+    char *dyn_path;
+    int  expand = 0;
     
-    delimiter = token_arr[i + 1];
-    fd = open(TEMP_DIR".txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
+    /* delimiter = ft_strdup(token_arr[i + 1]); */
+    delimiter = ft_hered_del(token_arr[i + 1], &expand);
+    printf("[DELIMITER]: %s\n", delimiter);
+    dyn_path = ft_gen_here_path();
+    ft_replace_token(token_arr, i + 1, dyn_path);
+    fd = open(dyn_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
     if (fd == -1)
         printf("ERRO AO CRIAR FD\n");
     else
@@ -35,16 +72,16 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 
             if (ft_strcmp(input, delimiter) == 0)
                 break;
-            
-            input = ft_expand_token(input, shell);
+            if (expand == 0)
+                input = ft_heredoc_expand(input, shell);
+
             input = ft_append_char_to_str(input, '\n');
 
             ft_putstr_fd(input, fd);
             free(input);
         }
-        /* printf("DELIMITADOR %s\n", delimiter); */
+        free(delimiter);
         close(fd);
-        free(input);
     }
     return (0);
 }
