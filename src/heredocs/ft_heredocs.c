@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/18 17:12:26 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:33:23 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,17 @@ char     *ft_hered_del(char *tkn, int *i)
 {
     char *str;
     int  j;
+    char quote_char;
 
     j = 0;
     str = NULL;
+    quote_char = 0;
     if (tkn[j] == '\'' || tkn[j] == '\"')
     {
+        quote_char = tkn[j];
         j++;
         *i = 1;
-        while(tkn[j] && tkn[j] != '\'' && tkn[j] != '\"')
+        while(tkn[j] && tkn[j] != quote_char)
         {
             str = ft_append_char_to_str(str, tkn[j]);
             j++;
