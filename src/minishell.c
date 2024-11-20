@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:33:37 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 18:14:20 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:20:15 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int     main(int ac, char** av, char *envp[])
         // Tokenizes the input and checks for syntax errors
         if (ft_tokenizer(&shell))
         {
+            add_history(shell.input);
             shell.exit_status = 1;
             free(shell.input);
             continue ;
