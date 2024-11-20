@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 14:21:05 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/15 15:14:13 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:51:28 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,15 @@ char    *ft_gen_here_path(void)
 {
     static int  index;
     char        *index_itoa;
-    char        *str;
+    char        *result;
 
+    result = NULL;
     index_itoa = ft_itoa(index);
-    str = ft_strjoin("here_doc_v", index_itoa);
+    result = ft_strjoin("/tmp/here_doc_v", index_itoa);
+    /* printf("[DIRETORIO COMPLETO HEREDOC]: %s\n", result); */
     index++;
     free(index_itoa);
-    return (str);
+    return (result);
 }
 
 t_heredoc     *ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc)

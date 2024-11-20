@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/18 17:33:23 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:52:07 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
     char *input;
     int  fd;
     char *dyn_path;
-    int  expand = 0;
+    int  expand;
     
-    /* delimiter = ft_strdup(token_arr[i + 1]); */
+    expand = 0;
     delimiter = ft_hered_del(token_arr[i + 1], &expand);
-    printf("[DELIMITER]: %s\n", delimiter);
+    /* printf("[DELIMITER]: %s\n", delimiter); */
     dyn_path = ft_gen_here_path();
     ft_replace_token(token_arr, i + 1, dyn_path);
     fd = open(dyn_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -69,17 +69,13 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
         while(1)
         {
             input = readline(RED"> "RES);
-
             if (input == NULL)
                 break;
-
             if (ft_strcmp(input, delimiter) == 0)
                 break;
             if (expand == 0)
                 input = ft_heredoc_expand(input, shell);
-
             input = ft_append_char_to_str(input, '\n');
-
             ft_putstr_fd(input, fd);
             free(input);
         }
