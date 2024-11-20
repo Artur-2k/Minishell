@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:02:41 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/12 22:37:24 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:10:27 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	ft_cd_old_pwd(t_exec *cmd)
         cmd->shell->exit_status = 1;
         return ;
     }
+    printf("%s\n", oldpwd);
     // PWD set to home value
     ft_set_value("PWD", oldpwd, cmd->shell->my_envp_h);
     // OLDPWD set to home value
