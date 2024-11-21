@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 18:03:32 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:13:02 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,30 +135,30 @@ int    ft_exec(t_exec *node)
 {
     int error;
 
-	if (node->av[0] == NULL) // $a
+    // apply redirects
+    error = ft_redirects(node->redir_list);
+    if (error)
+		return (error);
+
+    if (node->av[0] == NULL) // $a
 		return (0);
 	if (node->av[0][0] == '\0') // "" || ''
 	{
 		ft_putstr_fd("Command '' not found, sir\n", 2);
 		return (EXIT_404);
 	}
-
-    // check if it is a dir
-    error = ft_is_dir(node->av[0]);
-    if (error)
-		return (error);
-
-    // apply redirects
-    error = ft_redirects(node->redir_list);
-    if (error)
-		return (error);
-
+    
 	// check for built ins
 	if (ft_is_builtin((t_cmd *)node))
 	{
 		ft_redirect_execution(node);
 		return (node->shell->exit_status);
 	}
+    // check if it is a dir
+    error = ft_is_dir(node->av[0]);
+    if (error)
+		return (error);
+
 
     // strchr(.. /) if there is a / we just send it to execve otherwise we build
 	// with using the PATH env variable
