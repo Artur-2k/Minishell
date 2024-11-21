@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 13:13:02 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:49:00 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /*
  *   st_size: Tamanho do arquivo em bytes.
  *   st_mode: Define o tipo do arquivo e as permissões.
- *   st_nlink: Número de links para o arquivo (quantas referências existem para o mesmo inode).
+ *   st_nlink: Número de links para o arquivo
+ * (quantas referências existem para o mesmo inode).
  *   st_uid: ID do proprietário do arquivo.
  *   st_gid: ID do grupo ao qual o arquivo pertence.
  *   st_atime: Último acesso ao arquivo (timestamp).
@@ -35,32 +36,31 @@
  */
 static int	ft_is_dir(char *path)
 {
-    struct stat	file_stat;
+	struct stat	file_stat;
 
-    // so reconhece diretorios se o path tiver uma barra no fim */
-    if (ft_strchr(path, '/'))
-    {
-        errno = 0;
-        if (stat(path, &file_stat))
-        {
-            ft_what_happened(path, strerror(errno));
-        	return (EXIT_404);
-        }
-        if (S_ISREG(file_stat.st_mode))
-        {
-            if (access(path, X_OK) != 0)
-            {
-                ft_what_happened(path, strerror(errno));
-                return (EXIT_FNOK);
-            }
-        }
-        if (S_ISDIR(file_stat.st_mode))
-        {
-            ft_what_happened(path, "Is a directory");
-            return (EXIT_FNOK);
-        }
-    }
-    return (EXIT_SUCCESS); // Not a dir and path exists
+	if (ft_strchr(path, '/'))
+	{
+		errno = 0;
+		if (stat(path, &file_stat))
+		{
+			ft_what_happened(path, strerror(errno));
+			return (EXIT_404);
+		}
+		if (S_ISREG(file_stat.st_mode))
+		{
+			if (access(path, X_OK) != 0)
+			{
+				ft_what_happened(path, strerror(errno));
+				return (EXIT_FNOK);
+			}
+		}
+		if (S_ISDIR(file_stat.st_mode))
+		{
+			ft_what_happened(path, "Is a directory");
+			return (EXIT_FNOK);
+		}
+	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -69,23 +69,23 @@ static int	ft_is_dir(char *path)
  *	@return	full_path Will be the full path if found any or NULL if no file
  * was found on the PATH env var
  */
-static char    *ft_get_cmd_path(char *cmd, t_envp *envp)
+static char	*ft_get_cmd_path(char *cmd, t_envp *envp)
 {
-	char    *full_path;
-    char    *path_var;
-    char    **paths;
+	char	*full_path;
+	char	*path_var;
+	char	**paths;
 
 	path_var = ft_get_value("PATH", envp);
 	if (!path_var || path_var[0] == '\0')
 		return (ft_what_happened(cmd, "command not found"), NULL);
-    paths = ft_split(path_var, ':');
+	paths = ft_split(path_var, ':');
 	if (!paths)
 		return (ft_putstr_fd("Malloc error, sir\n", 2), NULL);
-    full_path = ft_check_paths_for_cmd(paths, cmd);
-    ft_free_str_arr(paths);
+	full_path = ft_check_paths_for_cmd(paths, cmd);
+	ft_free_str_arr(paths);
 	if (!full_path)
 		return (ft_what_happened(cmd, "command not found"), NULL);
-    return (full_path);
+	return (full_path);
 }
 
 /**
@@ -96,16 +96,15 @@ static char    *ft_get_cmd_path(char *cmd, t_envp *envp)
 static int	ft_exec_path(t_exec *ecmd)
 {
 	errno = 0;
-
 	if (access(ecmd->av[0], X_OK) != 0)
-    {
-        ft_what_happened(ecmd->av[0], strerror(errno));
-        return (EXIT_FNOK);
-    }
-    errno = 0;
-    execve(ecmd->av[0], ecmd->av, ecmd->tenvp);
-    ft_what_happened(ecmd->av[0], strerror(errno));
-    return (EXIT_FAILURE); // error
+	{
+		ft_what_happened(ecmd->av[0], strerror(errno));
+		return (EXIT_FNOK);
+	}
+	errno = 0;
+	execve(ecmd->av[0], ecmd->av, ecmd->tenvp);
+	ft_what_happened(ecmd->av[0], strerror(errno));
+	return (EXIT_FAILURE);
 }
 
 /**
@@ -118,11 +117,12 @@ static int	ft_exec_no_path(t_exec *ecmd)
 
 	cmd = ft_get_cmd_path(ecmd->av[0], ecmd->envp);
 	if (!cmd)
-		return (EXIT_404); // error
-    execve(cmd, ecmd->av, ecmd->tenvp);
+		return (EXIT_404);
+	execve(cmd, ecmd->av, ecmd->tenvp);
 	ft_what_happened(ecmd->av[0], strerror(errno));
-	return (EXIT_FAILURE); // error
+	return (EXIT_FAILURE);
 }
+
 /**
  * @brief	First we check for NULL exec node, then for empty, if we're
  * trying to execute a directory and checking permissions. Then we redirect
@@ -131,34 +131,34 @@ static int	ft_exec_no_path(t_exec *ecmd)
  * just need to try to execute that path
  * @retval	The exit status to be used
  */
-int    ft_exec(t_exec *node)
+int	ft_exec(t_exec *node)
 {
-    int error;
+	int	error;
 
-    // apply redirects
-    error = ft_redirects(node->redir_list);
-    if (error)
-		return (error);
-
-    if (node->av[0] == NULL) // $a
+	if (node->av[0] == NULL) // $a
 		return (0);
 	if (node->av[0][0] == '\0') // "" || ''
 	{
 		ft_putstr_fd("Command '' not found, sir\n", 2);
 		return (EXIT_404);
 	}
-    
+
+    // check if it is a dir
+    error = ft_is_dir(node->av[0]);
+    if (error)
+		return (error);
+
+    // apply redirects
+    error = ft_redirects(node->redir_list);
+    if (error)
+		return (error);
+
 	// check for built ins
 	if (ft_is_builtin((t_cmd *)node))
 	{
 		ft_redirect_execution(node);
 		return (node->shell->exit_status);
 	}
-    // check if it is a dir
-    error = ft_is_dir(node->av[0]);
-    if (error)
-		return (error);
-
 
     // strchr(.. /) if there is a / we just send it to execve otherwise we build
 	// with using the PATH env variable
@@ -166,8 +166,6 @@ int    ft_exec(t_exec *node)
         error = ft_exec_path(node);
 	else // find path (access on getcmdpath)
 		error = ft_exec_no_path(node);
-
-	// error check
 	if (error)
 		return (error);
 	return (EXIT_FAILURE);
