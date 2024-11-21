@@ -64,7 +64,7 @@ static void	ft_wait_n_fetch_status(t_shell *shell, int pid[2])
 
     waitpid(pid[0], &status[0], 0);
     waitpid(pid[1], &status[1], 0);
-    if (WIFSIGNALED(status[0]) || WIFSIGNALED(status[1]))
+    if (WIFSIGNALED(status[0]) && WIFSIGNALED(status[1]))
     {
         exit[0] = WTERMSIG(status[0]);
         exit[1] = WTERMSIG(status[1]);
