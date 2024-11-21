@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:53:55 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 23:12:41 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:47:02 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	long ft_choose_one(long sign)
+static long	ft_choose_one(long sign)
 {
 	errno = ERANGE;
 	if (sign == 1)
@@ -38,7 +38,6 @@ long	ft_atol(const char *str)
 	}
 	while (*str && '0' <= *str && *str <= '9')
 	{
-		// ve se o result ainda tem espaço para meter mais um digito antes de dar overflow/underflow
 		if (result > (LONG_MAX - (*str - '0')) / 10)
 			return (ft_choose_one(sign));
 		result = result * 10 + *str - 48;
