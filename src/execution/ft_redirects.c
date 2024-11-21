@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:30 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 16:26:44 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:32:02 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static int	ft_redirect_in(t_redir *redir)
 	if (open(redir->redir, O_RDONLY) < 0)
 	{
 		ft_what_happened(redir->redir, strerror(errno));
- 		return (1); // error
+		return (1);
 	}
-	return (0); // success
+	return (0);
 }
 
 /*
@@ -39,13 +39,13 @@ static int	ft_redirect_in(t_redir *redir)
 static int	ft_redirect_out(t_redir *redir)
 {
 	close(STDOUT_FILENO);
-    errno = 0;
-    if (open(redir->redir, O_CREAT | O_WRONLY | O_TRUNC, 0644) < 0)
+	errno = 0;
+	if (open(redir->redir, O_CREAT | O_WRONLY | O_TRUNC, 0644) < 0)
 	{
 		ft_what_happened(redir->redir, strerror(errno));
- 		return (1); // error
+		return (1);
 	}
-	return (0); // success
+	return (0);
 }
 
 // Tries to redirect the stdout with append mode to the
@@ -55,14 +55,15 @@ static int	ft_redirect_out(t_redir *redir)
 static int	ft_redirect_append(t_redir *redir)
 {
 	close(STDOUT_FILENO);
-    errno = 0;
-    if (open(redir->redir, O_CREAT | O_WRONLY | O_APPEND, 0644) < 0)
+	errno = 0;
+	if (open(redir->redir, O_CREAT | O_WRONLY | O_APPEND, 0644) < 0)
 	{
 		ft_what_happened(redir->redir, strerror(errno));
- 		return (1); // error
+		return (1);
 	}
-	return (0); // success
+	return (0);
 }
+
 static int	ft_redirect_heredoc(t_redir *redir)
 {
 	close(STDIN_FILENO);
@@ -82,24 +83,25 @@ static int	ft_redirect_heredoc(t_redir *redir)
 // at the stdfd;
 // @param redir A pointer to the redir list head
 // @return Returns 0 on success and a non-zero value in case of error
-int ft_redirects(t_redir *redir)
+int	ft_redirects(t_redir *redir)
 {
 	int	err;
 
 	err = 0;
-    while (redir && !err)
-    {
-        if (redir->type == INREDIR)
+	while (redir && !err)
+	{
+		if (redir->type == INREDIR)
 			err = ft_redirect_in(redir);
-        else if (redir->type == OUTREDIR)
-	        err = ft_redirect_out(redir);
-        else if (redir->type == APPREDIR)
+		else if (redir->type == OUTREDIR)
+			err = ft_redirect_out(redir);
+		else if (redir->type == APPREDIR)
 			err = ft_redirect_append(redir);
-        else if (redir->type == HDREDIR) // TODO HEREDOC
+		else if (redir->type == HDREDIR)
 			err = ft_redirect_heredoc(redir);
-        else // other bad redir type
-            return (ft_putstr_fd("Invalid redirection type error\n", STDERR_FILENO), 1);
-        redir = redir->next;
-    }
-    return (err); // 0 on success
+		else
+			return (ft_putstr_fd("Invalid redirection type error\n",
+					STDERR_FILENO), 1);
+		redir = redir->next;
+	}
+	return (err);
 }
