@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 16:00:18 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:09:30 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,36 +135,24 @@ int	ft_exec(t_exec *node)
 {
 	int	error;
 
-	if (node->av[0] == NULL) // $a
+	if (node->av[0] == NULL)
 		return (0);
-	if (node->av[0][0] == '\0') // "" || ''
-	{
-		ft_putstr_fd("Command '' not found, sir\n", 2);
-		return (EXIT_404);
-	}
-
-    // check if it is a dir
-    error = ft_is_dir(node->av[0]);
-    if (error)
+	if (node->av[0][0] == '\0')
+		return (ft_putstr_fd("Command '' not found, sir\n", 2), EXIT_404);
+	error = ft_is_dir(node->av[0]);
+	if (error)
 		return (error);
-
-    // apply redirects
-    error = ft_redirects(node->redir_list);
-    if (error)
+	error = ft_redirects(node->redir_list);
+	if (error)
 		return (error);
-
-	// check for built ins
 	if (ft_is_builtin((t_cmd *)node))
 	{
 		ft_redirect_execution(node);
 		return (node->shell->exit_status);
 	}
-
-    // strchr(.. /) if there is a / we just send it to execve otherwise we build
-	// with using the PATH env variable
-    if (ft_strchr(node->av[0], '/')) // path absoluto ==> execve
-        error = ft_exec_path(node);
-	else // find path (access on getcmdpath)
+	if (ft_strchr(node->av[0], '/'))
+		error = ft_exec_path(node);
+	else
 		error = ft_exec_no_path(node);
 	if (error)
 		return (error);
