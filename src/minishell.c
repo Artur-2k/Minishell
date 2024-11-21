@@ -43,10 +43,13 @@ int     main(int ac, char** av, char *envp[])
         }
 
 
+        // Verifica se o input não está vazio antes de adicionar ao histórico
+    	if (*shell.input != '\0')
+            add_history(shell.input);
+	    
         // Tokenizes the input and checks for syntax errors
         if (ft_tokenizer(&shell))
         {
-            add_history(shell.input);
             shell.exit_status = 1;
             free(shell.input);
             continue ;
@@ -54,10 +57,6 @@ int     main(int ac, char** av, char *envp[])
 
         // This function doesnt need a return statement
         ft_run_cmd(&shell);
-
-        // Verifica se o input não está vazio antes de adicionar ao histórico
-	    if (*shell.input != '\0')
-            add_history(shell.input);
 
         free(shell.input); // input
     }
