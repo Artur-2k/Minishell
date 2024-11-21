@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:01:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/06 18:30:37 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:02:03 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ft_echo(t_exec *cmd)
 		while (cmd->av[i][j] == 'n')
 			j++;
 		if (cmd->av[i][j])
-			break;
+			break ;
 		nlflag = false;
 		i++;
 	}
