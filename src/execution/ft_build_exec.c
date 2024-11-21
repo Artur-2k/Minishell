@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 15:58:22 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:02:33 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static int	ft_new_redir(t_exec *cmd, t_tokens **tkns)
 	return (0);
 }
 
-static void	ft_norminete(t_tokens ***tkns, t_shell *shell, t_exec *cmd, \
+static int	ft_norminete(t_tokens ***tkns, t_exec *cmd, \
 	int *i)
 {
 	int	j;
@@ -119,7 +119,7 @@ static void	ft_norminete(t_tokens ***tkns, t_shell *shell, t_exec *cmd, \
 		else if ((*tkns)[*i]->type != EXEC)
 		{
 			if (ft_new_redir(cmd, &(*tkns)[*i]))
-				return (ft_free_str_arr(cmd->av), free(cmd));
+				return (ft_free_str_arr(cmd->av), free(cmd), 1);
 			i += 2;
 		}
 		else
@@ -127,12 +127,13 @@ static void	ft_norminete(t_tokens ***tkns, t_shell *shell, t_exec *cmd, \
 			cmd->av[j] = ft_strdup((*tkns)[*i]->token);
 			if (!cmd->av[j])
 				return (ft_free_str_arr(cmd->av), \
-				ft_free_redir_list(&cmd->redir_list), free(cmd), NULL);
+				ft_free_redir_list(&cmd->redir_list), free(cmd), 2);
 			j++;
 			(*i)++;
 		}
 	}
 	cmd->av[j] = NULL;
+	return (0);
 }
 
 /*
@@ -158,7 +159,8 @@ t_cmd	*ft_build_exec(t_tokens ***tkns, t_shell *shell)
 		return (free(cmd), NULL);
 	i = 0;
 	j = 0;
-	ft_norminete(tkns, shell, cmd, &i);
+	if (ft_norminete(tkns, cmd, &i))
+		return (NULL);
 	cmd->shell = shell;
 	cmd->envp = shell->my_envp_h;
 	if (shell->my_envp_h)
