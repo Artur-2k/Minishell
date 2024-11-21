@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 15:44:59 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:58:39 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ static int	ft_exec_no_path(t_exec *ecmd)
 /**
  * @brief	First we check for NULL exec node, then for empty, if we're
  * trying to execute a directory and checking permissions. Then we redirect
- * our inputs and ouputs and then we try to execute our command. if there is no /
+ * our inputs and ouputs and then we try to execute our command. if there is no 
  * then we must build our command path using the PATH variable. if there is we
  * just need to try to execute that path
  * @retval	The exit status to be used
