@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:30:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 14:59:10 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:22:07 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ void	ft_set_value(char *key, char *value, t_envp *envp)
 		if (ft_strcmp(key, cur->key) == 0)
 		{
 			free(cur->value);
-			cur->value = ft_strdup(value); // ADD MALLOC CHECK
-			/* if (!cur->value)
-				ft_free_envp_lst(envp); */
+			cur->value = ft_strdup(value);
 			return ;
 		}
 		cur = cur->next;
