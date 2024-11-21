@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 15:36:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:58:22 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ static void	ft_norminete(t_tokens ***tkns, t_shell *shell, t_exec *cmd, \
 		else if ((*tkns)[*i]->type != EXEC)
 		{
 			if (ft_new_redir(cmd, &(*tkns)[*i]))
-				return (ft_free_str_arr(cmd->av), free(cmd), NULL);
+				return (ft_free_str_arr(cmd->av), free(cmd));
 			i += 2;
 		}
 		else
