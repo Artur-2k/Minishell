@@ -6,14 +6,14 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 14:07:54 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:52:22 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#define LONG_MAX "9223372036854775807"
-#define LONG_MIN "9223372036854775808"
+#define MY_LONG_MAX "9223372036854775807"
+#define MY_LONG_MIN "9223372036854775808"
 
 /*
 * exit
@@ -96,8 +96,8 @@ static void	ft_check_number_range(t_exec *cmd, char *str)
 	}
 	if (len == 19)
 	{
-		if ((cmd->av[1][0] != '-' && ft_strncmp(str, LONG_MAX, 19) > 0) \
-		|| (cmd->av[1][0] == '-' && ft_strncmp(str, LONG_MIN, 19) > 0))
+		if ((cmd->av[1][0] != '-' && ft_strncmp(str, MY_LONG_MAX, 19) > 0) \
+		|| (cmd->av[1][0] == '-' && ft_strncmp(str, MY_LONG_MIN, 19) > 0))
 		{
 			ft_exit_error_print(str, "numeric argument required");
 			ft_clean(cmd->shell);
