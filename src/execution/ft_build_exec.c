@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 16:02:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:45:33 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static int	ft_norminete(t_tokens ***tkns, t_exec *cmd, \
 		{
 			if (ft_new_redir(cmd, &(*tkns)[*i]))
 				return (ft_free_str_arr(cmd->av), free(cmd), 1);
-			i += 2;
+			(*i) += 2;
 		}
 		else
 		{
@@ -148,7 +148,6 @@ t_cmd	*ft_build_exec(t_tokens ***tkns, t_shell *shell)
 {
 	t_exec	*cmd;
 	int		i;
-	int		j;
 
 	cmd = (t_exec *)ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
@@ -158,7 +157,6 @@ t_cmd	*ft_build_exec(t_tokens ***tkns, t_shell *shell)
 	if (!cmd->av)
 		return (free(cmd), NULL);
 	i = 0;
-	j = 0;
 	if (ft_norminete(tkns, cmd, &i))
 		return (NULL);
 	cmd->shell = shell;
