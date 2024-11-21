@@ -105,13 +105,14 @@ struct  s_exec // limpar
     t_shell			*shell;
 };
 
-// heredoc paths
-struct s_heredoc
+typedef	struct s_heredoc
 {
-    char    *path;
-    struct s_heredoc  *next;
-};
-
+	char	*delimiter;
+	char	*input;
+	int		fd;
+	char	*dyn_path;
+	int		expand;
+}				t_heredoc;
 
 // Root struct
 struct  s_shell
