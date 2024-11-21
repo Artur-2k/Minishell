@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flextape.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 18:00:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/10/30 18:46:20 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:34:15 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * @param tkn The token string
  * @return Returns the type of token
 */
-static int ft_find_type(char *tkn)
+static int	ft_find_type(char *tkn)
 {
 	if (!ft_strcmp(tkn, "|"))
 		return (PIPE);
@@ -45,16 +45,12 @@ int	ft_emenda(char **tkn_arr, t_shell *shell)
 {
 	int	i;
 
-	// Token lenght
 	i = 0;
 	while (tkn_arr[i])
 		i++;
-
-	shell->tokens = (t_tokens **)ft_calloc(i + 1, sizeof(t_tokens*));
+	shell->tokens = (t_tokens **)ft_calloc(i + 1, sizeof(t_tokens *));
 	if (!shell->tokens)
-		return (1); // malloc error
-
-	// Allocate and set tokens type
+		return (1);
 	i = 0;
 	while (tkn_arr[i])
 	{
@@ -65,10 +61,7 @@ int	ft_emenda(char **tkn_arr, t_shell *shell)
 			ft_putstr_fd("Malloc error, sir\n", 2);
 			return (2);
 		}
-
-		// Matches the type of token
 		shell->tokens[i]->type = ft_find_type(tkn_arr[i]);
-		
 		i++;
 	}
 	return (0);
