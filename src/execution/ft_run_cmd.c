@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_run_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:42:45 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 15:34:09 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:24:59 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	ft_fetch_exit_status(t_shell *shell)
 		shell->exit_status = WEXITSTATUS(shell->status);
 	else if (WIFSIGNALED(shell->status))
 	{
+
 		signo = WTERMSIG(shell->status);
 		if (signo == SIGINT)
 			ft_putstr_fd("\n", 2);

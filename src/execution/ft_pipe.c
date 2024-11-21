@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:57:38 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 15:43:52 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:21:06 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	ft_wait_n_fetch_status(t_shell *shell, int pid[2])
 
 	waitpid(pid[0], &status[0], 0);
 	waitpid(pid[1], &status[1], 0);
-	if (WIFSIGNALED(status[0]) || WIFSIGNALED(status[1]))
+	if (WIFSIGNALED(status[0]) && WIFSIGNALED(status[1]))
 	{
 		exit[0] = WTERMSIG(status[0]);
 		exit[1] = WTERMSIG(status[1]);
@@ -72,7 +72,9 @@ static void	ft_wait_n_fetch_status(t_shell *shell, int pid[2])
 		if (exit[0] == SIGQUIT && exit[1] == SIGQUIT)
 			ft_putstr_fd("Quit (core dumped), sir\n", STDOUT_FILENO);
 		if (WIFSIGNALED(exit[1]))
+		{
 			shell->exit_status = 128 + exit[1];
+		}
 	}
 	else
 		shell->exit_status = WEXITSTATUS(status[1]);
