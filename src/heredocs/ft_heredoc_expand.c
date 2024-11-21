@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 12:28:25 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/18 14:40:32 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:49:27 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 // and just skips the $key
 static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 {
-	int	len;
-	char *key;
+	int		len;
+	char	*key;
 
 	key = NULL;
 	len = 0;
@@ -26,7 +26,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 			(*token)[len] != '\"' &&
 			(*token)[len] != '\'' &&
 			(*token)[len] != ' ' &&
- 			(*token)[len] != '$')
+			(*token)[len] != '$')
 		len++;
 	if (ft_has_key(*token, len, envp))
 	{
@@ -38,41 +38,38 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 		if (!new)
 			return (errno = EMALLOC, NULL);
 	}
-	(*token) += len - 1; // -1 para nao saltar dois a seguir
+	(*token) += len - 1;
 	return (new);
 }
 
 // Just removes the single quotes and copies what is inside
 static char	*ft_expand_squotes(char *new, char	**token, t_shell *shell)
 {
-	// Skips the quote
 	(*token)++;
-    // Add the quotes
-    new = ft_append_char_to_str(new, '\'');
+	new = ft_append_char_to_str(new, '\'');
 	while (**token && **token != '\'')
 	{
-		if (**token != '$') // normal letter
+		if (**token != '$')
 			new = ft_expand_variable(new, token, shell->my_envp_h);
 		else
 		{
 			(*token)++;
 			if (**token == ' ')
 				new = ft_strappend(new, "$ ");
-			else if (**token == '\'' || **token == ' ') // "...$"
+			else if (**token == '\'' || **token == ' ')
 				new = ft_append_char_to_str(new, '$');
-			else if (**token == '$') // "...$$asd"
+			else if (**token == '$')
 				new = ft_strappend(new, shell->spid);
-			else if (**token == '?') // "...$?..."
+			else if (**token == '?')
 				new = ft_strappend(new, shell->sexit_status);
-			else // "$key"
+			else
 				new = ft_expand_variable(new, token, shell->my_envp_h);
 		}
-		// str append e append char put errno to 1 on malloc error
 		if (errno == EMALLOC)
 			return (NULL);
 		(*token)++;
 	}
-    new = ft_append_char_to_str(new, '\'');
+	new = ft_append_char_to_str(new, '\'');
 	return (new);
 }
 
@@ -83,31 +80,30 @@ static char	*ft_expand_squotes(char *new, char	**token, t_shell *shell)
 static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 {
 	(*token)++;
-    new = ft_append_char_to_str(new, '\"');
+	new = ft_append_char_to_str(new, '\"');
 	while (**token && **token != '\"')
 	{
-		if (**token != '$') // normal letter
+		if (**token != '$')
 			new = ft_expand_variable(new, token, shell->my_envp_h);
 		else
 		{
 			(*token)++;
 			if (**token == ' ')
 				new = ft_strappend(new, "$ ");
-			else if (**token == '\"' || **token == ' ') // "...$"
+			else if (**token == '\"' || **token == ' ')
 				new = ft_append_char_to_str(new, '$');
-			else if (**token == '$') // "...$$asd"
+			else if (**token == '$')
 				new = ft_strappend(new, shell->spid);
-			else if (**token == '?') // "...$?..."
+			else if (**token == '?')
 				new = ft_strappend(new, shell->sexit_status);
-			else // "$key"
+			else
 				new = ft_expand_variable(new, token, shell->my_envp_h);
 		}
-		// str append e append char put errno to 1 on malloc error
 		if (errno == EMALLOC)
 			return (NULL);
 		(*token)++;
 	}
-    new = ft_append_char_to_str(new, '\"');
+	new = ft_append_char_to_str(new, '\"');
 	return (new);
 }
 
@@ -115,21 +111,19 @@ static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 static char	*ft_expand_noquotes(char *new, char **token, t_shell *shell)
 {
 	(*token)++;
-	if (!**token || **token == ' ') // ... $ => ... $
+	if (!**token || **token == ' ')
 		new = ft_append_char_to_str(new, '$');
-	else if (**token == '$') // ...$$asd
+	else if (**token == '$')
 		new = ft_strappend(new, shell->spid);
-	else if (**token == '?') // "...$?..."
+	else if (**token == '?')
 		new = ft_strappend(new, shell->sexit_status);
-    else if (**token == '\'' || **token == '\"')
-    {
-        if (*(*token - 1) == '$')
-            new = ft_append_char_to_str(new, '$');
+	else if (**token == '\'' || **token == '\"')
+	{
+		if (*(*token - 1) == '$')
+			new = ft_append_char_to_str(new, '$');
 		new = ft_strappend(new, *token);
-/*         while (*(*token) != '\0')
-            new = ft_append_char_to_str(new, *(*token++)); */
-    }
-    else // "$key"
+	}
+	else
 		new = ft_expand_variable(new, token, shell->my_envp_h);
 	if (errno == EMALLOC)
 		return (NULL);
@@ -143,27 +137,25 @@ char	*ft_heredoc_expand(char *token, t_shell *shell)
 	char	*new;
 
 	new = NULL;
-	// Check for empty strings
 	if (!ft_strcmp("\"\"", token) || !ft_strcmp("\'\'", token))
 		return (ft_strdup(""));
 	while (*token)
 	{
-		if (*token == '\'') // single quotes
+		if (*token == '\'')
 			new = ft_expand_squotes(new, &token, shell);
-		else if (*token == '\"') // double quotes
+		else if (*token == '\"')
 			new = ft_expand_dquotes(new, &token, shell);
-		else if (*token == '$') // normal expandables
-        {
+		else if (*token == '$')
+		{
 			new = ft_expand_noquotes(new, &token, shell);
-            break;
-        }
-        else // normal char
+			break ;
+		}
+		else
 			new = ft_append_char_to_str(new, *token);
 		if (errno == EMALLOC)
 			return (NULL);
-		if (*token) // So we dont go after the string ends
+		if (*token)
 			token++;
 	}
-	// Will be null when token => [$a] (a isnt on env)
-	return (new); // success
+	return (new);
 }
