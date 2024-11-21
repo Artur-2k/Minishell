@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_build_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 15:19:00 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 15:47:52 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:57:22 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * that are missing to append to the tree
  * @return Returns the right side of the pipe or NULL in case of error
 */
-t_cmd	*ft_build_pipe(t_cmd *cmd, t_tokens **tkns ,t_shell *shell)
+t_cmd	*ft_build_pipe(t_cmd *cmd, t_tokens **tkns, t_shell *shell)
 {
 	t_pipe	*pipe;
 
