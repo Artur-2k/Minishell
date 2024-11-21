@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 12:28:25 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/21 14:49:27 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:15:33 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ static char	*ft_expand_squotes(char *new, char	**token, t_shell *shell)
 			return (NULL);
 		(*token)++;
 	}
-	new = ft_append_char_to_str(new, '\'');
-	return (new);
+	return (new = ft_append_char_to_str(new, '\''), new);
 }
 
-// while there is no expansion it just coft_append_char_to_str(new, **token);pies the same way as squote
+// while there is no expansion it just coft_append_char_to_str(new, **token);
+// pies the same way as squote
 // in the case or $"" it just appends the $
 // no need to check for $\0 cuz there we've made sure it has ending quotes
 // extra: $$ isnt asked but i handled
@@ -103,8 +103,7 @@ static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 			return (NULL);
 		(*token)++;
 	}
-	new = ft_append_char_to_str(new, '\"');
-	return (new);
+	return (new = ft_append_char_to_str(new, '\"'), new);
 }
 
 //
