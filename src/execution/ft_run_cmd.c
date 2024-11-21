@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_run_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:42:45 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/11 21:05:26 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:34:09 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,19 @@
  */
 static void	ft_fetch_exit_status(t_shell *shell)
 {
+	int	signo;
+
 	if (WIFEXITED(shell->status))
-        shell->exit_status = WEXITSTATUS(shell->status);
-    else if (WIFSIGNALED(shell->status))
-    {
-        int signo;
-        signo = WTERMSIG(shell->status);
-        if (signo == SIGINT)
-            ft_putstr_fd("\n", 2);
-        else if (signo == SIGQUIT)
-            ft_putstr_fd("Quit (core dumped), sir\n", 2);
-        shell->exit_status = 128 + signo;
-    }
+		shell->exit_status = WEXITSTATUS(shell->status);
+	else if (WIFSIGNALED(shell->status))
+	{
+		signo = WTERMSIG(shell->status);
+		if (signo == SIGINT)
+			ft_putstr_fd("\n", 2);
+		else if (signo == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped), sir\n", 2);
+		shell->exit_status = 128 + signo;
+	}
 }
 
 /**
@@ -40,38 +41,27 @@ static void	ft_fetch_exit_status(t_shell *shell)
  * default function. We fork and do the execution on a child process and then
  * fetch the exit status of that child
  */
-void    ft_run_cmd(t_shell *shell)
+void	ft_run_cmd(t_shell *shell)
 {
-    int	pid;
+	int	pid;
 
-    if (!shell->cmd_tree)
+	if (!shell->cmd_tree)
 		return ;
-
-	// If there is only a built in it must be ran on main process
-	if (shell->cmd_tree->type == EXEC &&
-		ft_is_builtin(shell->cmd_tree))
+	if (shell->cmd_tree->type == EXEC
+		&& ft_is_builtin(shell->cmd_tree))
 		ft_run_builtin((t_exec *)shell->cmd_tree);
 	else
 	{
-		// Mute signals from parent
-	    ft_signal_ignore();
-
-	    // Child doenst return back here it exits
+		ft_signal_ignore();
 		pid = fork();
-	    if (pid == 0)
-	        ft_run_tree(shell->cmd_tree, shell);
-
-		// Exit status
-	    waitpid(pid, &shell->status, 0);
+		if (pid == 0)
+			ft_run_tree(shell->cmd_tree, shell);
+		waitpid(pid, &shell->status, 0);
 		ft_fetch_exit_status(shell);
-
-		// Restore signals
 		ft_init_signals();
 	}
-    // Replace exit status
-    free(shell->sexit_status);
-    shell->sexit_status = ft_itoa(shell->exit_status);
-
-    ft_free_tree(shell->cmd_tree);
-    shell->cmd_tree = NULL;
+	free(shell->sexit_status);
+	shell->sexit_status = ft_itoa(shell->exit_status);
+	ft_free_tree(shell->cmd_tree);
+	shell->cmd_tree = NULL;
 }
