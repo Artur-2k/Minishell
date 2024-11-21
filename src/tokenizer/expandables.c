@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 12:14:05 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 14:55:50 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:32:25 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 // Just removes the single quotes and copies what is inside
 static char	*ft_expand_squotes(char *new, char	**token)
 {
-	// Skips the quote
 	(*token)++;
-
 	while (**token && **token != '\'')
 	{
 		new = ft_append_char_to_str(new, **token);
@@ -33,8 +31,8 @@ static char	*ft_expand_squotes(char *new, char	**token)
 // and just skips the $key
 static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 {
-	int	len;
-	char *key;
+	int		len;
+	char	*key;
 
 	key = NULL;
 	len = 0;
@@ -42,7 +40,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 			(*token)[len] != '\"' &&
 			(*token)[len] != '\'' &&
 			(*token)[len] != ' ' &&
- 			(*token)[len] != '$')
+			(*token)[len] != '$')
 		len++;
 	if (ft_has_key(*token, len, envp))
 	{
@@ -54,7 +52,7 @@ static char	*ft_expand_variable(char *new, char **token, t_envp *envp)
 		if (!new)
 			return (errno = EMALLOC, NULL);
 	}
-	(*token) += len - 1; // -1 para nao saltar dois a seguir
+	(*token) += len - 1;
 	return (new);
 }
 
@@ -67,23 +65,22 @@ static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 	(*token)++;
 	while (**token && **token != '\"')
 	{
-		if (**token != '$') // normal letter
+		if (**token != '$')
 			new = ft_append_char_to_str(new, **token);
 		else
 		{
 			(*token)++;
 			if (**token == ' ')
 				new = ft_strappend(new, "$ ");
-			else if (**token == '\"' || **token == ' ') // "...$"
+			else if (**token == '\"' || **token == ' ')
 				new = ft_append_char_to_str(new, '$');
-			else if (**token == '$') // "...$$asd"
+			else if (**token == '$')
 				new = ft_strappend(new, shell->spid);
-			else if (**token == '?') // "...$?..."
+			else if (**token == '?')
 				new = ft_strappend(new, shell->sexit_status);
-			else // "$key"
+			else
 				new = ft_expand_variable(new, token, shell->my_envp_h);
 		}
-		// str append e append char put errno to 1 on malloc error
 		if (errno == EMALLOC)
 			return (NULL);
 		(*token)++;
@@ -95,13 +92,13 @@ static char	*ft_expand_dquotes(char *new, char **token, t_shell *shell)
 static char	*ft_expand_noquotes(char *new, char **token, t_shell *shell)
 {
 	(*token)++;
-	if (!**token || **token == ' ') // ... $ => ... $
+	if (!**token || **token == ' ')
 		new = ft_append_char_to_str(new, '$');
-	else if (**token == '$') // ...$$asd
+	else if (**token == '$')
 		new = ft_strappend(new, shell->spid);
-	else if (**token == '?') // "...$?..."
+	else if (**token == '?')
 		new = ft_strappend(new, shell->sexit_status);
-	else // "$key"
+	else
 		new = ft_expand_variable(new, token, shell->my_envp_h);
 	if (errno == EMALLOC)
 		return (NULL);
@@ -115,24 +112,22 @@ char	*ft_expand_token(char *token, t_shell *shell)
 	char	*new;
 
 	new = NULL;
-	// Check for empty strings
 	if (!ft_strcmp("\"\"", token) || !ft_strcmp("\'\'", token))
 		return (ft_strdup(""));
 	while (*token)
 	{
-		if (*token == '\'') // single quotes
+		if (*token == '\'')
 			new = ft_expand_squotes(new, &token);
-		else if (*token == '\"') // double quotes
+		else if (*token == '\"')
 			new = ft_expand_dquotes(new, &token, shell);
-		else if (*token == '$') // normal expandables
+		else if (*token == '$')
 			new = ft_expand_noquotes(new, &token, shell);
-		else // normal char
+		else
 			new = ft_append_char_to_str(new, *token);
 		if (errno == EMALLOC)
 			return (NULL);
-		if (*token) // So we dont go after the string ends
+		if (*token)
 			token++;
 	}
-	// Will be null when token => [$a] (a isnt on env)
-	return (new); // success
+	return (new);
 }
