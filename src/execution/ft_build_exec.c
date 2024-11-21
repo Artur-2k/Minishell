@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 11:15:54 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 16:45:33 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:08:36 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static int	ft_norminete(t_tokens ***tkns, t_exec *cmd, \
 	while ((*tkns)[*i] && (*tkns)[*i]->type != PIPE)
 	{
 		if ((*tkns)[*i]->token == NULL)
-			i++;
+			(*i)++;
 		else if ((*tkns)[*i]->type != EXEC)
 		{
 			if (ft_new_redir(cmd, &(*tkns)[*i]))
