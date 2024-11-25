@@ -6,13 +6,17 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/20 12:52:07 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:03:37 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 #define HERED_ABS_PATH "here_doc_v0"
+
+
+extern unsigned char g_signal;
+int temp_fd = -1;
 
 void     ft_replace_token(char **token_to_swap, int i, char *path)
 {
@@ -48,6 +52,29 @@ char     *ft_hered_del(char *tkn, int *i)
     return (str);
 }
 
+static void    ft_heredoc_sigint(int signo)
+{
+    g_signal = signo;
+
+    close(STDIN_FILENO);
+    printf("\n");
+    // Notifica o Readline que uma nova linha será iniciada
+    /* rl_on_new_line(); */
+    // Substitui o conteúdo da linha atual por uma linha em branco
+    rl_replace_line("", 0);
+    // Redesenha o prompt limpo após o sinal
+    rl_redisplay();
+}
+
+void restore_stdin() {
+    if (temp_fd != -1) {
+        // Restaura o stdin original
+        dup2(temp_fd, STDIN_FILENO);
+        close(temp_fd);
+        temp_fd = -1;
+    }
+}
+
 int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 {
     char *delimiter;
@@ -64,11 +91,17 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
     fd = open(dyn_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
     if (fd == -1)
         printf("ERRO AO CRIAR FD\n");
-    else
+    else if (shell->heredoc_ignore == 0)
     {
         while(1)
         {
             input = readline(RED"> "RES);
+			if (g_signal == SIGINT)
+			{
+				g_signal = 0;
+				shell->heredoc_ignore = 1;
+				/* printf("SIGINT DETECTADO!\n"); */
+			}
             if (input == NULL)
                 break;
             if (ft_strcmp(input, delimiter) == 0)
@@ -82,11 +115,21 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
         free(delimiter);
         close(fd);
     }
+	else
+		free(delimiter);
     return (0);
 }
 
 int     ft_heredoc_process(char **token_arr, t_shell *shell)
 {
+    temp_fd = dup(STDIN_FILENO);
+    struct sigaction sa;
+    sa.sa_handler = ft_heredoc_sigint;
+    sa.sa_flags = SA_RESTART;
+    sigemptyset(&sa.sa_mask);
+    sigaction(SIGINT, &sa, NULL);
+
+	shell->heredoc_ignore = 0;
     for(int i = 0; token_arr[i] != NULL; i++)
     {    
         if (ft_strcmp(token_arr[i], "<<") == 0)
@@ -96,6 +139,7 @@ int     ft_heredoc_process(char **token_arr, t_shell *shell)
         }
         /* printf("[%d][TOKEN_ARR]: %s\n", i, token_arr[i]); */
     }
+    restore_stdin();
     return (0);
 }
 
