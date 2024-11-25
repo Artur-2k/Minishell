@@ -128,6 +128,8 @@ struct  s_shell
     // helpers
     t_tokens        **tokens;
 
+	int				heredoc_ignore;
+
 	// Exit status
 	int         	status;
 	unsigned char	exit_status;
