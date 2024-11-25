@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/11/25 11:03:37 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:22:25 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 
 extern unsigned char g_signal;
-int temp_fd = -1;
+/* int temp_fd = -1; */
 
 void     ft_replace_token(char **token_to_swap, int i, char *path)
 {
@@ -66,7 +66,7 @@ static void    ft_heredoc_sigint(int signo)
     rl_redisplay();
 }
 
-void restore_stdin() {
+void restore_stdin(int temp_fd) {
     if (temp_fd != -1) {
         // Restaura o stdin original
         dup2(temp_fd, STDIN_FILENO);
@@ -122,13 +122,14 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 
 int     ft_heredoc_process(char **token_arr, t_shell *shell)
 {
-    temp_fd = dup(STDIN_FILENO);
+    int temp_fd;
     struct sigaction sa;
     sa.sa_handler = ft_heredoc_sigint;
     sa.sa_flags = SA_RESTART;
     sigemptyset(&sa.sa_mask);
     sigaction(SIGINT, &sa, NULL);
 
+    temp_fd = dup(STDIN_FILENO);
 	shell->heredoc_ignore = 0;
     for(int i = 0; token_arr[i] != NULL; i++)
     {    
@@ -139,7 +140,7 @@ int     ft_heredoc_process(char **token_arr, t_shell *shell)
         }
         /* printf("[%d][TOKEN_ARR]: %s\n", i, token_arr[i]); */
     }
-    restore_stdin();
+    restore_stdin(temp_fd);
     return (0);
 }
 
