@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s < artuda-s@student.42porto.com    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 23:30:00 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:09:04 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,10 @@ void	ft_exit(t_exec *cmd)
 	else // exit 5 asdasd
 	{
 		ft_exit_error_print("", "too many arguments");
-		cmd->shell->exit_status = 1;
+		if (cmd->shell->exit_status == 0)
+			cmd->shell->exit_status = 1;
+		else
+			;
 		return ;
 	}
 }
