@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 16:09:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:20:38 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,15 +134,15 @@ static int	ft_exec_no_path(t_exec *ecmd)
 int	ft_exec(t_exec *node)
 {
 	int	error;
-
+	
+	error = ft_redirects(node->redir_list);
+	if (error)
+		return (error);
 	if (node->av[0] == NULL)
 		return (0);
 	if (node->av[0][0] == '\0')
 		return (ft_putstr_fd("Command '' not found, sir\n", 2), EXIT_404);
 	error = ft_is_dir(node->av[0]);
-	if (error)
-		return (error);
-	error = ft_redirects(node->redir_list);
 	if (error)
 		return (error);
 	if (ft_is_builtin((t_cmd *)node))
