@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 17:50:41 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:31:29 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ int	ft_tokenizer(t_shell *shell)
 	if (ft_find_syntax_errors(token_arr)) //*✅*//
 		return(ft_free_str_arr(token_arr), -2);
 
-	ft_heredoc_process(token_arr, shell);
+	if (ft_heredoc_process(token_arr, shell) == -1)
+		return(ft_free_str_arr(token_arr), -2);
+	/* ft_heredoc_process(token_arr, shell); */
 
 	// (for tokenization on expandables might want to transform into a linked list)
 	// Creates a t_token** with an int type

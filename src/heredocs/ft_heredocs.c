@@ -6,7 +6,7 @@
 /*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/02 15:37:22 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:39:56 by dmelo-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 			{
 				g_signal = 0;
 				shell->heredoc_ignore = 1;
+                break ;
 				/* printf("SIGINT DETECTADO!\n"); */
 			}
             if (input == NULL)
@@ -139,6 +140,7 @@ int     ft_heredoc_process(char **token_arr, t_shell *shell)
 
     temp_fd = dup(STDIN_FILENO);
 	shell->heredoc_ignore = 0;
+    g_signal = 0;
     for(int i = 0; token_arr[i] != NULL; i++)
     {    
         if (ft_strcmp(token_arr[i], "<<") == 0)
@@ -151,6 +153,12 @@ int     ft_heredoc_process(char **token_arr, t_shell *shell)
     }
     restore_stdin(temp_fd);
     ft_signal_restore();
+    ft_init_signals();
+    if (shell->heredoc_ignore == 1)
+    {
+        shell->heredoc_ignore = 0;
+        return (-1);
+    }
     return (0);
 }
 
