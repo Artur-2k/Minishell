@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:12:06 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 16:20:15 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:58:14 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ struct s_shell
 	char			*sexit_status;
 	int				pid;
 	char			*spid;
+	int				heredoc_ignore;
 };
 
 // Prototypes
@@ -210,7 +211,7 @@ int			ft_theres_heredoc(t_tokens **tkns);
 t_heredoc	*ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc);
 char		*ft_redir_after_heredoc(t_tokens **tkns);
 char		*ft_heredoc_expand(char *token, t_shell *shell);
-char		*ft_gen_here_path(void);
+char		*ft_gen_here_path(int pid);
 
 // Utils
 int			ft_get_pid(void);

@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 14:12:27 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:17:37 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ void	ft_export(t_exec *cmd)
 			if (!ft_valid_identifier(key))
 			{
 				cmd->shell->exit_status = 1;
-				ft_what_happened(cmd->av[i], "not a valid identifier, sir");
+				ft_what_happened(cmd->av[i], "not a valid identifier");
+				free(key);
 				i++;
 				continue ;
 			}
