@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:33:23 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/25 11:20:38 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:41:25 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static int	ft_exec_no_path(t_exec *ecmd)
 int	ft_exec(t_exec *node)
 {
 	int	error;
-	
+
 	error = ft_redirects(node->redir_list);
 	if (error)
 		return (error);

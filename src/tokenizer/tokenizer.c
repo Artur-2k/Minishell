@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:50:16 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/12/09 17:15:28 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:44:48 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	ft_tokenizer(t_shell *shell)
 		return (-5);
 	if (ft_find_syntax_errors(token_arr))
 		return (ft_free_str_arr(token_arr), -2);
-	if (ft_heredoc_process(token_arr, shell) == -1)
-		return(ft_free_str_arr(token_arr), -2);
+	if (ft_heredoc_process(token_arr, shell) < 0)
+		return (ft_free_str_arr(token_arr), -2);
 	if (ft_emenda(token_arr, shell))
 		return (ft_free_str_arr(token_arr), -3);
 	if (ft_expand_tokens(token_arr, shell))
@@ -61,6 +61,5 @@ int	ft_tokenizer(t_shell *shell)
 	shell->cmd_tree = ft_build(shell->tokens, shell);
 	if (!shell->cmd_tree)
 		return (-6);
-	ft_free_tokens(shell->tokens);
-	return (0);
+	return (ft_free_tokens(shell->tokens), 0);
 }

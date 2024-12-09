@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:26:40 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/12/09 17:27:44 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:41:52 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	ft_exit(t_exec *cmd)
 	{
 		ft_exit_error_print("", "too many arguments");
 		if (cmd->shell->exit_status == 0)
-			cmd->shell->exit_status = 1;	
+			cmd->shell->exit_status = 1;
 		return ;
 	}
 }

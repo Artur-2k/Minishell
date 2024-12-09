@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:12:06 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/12/09 16:58:14 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:38:59 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,11 +207,9 @@ void		ft_free_tokens(t_tokens **tokens);
 
 // HEREDOCS
 int			ft_heredoc_process(char **token_arr, t_shell *shell);
-int			ft_theres_heredoc(t_tokens **tkns);
-t_heredoc	*ft_link_heredocs(t_tokens **tkns, t_heredoc *heredoc);
-char		*ft_redir_after_heredoc(t_tokens **tkns);
 char		*ft_heredoc_expand(char *token, t_shell *shell);
 char		*ft_gen_here_path(int pid);
+void		ft_heredoc_sigint(int signo);
 
 // Utils
 int			ft_get_pid(void);
