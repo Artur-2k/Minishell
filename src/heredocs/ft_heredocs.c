@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredocs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/02 18:39:56 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:47:14 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,11 @@ static void    ft_heredoc_sigint(int signo)
 {
     g_signal = signo;
 
-    close(STDIN_FILENO);
-    printf("\n");
-    // Notifica o Readline que uma nova linha será iniciada
-    /* rl_on_new_line(); */
+    rl_on_new_line();
     // Substitui o conteúdo da linha atual por uma linha em branco
     rl_replace_line("", 0);
     // Redesenha o prompt limpo após o sinal
-    rl_redisplay();
-}
-
-void restore_stdin(int temp_fd) {
-    if (temp_fd != -1) {
-        dup2(temp_fd, STDIN_FILENO);
-        close(temp_fd);
-        temp_fd = -1;
-    }
+    ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
 int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
@@ -93,7 +82,6 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
             input = readline(RED"> "RES);
 			if (g_signal == SIGINT)
 			{
-				g_signal = 0;
 				shell->heredoc_ignore = 1;
                 break ;
 				/* printf("SIGINT DETECTADO!\n"); */
@@ -145,14 +133,16 @@ int     ft_heredoc_process(char **token_arr, t_shell *shell)
     {    
         if (ft_strcmp(token_arr[i], "<<") == 0)
         {
-            /* printf("HEREDOC DETECTADO!!\n"); */
             ft_init_hered_signals();
             ft_heredoc_logic(token_arr, i, shell); //SE ENCONTRA HEREDOC EXECUTA FUNCAO RESPECTIVA A ELE
         }
-        /* printf("[%d][TOKEN_ARR]: %s\n", i, token_arr[i]); */
     }
-    restore_stdin(temp_fd);
-    ft_signal_restore();
+    if (g_signal)
+    {
+        shell->exit_status = 128 + g_signal;
+        free(shell->sexit_status);
+        shell->sexit_status = ft_itoa(shell->exit_status);
+    }
     ft_init_signals();
     if (shell->heredoc_ignore == 1)
     {
