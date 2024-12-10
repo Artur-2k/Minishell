@@ -3,7 +3,7 @@ BIN = minishell
 
 # Compiler
 CC = cc
-CFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -Wall -Wextra -Werror -g
+CFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -fsanitize=undefined -fno-omit-frame-pointer
 VG = valgrind --leak-check=full --show-leak-kinds=all --suppressions=supressions --track-origins=yes --log-file=leaks.log
 # --track-fds=all
 
