@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_pid.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/21 14:55:32 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/10 19:18:12 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_get_pid(void)
 	bytes_read = read(fd, buffer, sizeof(buffer));
 	if (bytes_read < 0)
 		return (-2);
-	buffer[bytes_read] = '\0';
+	buffer[bytes_read -1] = '\0';
 	pid = ft_atoi(buffer);
 	close(fd);
 	return (pid);
