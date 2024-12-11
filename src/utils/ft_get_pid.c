@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_pid.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:29:42 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/18 17:18:37 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/11 10:19:36 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_get_pid(void)
 	fd = open("/proc/self/stat", O_RDONLY);
 	if (fd < 0)
 		return (-1);
-	bytes_read = read(fd, buffer, sizeof(buffer));
+	bytes_read = read(fd, buffer, sizeof(buffer) - 1);
 	if (bytes_read < 0)
 		return (-2);
 	buffer[bytes_read] = '\0';
