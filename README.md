@@ -28,17 +28,23 @@ If you're using macOS, you can install the readline library using Homebrew:
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-### Installing
-
 1. **Clone the Repository**  
-   Use the following command to download the project from the repository:
-   ```bash
-   git clone git@github.com:Artur-2k/Minishell.git
-   cd Minishell/
-   make all
-   ```
+   Download the project by running:  
+   
+        git clone git@github.com:Artur-2k/Minishell.git
+   
+
+2. **Navigate to the Project Directory**
+
+        
+        cd Minishell/
+        
+
+3. **Compile the Program**
+
+    Build the project by running:
+
+        make all
 
 ### Executing program
 
