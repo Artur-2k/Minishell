@@ -2,6 +2,8 @@
 
 A small and simple shell inspired by Bash, but with significantly fewer features.
 
+![Demo](assets/demo.gif)
+
 ## Description
 
 This project involved creating our own shell with specific required functionalities, using Bash as a reference. While it doesn’t fully replicate Bash, it implements many of its core features.
