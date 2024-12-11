@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:22:19 by dmelo-ca          #+#    #+#             */
-/*   Updated: 2024/12/09 16:47:14 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/11 10:27:54 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
     
     expand = 0;
     delimiter = ft_hered_del(token_arr[i + 1], &expand);
-    /* printf("[DELIMITER]: %s\n", delimiter); */
     dyn_path = ft_gen_here_path(shell->pid);
     ft_replace_token(token_arr, i + 1, dyn_path);
     fd = open(dyn_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -84,7 +83,6 @@ int     ft_heredoc_logic(char **token_arr, int i, t_shell *shell)
 			{
 				shell->heredoc_ignore = 1;
                 break ;
-				/* printf("SIGINT DETECTADO!\n"); */
 			}
             if (input == NULL)
                 break;
@@ -124,9 +122,6 @@ void    ft_init_hered_signals(void)
 
 int     ft_heredoc_process(char **token_arr, t_shell *shell)
 {
-    int temp_fd;
-
-    temp_fd = dup(STDIN_FILENO);
 	shell->heredoc_ignore = 0;
     g_signal = 0;
     for(int i = 0; token_arr[i] != NULL; i++)

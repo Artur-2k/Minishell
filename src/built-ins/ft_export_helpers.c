@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:30:20 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/11/13 16:32:48 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/11 10:29:21 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,25 @@
 #define REPLACE 3
 #define APPEND  4
 
+static int	ft_check_replace(char *try, t_envp *envp)
+{
+	if (!try || !*try || !envp)
+		return (false);
+	while (envp != NULL)
+	{
+		if (!strcmp(try, envp->key))
+			return (true);
+		envp = envp->next;
+	}
+	return (false);
+}
+
 static int	ft_replace_value(t_envp **head, char *key, char *value, int mode)
 {
     t_envp *cur = *head;
     while (ft_strcmp(key, cur->key) != 0)
         cur = cur->next;
-    if (mode == REPLACE)
+    if (value && mode == REPLACE)
     {
         if (cur->value)
             free(cur->value);
@@ -41,7 +54,7 @@ static int	ft_replace_value(t_envp **head, char *key, char *value, int mode)
 
 int 		ft_add_entry_env(t_envp **head, char *key, char *value, int mode)
 {
-    if (ft_has_key(key, ft_strlen(key), *head))
+    if (ft_check_replace(key, *head))
 		ft_replace_value(head, key, value, mode);
     else
     {
@@ -53,7 +66,7 @@ int 		ft_add_entry_env(t_envp **head, char *key, char *value, int mode)
         }
         else
         {
-            // Ir até ao fim e adicionar no final
+            // Go to the end and add there
             t_envp *temp = *head;
             while (temp->next != NULL)
                 temp = temp->next;
@@ -69,7 +82,7 @@ int     	ft_add_entry_env2(t_envp **head, char *key, char *value, int mode)
 {
     t_envp  *new ;
 
-    if (ft_has_key(key, ft_strlen(key),  *head))
+    if (ft_check_replace(key, *head))
 		ft_replace_value(head, key, value, mode);
     else
     {
@@ -85,7 +98,7 @@ int     	ft_add_entry_env2(t_envp **head, char *key, char *value, int mode)
         }
 
         t_envp  *cur = *head;
-        // procurar sitio certo
+        // Look for the right place
         while (cur->next != NULL && ft_strcmp(cur->next->key, new->key) < 0)
             cur = cur->next;
         new->next = cur->next;
