@@ -6,7 +6,7 @@
 /*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:30:20 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/12/10 19:26:30 by artuda-s         ###   ########.fr       */
+/*   Updated: 2024/12/16 10:25:47 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #define ENV2    2
 #define REPLACE 3
 #define APPEND  4
-
 
 static int	ft_check_replace(char *try, t_envp *envp)
 {
