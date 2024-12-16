@@ -79,6 +79,10 @@ leaks: all sup
 	@if [ -f leaks.log ]; then mv leaks.log leaks-old.log; fi
 	$(VG) ./$(BIN)
 
+san: all sup
+	@if [ -f leaks.log ]; then mv leaks.log leaks-old.log; fi
+	ASAN_OPTIONS=suppressions=$(SUP_FILE) ./$(BIN)
+
 gdb: re
 	gdb --tui $(BIN)
 

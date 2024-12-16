@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmelo-ca <dmelo-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: artuda-s <artuda-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:01 by artuda-s          #+#    #+#             */
-/*   Updated: 2024/12/02 18:30:42 by dmelo-ca         ###   ########.fr       */
+/*   Updated: 2024/12/16 10:21:58 by artuda-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void    ft_export(t_exec *cmd)
 			if (!ft_valid_identifier(key))
 			{
 				cmd->shell->exit_status = 1;
-				ft_what_happened(cmd->av[i], "not a valid identifier, sir");
+				ft_what_happened(cmd->av[i], "not a valid identifier");
 				i++;
                 free(key);
 				continue ;
