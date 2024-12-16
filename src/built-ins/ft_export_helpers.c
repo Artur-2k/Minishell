@@ -23,7 +23,7 @@ static int	ft_check_replace(char *try, t_envp *envp)
 		return (false);
 	while (envp != NULL)
 	{
-		if (!strcmp(try, envp->key))
+		if (!ft_strcmp(try, envp->key))
 			return (true);
 		envp = envp->next;
 	}
