@@ -10,6 +10,9 @@ This project involved creating our own shell with specific required functionalit
 
 Minishell may lack the extensive capabilities of Bash, but it includes essential functionalities such as syntax error detection, command execution, input/output redirection, and piping. Additionally, it provides basic support for environment variables on a smaller scale.
 
+We implemented some built ins such as **echo**, **exit**, **cd**, **pwd**, **export**, **unset** and **env** mostly without options as the requeriments asked.
+
+You can try to execute commands by passing the binary path or if it's directory is stated in the $PATH environment variable you can execute just like any other command
 
 ## Getting Started
 
@@ -21,12 +24,7 @@ Minishell may lack the extensive capabilities of Bash, but it includes essential
 #### Installation on Linux:
 Ensure you have the readline library installed. You can install it using the package manager for your distribution:
 - **Debian/Ubuntu**: `sudo apt install libreadline-dev`
-- **Fedora**: `sudo dnf install readline-devel`
-- **Arch Linux**: `sudo pacman -S readline`
-
-#### Installation on macOS:
-If you're using macOS, you can install the readline library using Homebrew:
-`brew install readline`
+- **macOS**: `brew install readline`
 
 ### Installing
 
